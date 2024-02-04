@@ -20,7 +20,7 @@ class Notification
     #[ORM\Column]
     private ?bool $aEteLu = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_envoi = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
