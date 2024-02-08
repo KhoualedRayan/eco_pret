@@ -1,3 +1,33 @@
+
+
+
+:root {
+    --couleurFancy: #26b326;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    color: var(--couleurTexte);
+    background-color: var(--couleurFond);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    border-top: 1px solid var(--couleurFilet);
+}
+
+.copyright {
+    margin-left: 5%;
+}
+
+
 header {
     font-family: system-ui;
     border-bottom: 1px var(--couleurFilet) solid;
