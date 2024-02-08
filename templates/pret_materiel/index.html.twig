@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<h2>Nouvelle Annonce</h2>
+<textarea>Titre</textarea> <br /><br />
+Matériel : <br /><br />
+Durée : <br /><br />
+Description <br />
+<textarea></textarea>
+<br />
+<button>Valider</button>
+<button>Annuler</button>
+{% endblock %}
