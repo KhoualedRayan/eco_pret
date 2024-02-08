@@ -1,9 +1,9 @@
 server {
     #proxy_cache cache;
-    #proxy_cache_valid 200 1s;
+	#proxy_cache_valid 200 1s;
     listen 8080;
     listen [::]:8080;
-    root /home/site/wwwroot;    
+    root /home/site/wwwroot;
     index  index.php index.html index.htm;
     server_name  example.com www.example.com; 
     port_in_redirect off;
@@ -14,7 +14,7 @@ server {
 
     # redirect server error pages to the static page /50x.html
     #
-    #error_page   500 502 503 504  /50x.html; # Commented out for Laravel so that Laravel debug mode pages are shown
+    error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   /html/;
     }
@@ -27,8 +27,8 @@ server {
     }
 
     # Add locations of phpmyadmin here.
-    location ~ [^/]\.php(/|$) {
-        fastcgi_split_path_info ^(.+?\.php)(|/.*)$;
+    location ~* [^/]\.php(/|$) {
+        fastcgi_split_path_info ^(.+?\.[Pp][Hh][Pp])(|/.*)$;
         fastcgi_pass 127.0.0.1:9000;
         include fastcgi_params;
         fastcgi_param HTTP_PROXY "";
@@ -44,4 +44,4 @@ server {
         fastcgi_busy_buffers_size 256k;
         fastcgi_temp_file_write_size 256k;
     }
-}-
+}
