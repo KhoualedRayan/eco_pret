@@ -1,3 +1,25 @@
+:root {
+    --couleurFancy: #26b326;
+}
+
 body {
-    background-color: skyblue;
+    margin: 0;
+    font-family: sans-serif;
+    color: var(--couleurTexte);
+    background-color: var(--couleurFond);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    border-top: 1px solid var(--couleurFilet);
+}
+
+.copyright {
+    margin-left: 5%;
 }

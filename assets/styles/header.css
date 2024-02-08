@@ -1,0 +1,43 @@
+header {
+    font-family: system-ui;
+    border-bottom: 1px var(--couleurFilet) solid;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo {
+    font-size: 1.5em;
+    color: var(--couleurFancy);
+    font-weight: bold;
+}
+
+.material-icons.theme {
+    font-size: 18px;
+    margin-left: 15px;
+    cursor: pointer;
+    color: var(--couleurTexte);
+}
+
+.aDroite {
+    display: flex;
+    align-items: center;
+}
+
+.lien {
+    margin-left: 10px;
+    margin-right: 10px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+}
+
+.lien:hover {
+    color: var(--couleurFancy);
+    transform: translateY(-1px);
+}
