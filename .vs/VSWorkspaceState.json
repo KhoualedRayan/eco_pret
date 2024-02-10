@@ -1,11 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\assets",
+    "\\assets\\styles",
+    "\\public",
+    "\\public\\styles",
     "\\src",
     "\\src\\Controller",
     "\\templates",
-    "\\templates\\home_page"
+    "\\templates\\home_page",
+    "\\templates\\pret_materiel"
   ],
-  "SelectedNode": "\\templates\\base.html.twig",
+  "SelectedNode": "\\src\\Controller\\PretMaterielController.php",
   "PreviewInSolutionExplorer": false
 }

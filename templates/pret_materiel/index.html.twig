@@ -8,7 +8,7 @@
 
 {% block body %}
 <h2>Nouvelle Annonce</h2>
-<form action="#" method="post">
+<form action="{{ path('handle_form_submission') }}" method="post">
     <label for="titre">Titre de l'annonce :</label>
     <input type="text" name="titre" required /><br />
     
@@ -20,9 +20,9 @@
     <label for="materiel">Matériel : </label>
     <select name="materiel" required>
         <option value="">Sélectionnez un tag pour votre matériel</option>
-        <option value="1">Outils</option>
-        <option value="2">Voiture</option>
-        <option value="3">Autres</option>
+        {% for mats in categories %}
+            <option value="{{ mats.getId() }}">{{ mats.getNomMateriel() }}</option>
+        {% endfor %}
     </select><br />
     
     <br />
