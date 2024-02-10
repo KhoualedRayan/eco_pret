@@ -1,0 +1,16 @@
+input {
+    border-radius: 5px;
+}
+.input_small {
+    width: 3%;
+}
+select {
+    border-radius: 5px;
+}
+textarea {
+    width: 20%;
+    height: 8em;
+    border-radius: 5%;
+    resize: none;
+    border: 1px solid #ccc; 
+}

@@ -1,17 +1,50 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
+
 {% endblock %}
 
 
 {% block body %}
 <h2>Nouvelle Annonce</h2>
-<textarea>Titre</textarea> <br /><br />
-Matériel : <br /><br />
-Durée : <br /><br />
-Description <br />
-<textarea></textarea>
-<br />
-<button>Valider</button>
-<button>Annuler</button>
+<form action="#" method="post">
+    <label for="titre">Titre de l'annonce :</label>
+    <input type="text" name="titre" required /><br />
+    
+    <br />
+    <label for="date_pret">Date du prêt :</label>
+    <input type="date" name="date_pret" min="{{ "now"|date("Y-m-d") }}" title="Date du prêt optionnel, doit être supérieur à aujourd'hui"  /><br />
+    
+    <br />
+    <label for="materiel">Matériel : </label>
+    <select name="materiel" required>
+        <option value="">Sélectionnez un tag pour votre matériel</option>
+        <option value="1">Outils</option>
+        <option value="2">Voiture</option>
+        <option value="3">Autres</option>
+    </select><br />
+    
+    <br />
+    <label for="duree_pret">Durée : </label>
+    <input type="text" class="input_small" name="duree_pret_valeur" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez une durée valide (par exemple : 12 heures)" required />
+    <select name="duree_pret"  required>
+        <option value="1">heures</option>
+        <option value="2">jours</option>
+    </select><br />
+    
+    <br />
+    <label for="prix">Prix :</label>
+    <input type="text" class="input_small" name="prix" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez un prix valide (par exemple, 10.50)" required />€<br />
+
+
+    <br />
+    <label for="description">Description</label><br />
+    <textarea name="description" required></textarea><br />
+
+
+    <button>Valider</button>
+    <button>Annuler</button>
+</form>
+
 {% endblock %}
