@@ -32,4 +32,6 @@ class CategorieMateriel
 
         return $this;
     }
+
+
 }
