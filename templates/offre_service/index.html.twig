@@ -8,15 +8,15 @@
 
 {% block body %}
 <h2>Nouvelle Annonce</h2>
-<form action="#" method="post">
+<form action="{{ path('handle_form_service') }}" method="post">
     <label for="titre">Titre de l'annonce :</label>
     <input type="text" name="titre" required /><br />
     
     <br />
-    <label for="date_pret">Date du service :</label>
-    <input type="date" name="date_pret" min="{{ "now"|date("Y-m-d") }}" title="Date du prêt optionnel, doit être supérieur à aujourd'hui"  /><br />
-    
+    <label for="date_pret">Date et heure du service :</label>
+    <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" /><br />
     <br />
+    
     <label for="service">Service : </label>
     <select name="service" required>
         <option value="">Sélectionnez un tag pour votre Service</option>

@@ -7,7 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\CategorieService;
-use App\Entity\CategorieMateriel;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\AnnonceService;
+use DateTime;
+use App\Entity\User;
+use App\Entity\Abonnement;
 
 
 class OffreServiceController extends AbstractController
@@ -22,8 +26,8 @@ class OffreServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/handle_form_submission', name: 'handle_form_submission')]
-    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
+    #[Route('/handle_form_service', name: 'handle_form_service')]
+    public function handleFormService(EntityManagerInterface $entityManager,Request $request): Response
     {
         $users = $entityManager->getRepository(User::class);
         $user = $users->find(1);
@@ -37,11 +41,10 @@ class OffreServiceController extends AbstractController
         $annonce->setTitre($titre);
         $annonce->setDescription($description);
         $annonce->setDatePublication($date);
-        $annonce->setDuree($duree_pret);
         $annonce->setPrix($prix);
         $annonce->setPosteur($user);
         $annonce->setStatut("Disponible");
-
+        $annonce->setDateFin($date);
         $entityManager->persist($annonce);
         $entityManager->flush();
 
