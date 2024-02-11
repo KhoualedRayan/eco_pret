@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\assets",
-    "\\assets\\styles",
     "\\public",
     "\\public\\styles",
     "\\src",
     "\\src\\Controller",
+    "\\src\\Entity",
+    "\\src\\Repository",
     "\\templates",
     "\\templates\\home_page",
     "\\templates\\pret_materiel"
   ],
-  "SelectedNode": "\\src\\Controller\\PretMaterielController.php",
+  "SelectedNode": "\\src\\Entity\\Annonce.php",
   "PreviewInSolutionExplorer": false
 }

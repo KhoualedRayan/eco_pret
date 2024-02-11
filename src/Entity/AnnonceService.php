@@ -5,13 +5,14 @@ namespace App\Entity;
 use App\Repository\AnnonceServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Entity\Annonce;
 #[ORM\Entity(repositoryClass: AnnonceServiceRepository::class)]
 class AnnonceService extends Annonce
 {
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_fin = null;
+
 
     public function getId(): ?int
     {
@@ -29,5 +30,10 @@ class AnnonceService extends Annonce
 
         return $this;
     }
+
+
+
+
+
 
 }

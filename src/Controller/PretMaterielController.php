@@ -36,9 +36,9 @@ class PretMaterielController extends AbstractController
         $description = $request->request->get('description');
         $duree_pret_valeur = $request->request->get('duree_pret_valeur');
         $duree_pret = $request->request->get('duree_pret');
-        $duree_pret += $duree_pret_valeur;
+        $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
 
-        // Créez une instance de votre entité et affectez les valeurs
+
         $annonce = new AnnonceMateriel();
         $annonce->setTitre($titre);
         $annonce->setDescription($description);
@@ -48,11 +48,9 @@ class PretMaterielController extends AbstractController
         $annonce->setPosteur($user);
         $annonce->setStatut("Disponible");
 
-        // Obtenez l'EntityManager et persistez votre entité
         $entityManager->persist($annonce);
         $entityManager->flush();
 
-        // Retourne la réponse HTTP contenant le code JavaScript
-        return $this->redirectToRoute('app_pret_materiel');
+        return $this->redirectToRoute('app_home_page');
     }
 }
