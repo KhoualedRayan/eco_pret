@@ -29,8 +29,8 @@
     <label for="duree_pret">Durée : </label>
     <input type="text" class="input_small" name="duree_pret_valeur" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez une durée valide (par exemple : 12 heures)" required />
     <select name="duree_pret"  required>
-        <option value="1">heures</option>
-        <option value="2">jours</option>
+        <option value="heures">heures</option>
+        <option value="jours">jours</option>
     </select><br />
     
     <br />
@@ -40,11 +40,11 @@
 
     <br />
     <label for="description">Description</label><br />
-    <textarea name="description" required></textarea><br />
-
+    <textarea name="description" ></textarea><br />
+    <br />
 
     <button>Valider</button>
-    <button>Annuler</button>
+    <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>
 </form>
 
 {% endblock %}
