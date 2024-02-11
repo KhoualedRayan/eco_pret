@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\AnnonceMateriel;
 use DateTime;
 use App\Entity\User;
-use App\Entity\Abonnement;
 
 class PretMaterielController extends AbstractController
 {
