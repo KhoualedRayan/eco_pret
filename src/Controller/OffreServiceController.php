@@ -21,4 +21,30 @@ class OffreServiceController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    #[Route('/handle_form_submission', name: 'handle_form_submission')]
+    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
+    {
+        $users = $entityManager->getRepository(User::class);
+        $user = $users->find(1);
+        //$posteur_id = $this->getUser();
+        $titre = $request->request->get('titre');
+        $date = new DateTime();
+        $prix = $request->request->get('prix');
+        $description = $request->request->get('description');
+
+        $annonce = new AnnonceService();
+        $annonce->setTitre($titre);
+        $annonce->setDescription($description);
+        $annonce->setDatePublication($date);
+        $annonce->setDuree($duree_pret);
+        $annonce->setPrix($prix);
+        $annonce->setPosteur($user);
+        $annonce->setStatut("Disponible");
+
+        $entityManager->persist($annonce);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home_page');
+    }
 }
