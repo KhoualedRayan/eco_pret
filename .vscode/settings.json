@@ -1,4 +1,4 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/152d7f65-25be-44a4-b44a-e475f17db340/resourceGroups/ECOPRET/providers/Microsoft.Web/sites/ecop",
-    "appService.deploySubpath": ""
+    "appService.deploySubpath": "."
 }
