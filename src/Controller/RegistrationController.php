@@ -21,19 +21,32 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setUsername($form->get('username')->getData());
+            $user->setEmail($form->get('email')->getData());
+            $user->setAbonnement($form->get('abonnement')->getData());
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
+            $user->setFirstName($form->get('first_name')->getData());
+            $user->setSurname($form->get('surname')->getData());
 
+            $user->setNbFlorains(1000);
+
+            $this->addFlash('success', 'Inscription réussie !');
+
+            $entityManager->persist($user->getAbonnement());
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_home_page');
+            $user = new User();
+            $form = $this->createForm(RegistrationFormType::class, $user);
+           
         }
 
         return $this->render('registration/register.html.twig', [
@@ -41,3 +54,4 @@ class RegistrationController extends AbstractController
         ]);
     }
 }
+

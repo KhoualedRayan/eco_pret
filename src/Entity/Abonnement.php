@@ -24,7 +24,7 @@ class Abonnement
     #[ORM\Column]
     private ?int $niveau = null;
 
-    #[ORM\OneToMany(mappedBy: 'abonnement', targetEntity: User::class)]
+    #[ORM\OneToMany(mappedBy: 'abonnement', targetEntity: User::class, cascade: ['persist'])]
     private Collection $users;
 
     public function __construct()
@@ -35,6 +35,11 @@ class Abonnement
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->id;
     }
 
     public function getNom(): ?string

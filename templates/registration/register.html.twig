@@ -1,17 +1,40 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/inscription.css') }}">
+{% endblock %}
 
-{% block title %}Inscription{% endblock %}
 
 {% block body %}
     <h1>Inscription</h1>
 
+    {% for flashMessage in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    <br>
+    <br>
+
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email, {label: 'Mail'}) }}
-        {{ form_row(registrationForm.plainPassword, {label: 'Mot de passe'}) }}
-        {{ form_row(registrationForm.agreeTerms, {label: "Accepter les termes d'utilisation"}) }}
-
+        {{ form_row(registrationForm.username, {label: "*Nom d'utilisateur : "}) }}
+        <br>
+        {{ form_row(registrationForm.email, {label: '*Mail : '}) }}
+        <br>
+        {{ form_row(registrationForm.password, {label: '*Mot de passe : '}) }}
+        <br>
+        {{ form_row(registrationForm.first_name, {label: 'Prenom : '}) }}
+        <br>
+        {{ form_row(registrationForm.surname, {label: 'Nom : '}) }}
+        <br>
+        {{ form_row(registrationForm.abonnement, {label: "*Formule d'abonnement : "}) }}
+        {{ form_row(registrationForm.agreeTerms, {label: "*Accepter les termes d'utilisation : "}) }}
+        <br>
+        <br>
+        <p>(* Champs obligatoires)</p>
         <button type="submit" class="btn">S'inscrire</button>
     {{ form_end(registrationForm) }}
 {% endblock %}
