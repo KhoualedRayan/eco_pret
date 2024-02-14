@@ -13,5 +13,55 @@
     <a href = "{{ path('app_offre_service') }}"><button>Offrir un service</button></a>
 </div>
 <h2>Annonces</h2>
+<div style="display: flex;">
+    <div style="flex: 1;">
+        <table>
+            <thead>
+                <tr>
+                    <th class="border-bottom text-left">Titre</th>
+                    <th class="border-bottom text-left">Description</th>
+                    <th class="border-bottom text-left">Prix</th>
+                    <th class="border-bottom text-left">Statut</th>
+                    <th class="border-bottom text-left">Posteur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for anoServ in annonceService %}
+                    <tr>
+                        <td class="border-bottom text-left">{{anoServ.getTitre()}}</td>
+                        <td class="border-bottom text-left">{{anoServ.getDescription()}}</td>
+                        <td class="border-bottom text-left">{{anoServ.getPrix()}}</td>
+                        <td class="border-bottom text-left">{{anoServ.getStatut()}}</td>
+                        <td class="border-bottom text-left">{{anoServ.getPosteur().getUsername()}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="flex: 1;">
+        <table>
+            <thead>
+                <tr>
+                    <th class="border-bottom text-left">Titre</th>
+                    <th class="border-bottom text-left">Description</th>
+                    <th class="border-bottom text-left">Prix</th>
+                    <th class="border-bottom text-left">Statut</th>
+                    <th class="border-bottom text-left">Posteur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for anoMat in annonceMateriel %}
+                    <tr>
+                        <td class="border-bottom text-left">{{anoMat.getTitre()}}</td>
+                        <td class="border-bottom text-left">{{anoMat.getDescription()}}</td>
+                        <td class="border-bottom text-left">{{anoMat.getPrix()}}</td>
+                        <td class="border-bottom text-left">{{anoMat.getStatut()}}</td>
+                        <td class="border-bottom text-left">{{anoMat.getPosteur().getUsername()}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
