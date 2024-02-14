@@ -48,3 +48,28 @@ h2 {
     border-bottom: 1px solid var(--couleurFilet);
     display: block;
 }
+
+/* CSS TEMPORARIRE A CHANGER DES 'Annonces' */
+.table-container {
+    display: flex;
+}
+
+.table-wrapper {
+    flex: 1;
+    margin-right: 10px; 
+}
+
+/* Pour que les deux tableaux aient le même style */
+.table-wrapper table {
+    width: 100%;
+}
+
+.table-wrapper th {
+    border-bottom: 1px solid #000;
+    text-align: left;
+}
+
+.table-wrapper td {
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
