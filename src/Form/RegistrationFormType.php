@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\User;
+
 use App\Entity\Abonnement;
+use App\Repository\AbonnementRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -13,35 +15,54 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+
 
 class RegistrationFormType extends AbstractType
 {
+
+    private $abonnementRepository;
+
+    public function __construct(AbonnementRepository $abonnementRepository)
+    {
+        $this->abonnementRepository = $abonnementRepository;
+    }
     
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-        $abo1 = new Abonnement();
-        $abo2 = new Abonnement();
+        $abonnements = $this->abonnementRepository->findAll();
 
-        $abo1->setNom("Preteur");
-        $abo2->setNom("Emprunteur");
-
-        $abo1->setPrix("10");
-        $abo2->setPrix("10");
-
-        $abo1->setNiveau("1");
-        $abo2->setNiveau("2");
+        $choices = [];
+        foreach ($abonnements as $abonnement) {
+            $choices[$abonnement->getNom()] = $abonnement;
+        }
 
         $builder
             ->add('username')
-            ->add('email')
+            ->add('email', EmailType::class, [
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez entrer votre adresse e-mail.',
+                    ]),
+                    new Assert\Email([
+                        'message' => 'L\'adresse e-mail "{{ value }}" n\'est pas valide.',
+                        'mode' => 'strict',
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+                        'message' => 'L\'adresse e-mail "{{ value }}" n\'est pas au bon format.',
+                    ]),
+                ],
+            ])
             ->add('abonnement', ChoiceType::class, [
                 'multiple' => false,
                 'expanded' => true,
-                'choices' => [
-                    'Prêteur' => $abo1,
-                    'Emprunteur' => $abo2,
-                ],
+                'choices' => $choices,
+                'choice_label' => function ($abonnement) {
+                    return $abonnement->getNom();
+                },
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez sélectionner un abonnement.',
