@@ -40,8 +40,24 @@ class RegistrationFormType extends AbstractType
         }
 
         $builder
-            ->add('username')
+            ->add('username', null, [
+
+                'required'=>false,
+                'attr' => [
+
+                    'placeholder' => "Entrez votre pseudo"
+                ],
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez entrer votre nom.', // Message d'erreur si le champ est vide
+                    ]),
+                ],
+            ])
             ->add('email', EmailType::class, [
+                'attr' => [
+
+                    'placeholder' => "Entrez votre mail"
+                ],
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez entrer votre adresse e-mail.',
@@ -84,7 +100,7 @@ class RegistrationFormType extends AbstractType
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => true,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password', 'placeholder' => "Entrez votre mot de passe"],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un mot de passe',
@@ -97,8 +113,20 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('first_name')
-            ->add('surname')
+            ->add('first_name', null, [
+
+                'attr' => [
+
+                    'placeholder' => "Entrez votre prénom"
+                ],
+            ])
+            ->add('surname', null, [
+
+                'attr' => [
+
+                    'placeholder' => "Entrez votre nom"
+                ],
+            ])
         ;
 
         
