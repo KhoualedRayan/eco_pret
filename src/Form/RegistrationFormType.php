@@ -45,7 +45,7 @@ class RegistrationFormType extends AbstractType
                 'required'=>false,
                 'attr' => [
 
-                    'placeholder' => "Entrez votre pseudo"
+                    'placeholder' => "Entrez votre pseudo",
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
@@ -58,6 +58,7 @@ class RegistrationFormType extends AbstractType
 
                     'placeholder' => "Entrez votre mail"
                 ],
+                'required'=>false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez entrer votre adresse e-mail.',
@@ -101,6 +102,7 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => true,
                 'attr' => ['autocomplete' => 'new-password', 'placeholder' => "Entrez votre mot de passe"],
+                'required'=>false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un mot de passe',

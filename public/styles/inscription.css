@@ -16,11 +16,19 @@
     
 }
 
-.custom-choice-box input {
-    
-    margin-right: 7px;
-    border-radius: 2px black solid;
-    
+.custom-input {
+    border: 1px solid white; /* Bordure du champ de texte */
+    content: "*";
+    color: red;
 }
+
+.custom-input:hover {
+    border: 1px solid #136e13; /* Bordure du champ de texte */
+}
+
+.custom-input:focus {
+    border: 1px solid #136e13; /* Bordure du champ de texte */
+}
+
 
 
