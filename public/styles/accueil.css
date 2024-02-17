@@ -73,3 +73,12 @@ h2 {
     border-bottom: 1px solid #ccc;
     text-align: left;
 }
+
+
+.custom-input:hover {
+    border: 1px solid red; /* Bordure du champ de texte */
+}
+
+.custom-input:focus {
+    border: 1px solid red; /* Bordure du champ de texte */
+}

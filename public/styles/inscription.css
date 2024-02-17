@@ -18,17 +18,9 @@
 
 .custom-input {
     border: 1px solid white; /* Bordure du champ de texte */
-    content: "*";
-    color: red;
+    color: black;
 }
 
-.custom-input:hover {
-    border: 1px solid #136e13; /* Bordure du champ de texte */
-}
-
-.custom-input:focus {
-    border: 1px solid #136e13; /* Bordure du champ de texte */
-}
 
 
 

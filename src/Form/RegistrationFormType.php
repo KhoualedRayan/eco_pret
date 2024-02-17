@@ -36,7 +36,8 @@ class RegistrationFormType extends AbstractType
 
         $choices = [];
         foreach ($abonnements as $abonnement) {
-            $choices[$abonnement->getNom()] = $abonnement;
+            if($abonnement->getNom() != 'Admin')
+                $choices[$abonnement->getNom()] = $abonnement;
         }
 
         $builder
