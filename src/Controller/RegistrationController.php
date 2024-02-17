@@ -37,12 +37,12 @@ class RegistrationController extends AbstractController
 
             $user->setNbFlorains(1000);
 
-            $this->addFlash('success', 'Inscription réussie !');
-
             $entityManager->persist($user->getAbonnement());
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
+
+            $this->addFlash('notificationAnnonces', 'Félicitations, ' . $user->getUsername() . ', votre compte à été créé !');
 
             $user = new User();
             $form = $this->createForm(RegistrationFormType::class, $user);

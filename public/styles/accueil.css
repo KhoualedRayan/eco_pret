@@ -74,15 +74,14 @@ h2 {
     text-align: left;
 }
 
-
 .custom-input {
-    background-color: blue;
+    border: 1px solid #c2c2c2; /* Bordure du champ de texte */
 }
 
 .custom-input:hover {
-    border: 1px solid red; /* Bordure du champ de texte */
+    border: 1px solid black; /* Bordure du champ de texte */
 }
 
 .custom-input:focus {
-    border: 1px solid red; /* Bordure du champ de texte */
+    border: 2px solid black; /* Bordure du champ de texte */
 }
