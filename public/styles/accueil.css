@@ -75,6 +75,10 @@ h2 {
 }
 
 
+.custom-input {
+    background-color: blue;
+}
+
 .custom-input:hover {
     border: 1px solid red; /* Bordure du champ de texte */
 }
