@@ -14,8 +14,6 @@ namespace Symfony\Component\Routing\Attribute;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Alexander M. Turek <me@derrabus.de>
- *
- * @final
  */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Route
@@ -31,7 +29,7 @@ class Route
      * @param string[]|string           $schemes
      */
     public function __construct(
-        string|array $path = null,
+        string|array|null $path = null,
         private ?string $name = null,
         private array $requirements = [],
         private array $options = [],
@@ -41,10 +39,10 @@ class Route
         array|string $schemes = [],
         private ?string $condition = null,
         private ?int $priority = null,
-        string $locale = null,
-        string $format = null,
-        bool $utf8 = null,
-        bool $stateless = null,
+        ?string $locale = null,
+        ?string $format = null,
+        ?bool $utf8 = null,
+        ?bool $stateless = null,
         private ?string $env = null
     ) {
         if (\is_array($path)) {

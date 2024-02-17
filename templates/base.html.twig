@@ -7,11 +7,23 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" id='theme' href="{{ asset('styles/themes/light_mode.css') }}">
         <link rel="stylesheet" id='theme' href="{{ asset('styles/header.css') }}">
+        <link rel="stylesheet"  href="{{ asset('styles/notif.css') }}">
         {% block stylesheets %}
         {% endblock %}
 
         {% block javascripts %}
-{% block importmap %}{{ importmap('app') }}{% endblock %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var notification = document.querySelector('.alert-notifAnnonces');
+                if (notification) {
+                    setTimeout(function() {
+                        notification.remove();
+                        console.log('remove');
+                    }, 3000); // .3 secondes
+                }
+            });
+            </script>
         {% endblock %}
     </head>
     <body>
@@ -25,6 +37,14 @@
                 <div class='lien'><a href="{{ path('app_register') }}">S'inscrire</a></div>
             </div>
         </header>
+
+        {#Notifications#}
+        {% for message in app.session.flashbag.get('notificationAnnonces') %}
+            <div class="alert-notifAnnonces">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <div class="content">
             {% block body %}{% endblock %}
         </div>

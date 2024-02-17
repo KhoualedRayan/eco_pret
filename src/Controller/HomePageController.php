@@ -17,7 +17,6 @@ class HomePageController extends AbstractController
         $annonceService = $entityManager->getRepository(AnnonceService::class)->findAll();
         $entityManager->clear();
         $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
-        #$annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'annonceService' => $annonceService,

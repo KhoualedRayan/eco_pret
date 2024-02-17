@@ -27,7 +27,7 @@ class PretMaterielController extends AbstractController
     public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
     {
         $users = $entityManager->getRepository(User::class);
-        $user = $users->find(1);
+        $user = $users->find(5);
         //$posteur_id = $this->getUser();
         $titre = $request->request->get('titre');
         $date = new DateTime();
@@ -49,7 +49,7 @@ class PretMaterielController extends AbstractController
 
         $entityManager->persist($annonce);
         $entityManager->flush();
-
+        $this->addFlash('notificationAnnonces', 'Félicitations, votre annonce à été publiée !');
         return $this->redirectToRoute('app_home_page');
     }
 }
