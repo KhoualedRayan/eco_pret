@@ -45,7 +45,6 @@ class RegistrationFormType extends AbstractType
 
                 'required'=>false,
                 'attr' => [
-
                     'placeholder' => "Entrez votre pseudo",
                 ],
                 'constraints' => [
@@ -56,7 +55,6 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
-
                     'placeholder' => "Entrez votre mail"
                 ],
                 'required'=>false,

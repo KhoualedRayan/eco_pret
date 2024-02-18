@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="{{ asset('styles/inscription.css') }}">
 {% endblock %}
 
-
 {% block body %}
     <h1>Inscription</h1>
 
@@ -13,9 +12,6 @@
             {{ flashMessage }}
         </div>
     {% endfor %}
-
-    <br>
-    <br>
 
     {{ form_errors(registrationForm) }}
 
@@ -35,6 +31,6 @@
         <br>
         <br>
         <p>(* Champs obligatoires)</p>
-        <button type="submit" class="btn">S'inscrire</button>
+        <button type="submit">S'inscrire</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

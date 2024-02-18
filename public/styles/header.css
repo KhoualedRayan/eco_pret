@@ -1,8 +1,10 @@
-
-
-
 :root {
     --couleurFancy: #26b326;
+    --couleurTexte: #333;
+    --couleurFond: white; 
+    --couleurFondMain: #f5f5f5;
+    --couleurFondInput: white; 
+    --couleurFilet: #ddd;
 }
 
 body {

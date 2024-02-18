@@ -1,9 +1,0 @@
-/* Dark theme */
-
-:root {
-    --couleurTexte: rgba(255, 255, 255, 0.87);
-    --couleurFond: #121212; 
-    --couleurFondMain: #121212;
-    --couleurFondInput: rgba(33, 33, 33, 0.4); 
-    --couleurFilet: rgba(138,180,248,.24);
-}
