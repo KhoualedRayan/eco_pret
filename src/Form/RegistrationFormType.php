@@ -18,10 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
-
 class RegistrationFormType extends AbstractType
 {
-
     private $abonnementRepository;
 
     public function __construct(AbonnementRepository $abonnementRepository)
@@ -42,11 +40,9 @@ class RegistrationFormType extends AbstractType
 
         $builder
             ->add('username', null, [
-
+                'label' => '* Nom d\'utilisateur : ',
                 'required'=>false,
-                'attr' => [
-                    'placeholder' => "Entrez votre pseudo",
-                ],
+                'attr' => ['placeholder' => ' '],
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez entrer votre nom.', // Message d'erreur si le champ est vide
@@ -54,10 +50,9 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'attr' => [
-                    'placeholder' => "Entrez votre mail"
-                ],
+                'label' => '* Mail : ',
                 'required'=>false,
+                'attr' => ['placeholder' => ' '],
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez entrer votre adresse e-mail.',
@@ -77,34 +72,50 @@ class RegistrationFormType extends AbstractType
                 'expanded' => true,
                 'choices' => $choices,
                 'choice_label' => function ($abonnement) {
-                    return $abonnement->getNom();
+                    if ($abonnement->getNiveau() == 1)
+                        return '<div class="title">Standard</div>
+                                     <div class="infos">
+                                         <ul>
+                                             <li>Prix : 20€/an</li>
+                                             <li>Fonctionalités :
+                                                 <ul>
+                                                     <li>Prêter du matériel</li>
+                                                     <li>Offrir des services</li>
+                                                     <li>Recevoir des services</li>
+                                                 </ul>
+                                             </li>
+                                         </ul>
+                                     </div>';
+                    else if ($abonnement->getNiveau() == 2)
+                        return '<div class="title">Premium</div>
+                                         <div class="infos">
+                                             <ul>
+                                                 <li>Prix : 30€/an</li>
+                                                 <li>Fonctionalités bonus :
+                                                     <ul>
+                                                         <li>Emprunter du matériel</li>
+                                                     </ul>
+                                                 </li>
+                                             </ul>
+                                         </div>';
                 },
+                'label_html' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez sélectionner un abonnement.',
-                    ]),
-                ],
-                'attr' => [
-                    'class' => 'custom-choice-box', // Ajoutez ici votre classe personnalisée
-                ],
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions.',
                     ]),
                 ],
             ])
             ->add('password', PasswordType::class, [
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => '* Mot de passe',
                 'mapped' => true,
-                'attr' => ['autocomplete' => 'new-password', 'placeholder' => "Entrez votre mot de passe"],
+                'attr' => ['autocomplete' => 'new-password', 'placeholder' => ' '],
                 'required'=>false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Entrez un mot de passe',
+                        'message' => 'Veuillez entrer un mot de passe.',
                     ]),
                     new Length([
                         'min' => 6,
@@ -115,18 +126,12 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('first_name', null, [
-
-                'attr' => [
-
-                    'placeholder' => "Entrez votre prénom"
-                ],
+                'attr' => ['placeholder' => ' '],
+                'label' => 'Prénom',
             ])
             ->add('surname', null, [
-
-                'attr' => [
-
-                    'placeholder' => "Entrez votre nom"
-                ],
+                'attr' => ['placeholder' => ' '],
+                'label' => 'Nom',
             ])
         ;
 
