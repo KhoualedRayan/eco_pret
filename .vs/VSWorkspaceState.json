@@ -1,16 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\assets",
+    "\\assets\\styles",
     "\\src",
     "\\src\\Controller",
-    "\\src\\Entity",
     "\\templates",
     "\\templates\\home_page",
-    "\\templates\\inscription",
     "\\templates\\offre_service",
     "\\templates\\pret_materiel",
-    "\\templates\\registration"
+    "\\templates\\registration",
+    "\\templates\\security"
   ],
-  "SelectedNode": "\\assets\\app.js",
+  "SelectedNode": "\\src\\Controller\\PretMaterielController.php",
   "PreviewInSolutionExplorer": false
 }

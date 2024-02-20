@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\AnnonceServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Annonce;
+
 #[ORM\Entity(repositoryClass: AnnonceServiceRepository::class)]
 class AnnonceService extends Annonce
 {
@@ -15,6 +15,10 @@ class AnnonceService extends Annonce
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Recurrence $id_recurrence = null;
+
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $posteur = null;
 
     public function getId(): ?int
     {
@@ -41,6 +45,18 @@ class AnnonceService extends Annonce
     public function setIdRecurrence(?Recurrence $id_recurrence): static
     {
         $this->id_recurrence = $id_recurrence;
+
+        return $this;
+    }
+    
+    public function getPosteur(): ?User
+    {
+        return $this->posteur;
+    }
+
+    public function setPosteur(?User $posteur): static
+    {
+        $this->posteur = $posteur;
 
         return $this;
     }
