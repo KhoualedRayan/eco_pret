@@ -32,7 +32,7 @@ class UserProvider implements UserProviderInterface
 
     public function refreshUser(UserInterface $user): UserInterface
     {
-        if (!$user instanceof User) {
+        if (!$user instanceof User && !$user instanceof \App\Entity\User) {
             throw new UnsupportedUserException();
         }
 
@@ -41,7 +41,7 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass(string $class): bool
     {
-        return User::class === $class;
+        return $class === User::class || is_subclass_of($class, User::class);
     }
 }
 
