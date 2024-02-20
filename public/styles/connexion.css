@@ -18,6 +18,7 @@
 .inputbox {
     display: flex;
     margin-bottom: 15px;
+    padding: 0 20px;
     align-items: center;
 }
 
@@ -34,4 +35,8 @@
 .signup {
     text-decoration: none;
     color: #007bff;
+}
+
+.alert {
+    color: red;
 }

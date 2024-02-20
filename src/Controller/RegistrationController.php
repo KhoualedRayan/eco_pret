@@ -49,7 +49,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('notificationAnnonces', 'Félicitations, ' . $user->getUsername() . ', votre compte à été créé !');
 
-            return $this->redirectToRoute('app_home_page');
+            return $this->redirectToRoute('app_login');
            
         }
 

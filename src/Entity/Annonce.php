@@ -31,6 +31,10 @@ class Annonce
     #[ORM\Column(length: 127)]
     private ?string $statut = null;
 
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $posteur = null;
+
     #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: Transaction::class, orphanRemoval: true)]
     private Collection $transactions;
 
@@ -131,6 +135,18 @@ class Annonce
                 $transaction->setAnnonce(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPosteur(): ?User
+    {
+        return $this->posteur;
+    }
+
+    public function setPosteur(?User $posteur): static
+    {
+        $this->posteur = $posteur;
 
         return $this;
     }

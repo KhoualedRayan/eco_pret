@@ -12,10 +12,6 @@ class AnnonceMateriel extends Annonce
     #[ORM\Column(length: 255)]
     private ?string $duree = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $posteur = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -32,21 +28,6 @@ class AnnonceMateriel extends Annonce
 
         return $this;
     }
-
-    public function getPosteur(): ?User
-    {
-        return $this->posteur;
-    }
-
-    public function setPosteur(?User $posteur): static
-    {
-        $this->posteur = $posteur;
-
-        return $this;
-    }
-
-
-
 
 
 
