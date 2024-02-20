@@ -16,7 +16,7 @@ class AnnonceService extends Annonce
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Recurrence $id_recurrence = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
