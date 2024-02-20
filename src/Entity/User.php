@@ -41,8 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $sleep_mode = null;
 
-    #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: Annonce::class, orphanRemoval: true)]
-    private Collection $annonces;
+    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceMateriel::class, orphanRemoval: true)]
+    // private Collection $annoncesMateriel;
+
+    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceService::class, orphanRemoval: true)]
+    // private Collection $annoncesService;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
@@ -193,35 +196,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Annonce>
-     */
-    public function getAnnonces(): Collection
-    {
-        return $this->annonces;
-    }
+    // /**
+    //  * @return Collection<int, AnnonceService>
+    //  */
+    // public function getAnnoncesService(): Collection
+    // {
+    //     return $this->annoncesService;
+    // }
 
-    public function addAnnonce(Annonce $annonce): static
-    {
-        if (!$this->annonces->contains($annonce)) {
-            $this->annonces->add($annonce);
-            $annonce->setPosteur($this);
-        }
+    // public function addAnnonceService(AnnonceService $annonce): static
+    // {
+    //     if (!$this->annoncesService->contains($annonce)) {
+    //         $this->annonces->add($annonce);
+    //         $annonce->setPosteur($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeAnnonce(Annonce $annonce): static
-    {
-        if ($this->annonces->removeElement($annonce)) {
-            // set the owning side to null (unless already changed)
-            if ($annonce->getPosteur() === $this) {
-                $annonce->setPosteur(null);
-            }
-        }
+    // public function removeAnnonceService(AnnonceService $annonce): static
+    // {
+    //     if ($this->annoncesService->removeElement($annonce)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($annonce->getPosteur() === $this) {
+    //             $annonce->setPosteur(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getAbonnement(): ?Abonnement
     {
