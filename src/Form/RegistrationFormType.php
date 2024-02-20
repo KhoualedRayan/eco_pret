@@ -73,10 +73,10 @@ class RegistrationFormType extends AbstractType
                 'choices' => $choices,
                 'choice_label' => function ($abonnement) {
                     if ($abonnement->getNiveau() == 1)
-                        return '<div class="title">Standard</div>
+                        return '<div class="title">'.$abonnement->getNom().'</div>
                                      <div class="infos">
                                          <ul>
-                                             <li>Prix : 20€/an</li>
+                                             <li>Prix : '.$abonnement->getPrix().' €/an</li>
                                              <li>Fonctionalités :
                                                  <ul>
                                                      <li>Prêter du matériel</li>
@@ -87,10 +87,10 @@ class RegistrationFormType extends AbstractType
                                          </ul>
                                      </div>';
                     else if ($abonnement->getNiveau() == 2)
-                        return '<div class="title">Premium</div>
+                        return '<div class="title">'.$abonnement->getNom().'</div>
                                          <div class="infos">
                                              <ul>
-                                                 <li>Prix : 30€/an</li>
+                                                 <li>Prix : '.$abonnement->getPrix().' €/an</li>
                                                  <li>Fonctionalités bonus :
                                                      <ul>
                                                          <li>Emprunter du matériel</li>
@@ -113,6 +113,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => true,
                 'attr' => ['autocomplete' => 'new-password', 'placeholder' => ' '],
                 'required'=>false,
+                'help' => '6 caractères minimum',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe.',

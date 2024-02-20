@@ -32,6 +32,9 @@
                     {{ form_widget(registrationForm.password) }}
                     {{ form_label(registrationForm.password) }}
                     {{ form_errors(registrationForm.password) }}
+                    <div class="help">
+                        {{ form_help(registrationForm.password) }}
+                    </div>
                  </div>
                  <div class="input-container">
                     {{ form_widget(registrationForm.first_name) }}
@@ -44,7 +47,7 @@
                     {{ form_errors(registrationForm.surname) }}
                  </div>
             </div>
-            <div style="margin-left: 60px;">
+            <div style="margin-left: 70px;">
                 {{ form_row(registrationForm.abonnement, {label: "* Formules d'abonnemement :", attr: {'class': 'plans'} }) }}
             </div>
         </div>

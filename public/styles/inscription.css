@@ -64,7 +64,12 @@ button:hover {
     margin: 0;
     padding: 0;
     color:red;
-    font-size: 13px;
+    font-size: 14px;
+}
+
+.help {
+    font-size: 14px;
+    text-align: right;
 }
 
 .input-container input{ 
@@ -72,7 +77,6 @@ button:hover {
   border-bottom:1px solid #555;
   background:transparent;
   min-width: 50dvh;
-  margin-right: 30px;
   font-size:16px;
 }
 .input-container input:focus{ 
@@ -119,7 +123,7 @@ input[type="radio"] {
   /* Style for checked label */
 input[type="radio"]:checked + label {
     color: white;
-    background: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(255, 0, 0, 0.8));
+    background: linear-gradient(45deg, rgba(0, 0, 255, 0.9), rgba(255, 0, 0, 0.9));
 }
 
 .title {
