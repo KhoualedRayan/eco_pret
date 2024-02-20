@@ -43,7 +43,7 @@ button:active {
   border:0;
   border-bottom:1px solid #555;
   background:transparent;
-  min-width: 50dvh;
+  width: 100%;
   font-size:16px;
 }
 
@@ -61,7 +61,7 @@ button:active {
 
 .content {
     flex: 0;
-    padding: 10px 2em;
+    padding: 10px 3em;
     display: inline-block;
     width: fit-content;
     height: fit-content;
