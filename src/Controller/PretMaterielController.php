@@ -17,11 +17,11 @@ class PretMaterielController extends AbstractController
     #[Route('/pret/materiel', name: 'app_pret_materiel')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        #Check si l'utilisateur est connecter ou non.
-        $connecter = $this->estConnecter();
-        if ($connecter !== null) {
-            return $connecter;
+        // redirige l'utilisateur vers la page de connexion si non connecté
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
         }
+
         $categories = $entityManager->getRepository(CategorieMateriel::class)->findAll();
         return $this->render('pret_materiel/index.html.twig', [
             'controller_name' => 'PretMaterielController',
@@ -31,8 +31,6 @@ class PretMaterielController extends AbstractController
     #[Route('/handle_form_submission', name: 'handle_form_submission')]
     public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
     {
-
-        $user = $this->getUser();
         $titre = $request->request->get('titre');
         $date = new DateTime();
         $prix = $request->request->get('prix');
@@ -48,22 +46,12 @@ class PretMaterielController extends AbstractController
         $annonce->setDatePublication($date);
         $annonce->setDuree($duree_pret);
         $annonce->setPrix($prix);
-        $annonce->setPosteur($user);
+        $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");
 
         $entityManager->persist($annonce);
         $entityManager->flush();
         $this->addFlash('notificationAnnonces', 'Félicitations, votre annonce à été publiée !');
         return $this->redirectToRoute('app_home_page');
-    }
-    public function estConnecter()
-    {
-        #Si l'utilisateur n'est pas connecté, renvoit vers la page d'accueil
-        #Changer page d'accueil vers login quand fait
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return $this->redirectToRoute('app_login');
-        }
-        return null;
     }
 }

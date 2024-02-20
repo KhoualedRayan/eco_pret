@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/connexion.css') }}">
 {% endblock %}
 
@@ -9,7 +8,7 @@
 {% block body %}
 <form method="post">
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="alert">{{ error }}</div>
     {% endif %}
 
     {% if app.user %}
@@ -20,12 +19,12 @@
 
     <h1>Connexion</h1>
     <div class="inputbox">
-        <label for="inputId">Nom d'utilisateur ou email : </label>
-        <input type="text" value="{{ last_username }}" name="id" id="inputId" class="custom-input" required autofocus>
+        <input type="text" value="{{ last_username }}" name="id" id="inputId" class="custom-input" placeholder="" autofocus required>
+        <label for="inputId">Nom d'utilisateur ou email</label>
     </div>
     <div class="inputbox">
-        <label for="inputPassword">Mot de passe : </label>
-        <input type="password" name="password" id="inputPassword" class="custom-input" autocomplete="current-password" required>
+        <input type="password" name="password" id="inputPassword" class="custom-input" autocomplete="current-password" placeholder="" required>
+        <label for="inputPassword">Mot de passe</label>
     </div>
     <div style="margin-bottom: 15px;">
         Pas encore inscrit ? <a href="{{ path('app_register') }}" class="signup">Inscrivez-vous ici</a>

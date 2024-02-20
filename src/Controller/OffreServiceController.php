@@ -19,6 +19,11 @@ class OffreServiceController extends AbstractController
     #[Route('/offre/service', name: 'app_offre_service')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        // redirige l'utilisateur vers la page de connexion si non connecté
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $categories = $entityManager->getRepository(CategorieService::class)->findAll();
         return $this->render('offre_service/index.html.twig', [
             'controller_name' => 'OffreServiceController',
@@ -29,9 +34,6 @@ class OffreServiceController extends AbstractController
     #[Route('/handle_form_service', name: 'handle_form_service')]
     public function handleFormService(EntityManagerInterface $entityManager,Request $request): Response
     {
-        $users = $entityManager->getRepository(User::class);
-        $user = $users->find(5);
-        //$posteur_id = $this->getUser();
         $titre = $request->request->get('titre');
         $date = new DateTime();
         $prix = $request->request->get('prix');
@@ -42,7 +44,7 @@ class OffreServiceController extends AbstractController
         $annonce->setDescription($description);
         $annonce->setDatePublication($date);
         $annonce->setPrix($prix);
-        $annonce->setPosteur($user);
+        $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");
         $annonce->setDateFin($date);
         $entityManager->persist($annonce);

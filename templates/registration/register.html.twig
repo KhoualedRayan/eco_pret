@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/inscription.css') }}">
+<script src="{{ asset('scripts/inscription.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -16,21 +16,42 @@
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username, {label: "*Nom d'utilisateur : ", required : false, attr: {'class': 'custom-input'}})}}
-        <br>
-        {{ form_row(registrationForm.email, {label: '*Mail : ', required : false, attr: {'class': 'custom-input'}})}}
-        <br>
-        {{ form_row(registrationForm.password, {label: '*Mot de passe : ', required : false, attr: {'class': 'custom-input'}})}}
-        <br>
-        {{ form_row(registrationForm.first_name, {label: 'Prenom : ', required : false, attr: {'class': 'custom-input'}})}}
-        <br>
-        {{ form_row(registrationForm.surname, {label: 'Nom : ', required : false, attr: {'class': 'custom-input'}})}}
-        <br>
-        {{ form_row(registrationForm.abonnement, {label: "*Formule d'abonnement : "}) }}
-        {{ form_row(registrationForm.agreeTerms, {label: "*Accepter les termes d'utilisation : "}) }}
-        <br>
-        <br>
-        <p>(* Champs obligatoires)</p>
-        <button type="submit">S'inscrire</button>
+        <div style="display: flex;">
+            <div style="margin:auto 0">
+                <div class="input-container">
+                   {{ form_widget(registrationForm.username) }} 
+                   {{ form_label(registrationForm.username) }}
+                   {{ form_errors(registrationForm.username) }} 
+                </div>
+                <div class="input-container">
+                    {{ form_widget(registrationForm.email) }}
+                    {{ form_label(registrationForm.email) }}
+                    {{ form_errors(registrationForm.email) }}
+                 </div>
+                 <div class="input-container">
+                    {{ form_widget(registrationForm.password) }}
+                    {{ form_label(registrationForm.password) }}
+                    {{ form_errors(registrationForm.password) }}
+                    <div class="help">
+                        {{ form_help(registrationForm.password) }}
+                    </div>
+                 </div>
+                 <div class="input-container">
+                    {{ form_widget(registrationForm.first_name) }}
+                    {{ form_label(registrationForm.first_name) }}
+                    {{ form_errors(registrationForm.first_name) }}
+                 </div>
+                 <div class="input-container">
+                    {{ form_widget(registrationForm.surname) }}
+                    {{ form_label(registrationForm.surname) }}
+                    {{ form_errors(registrationForm.surname) }}
+                 </div>
+            </div>
+            <div style="margin-left: 70px;">
+                {{ form_row(registrationForm.abonnement, {label: "* Formules d'abonnemement :", attr: {'class': 'plans'} }) }}
+            </div>
+        </div>
+        <p>(*Champs obligatoires)</p>
+        <div style="text-align: center;"><button type="submit" class="but">S'inscrire</button></div>
     {{ form_end(registrationForm) }}
 {% endblock %}
