@@ -1,13 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\assets",
-    "\\assets\\styles",
+    "\\config\\packages",
+    "\\config\\routes",
     "\\src",
-    "\\src\\Controller",
+    "\\src\\Entity",
+    "\\src\\Security",
     "\\templates",
-    "\\templates\\home_page",
-    "\\templates\\offre_service",
     "\\templates\\pret_materiel",
     "\\templates\\registration",
     "\\templates\\security"

@@ -12,9 +12,42 @@
     
     <br />
     <label for="date_pret">Date et heure du service :</label>
-    <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required /><br />
+    <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
+
+
+    <br />
+    <label for="recurrence">Récurrence :</label>
+    <select name="recurrence" id="recurrence">
+        <option value="">Sélectionnez une récurrence</option>
+        <option value="hebdomadaire">Hebdomadaire</option>
+        <option value="quotidienne">Quotidienne</option>
+        <option value="mensuelle">Mensuelle</option>
+    </select>
+
+    <button type="button" id="addDateButton">Ajouter une autre date</button><br />
     <br />
     
+    <div id="periode">
+        <div id="jours" style="display:none;">
+            <label for="jour_fin">Jour de fin (compris):</label>
+            <input type="date" name="jour_fin" id="jour_fin" min="{{ "now"|date("Y-m-d") }}T00:00" ><br>
+        </div>
+    
+        <div id="mois" style="display:none;">
+            <label for="mois_fin">Mois de fin (compris) :</label>
+            <input type="month" name="mois_fin" id="mois_fin" min="{{ "now"|date("Y-m") }}T00:00" ><br>
+        </div>
+
+        <div id="semaine" style="display:none;">
+            <label for="semaine_fin">Semaine de fin (comprise) :</label>
+            <input type="week" name="semaine_fin" id="semaine_fin" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
+        </div>
+        <br />
+    </div>
+
+    <div id="additionalDates"></div>
+
+    <br />
     <label for="service">Service : </label>
     <select name="service" required>
         <option value="">Sélectionnez un tag pour votre Service</option>
@@ -23,28 +56,6 @@
         {% endfor %}
     </select><br />
 
-    <label for="recurrence">Récurrence :</label>
-    <select name="recurrence" id="recurrence">
-        <option value="">Sélectionnez une récurrence</option>
-        <option value="hebdomadaire">Hebdomadaire</option>
-        <option value="quotidienne">Quotidienne</option>
-        <option value="mensuelle">Mensuelle</option>
-    </select><br>
-    
-    <div id="jours" style="display:none;">
-        <label for="jour_fin">Jour de fin (compris):</label>
-        <input type="date" name="jour_fin" id="jour_fin" min="{{ "now"|date("Y-m-d") }}T00:00" required><br>
-    </div>
-    
-    <div id="mois" style="display:none;">
-        <label for="mois_fin">Mois de fin (compris) :</label>
-        <input type="month" name="mois_fin" id="mois_fin" min="{{ "now"|date("Y-m") }}T00:00" required><br>
-    </div>
-
-    <div id="semaine" style="display:none;">
-        <label for="semaine_fin">Semaine de fin (comprise) :</label>
-        <input type="week" name="semaine_fin" id="semaine_fin" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" required><br>
-    </div>
     
     <br />
     <label for="prix">Prix :</label>
@@ -55,7 +66,7 @@
     <textarea name="description" ></textarea><br />
 
     <button>Valider</button>
-    <button>Annuler</button>
+    <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>
 </form>
 
 <script>
@@ -73,8 +84,53 @@
             document.getElementById('jours').style.display = 'none';
             document.getElementById('mois').style.display = 'none';
             document.getElementById('semaine').style.display = 'block';
+        } else {
+            document.getElementById('jours').style.display = 'none';
+            document.getElementById('mois').style.display = 'none';
+            document.getElementById('semaine').style.display = 'none';
         }
     });
+    document.getElementById('addDateButton').addEventListener('click', function() {
+        var additionalDatesDiv = document.getElementById('additionalDates');
+        var newInput = document.createElement('input');
+        newInput.type = 'datetime-local';
+        newInput.name = 'additional_date[]';
+        newInput.min = '{{ "now"|date("Y-m-d") }}T00:00';
+        newInput.title = 'Date et heure du prêt optionnel, doit être supérieur à maintenant';
+        newInput.required = true;
+        additionalDatesDiv.append('Date optionnel : ');
+        additionalDatesDiv.appendChild(newInput);
+        additionalDatesDiv.appendChild(document.createElement('br'));
+
+        ajoutReccurence();
+    });
+    function ajoutReccurence() {
+        var additionalRecurrencesDiv = document.getElementById('additionalDates');
+        var newSelect = document.createElement('select');
+        var newPeriode = document.createElement('div');
+
+        newSelect.name = 'additional_recurrence[]';
+        newPeriode.name = 'additional_periode[]';
+
+        newSelect.innerHTML = document.getElementById('recurrence').innerHTML;
+        newPeriode.innerHTML = document.getElementById('periode').innerHTML;
+        additionalRecurrencesDiv.appendChild(newSelect);
+        additionalRecurrencesDiv.append(newSelect.value);
+        additionalRecurrencesDiv.appendChild(newPeriode);
+        additionalRecurrencesDiv.appendChild(document.createElement('br'));
+        newSelect.addEventListener('change', function() {
+            // Vérifie si la valeur sélectionnée est 'hebdomadaire'
+            if (newSelect.value === 'quotidienne') {
+                newPeriode.innerHTML = document.getElementById('jours').innerHTML;
+            } else if (newSelect.value === 'hebdomadaire') {
+                newPeriode.innerHTML = document.getElementById('semaine').innerHTML;
+            } else if (newSelect.value === 'mensuelle') {
+                newPeriode.innerHTML = document.getElementById('mois').innerHTML;
+            } else {
+                newPeriode.innerHTML = "";
+            }
+        });
+    }
 </script>
 
 {% endblock %}
