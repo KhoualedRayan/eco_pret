@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte associé a cet e-mail.')]
+#[UniqueEntity(fields: ['username'], message: 'Ce pseudo est déjà utilisé par un autre utilisateur.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,9 +22,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
-
-    #[ORM\Column]
-    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -37,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique : true)]
     private ?string $username = null;
 
     #[ORM\Column(nullable: true)]
@@ -110,9 +108,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles = array();
 
         return array_unique($roles);
     }

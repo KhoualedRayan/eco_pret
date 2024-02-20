@@ -10,13 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Abonnement;
+use App\Repository\AbonnementRepository;
+use Symfony\Component\Form\FormError;
 
 class RegistrationController extends AbstractController
 {
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -37,15 +42,14 @@ class RegistrationController extends AbstractController
 
             $user->setNbFlorains(1000);
 
-            $this->addFlash('success', 'Inscription réussie !');
-
             $entityManager->persist($user->getAbonnement());
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            $user = new User();
-            $form = $this->createForm(RegistrationFormType::class, $user);
+            $this->addFlash('notificationAnnonces', 'Félicitations, ' . $user->getUsername() . ', votre compte à été créé !');
+
+            return $this->redirectToRoute('app_login');
            
         }
 

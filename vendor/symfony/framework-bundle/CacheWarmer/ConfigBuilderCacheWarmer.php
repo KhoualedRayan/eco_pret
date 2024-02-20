@@ -31,13 +31,13 @@ class ConfigBuilderCacheWarmer implements CacheWarmerInterface
     private KernelInterface $kernel;
     private ?LoggerInterface $logger;
 
-    public function __construct(KernelInterface $kernel, LoggerInterface $logger = null)
+    public function __construct(KernelInterface $kernel, ?LoggerInterface $logger = null)
     {
         $this->kernel = $kernel;
         $this->logger = $logger;
     }
 
-    public function warmUp(string $cacheDir, string $buildDir = null): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         if (!$buildDir) {
             return [];
@@ -80,6 +80,6 @@ class ConfigBuilderCacheWarmer implements CacheWarmerInterface
 
     public function isOptional(): bool
     {
-        return true;
+        return false;
     }
 }

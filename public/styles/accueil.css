@@ -1,5 +1,3 @@
-
-
 .content {
     margin: 10px;
     padding: 1em;
@@ -12,6 +10,7 @@
     font-weight: bold;
     text-align: center;
     padding: 10px;
+    font-size: 24px;
     background-color: var(--couleurFond);
     border: 1px solid var(--couleurFilet);
     border-radius: 2rem;
@@ -27,7 +26,7 @@ button {
     color: #fff;
     display: inline-flex;
     font-family: system-ui;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     padding: 6px;
     margin-left: 2%;
@@ -59,7 +58,7 @@ h2 {
     margin-right: 10px; 
 }
 
-/* Pour que les deux tableaux aient le même style */
+/* Pour que les deux tableaux aient le mï¿½me style */
 .table-wrapper table {
     width: 100%;
 }

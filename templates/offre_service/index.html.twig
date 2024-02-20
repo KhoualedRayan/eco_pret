@@ -14,7 +14,7 @@
     
     <br />
     <label for="date_pret">Date et heure du service :</label>
-    <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" /><br />
+    <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required /><br />
     <br />
     
     <label for="service">Service : </label>
@@ -29,7 +29,7 @@
     
     <br />
     <label for="prix">Prix :</label>
-    <input type="text" class="input_small" name="prix" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez un prix valide (par exemple, 10.50)" required />€<br />
+    <input type="text" class="input_small" name="prix" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez un prix valide (par exemple, 10.50)" required /><br />
 
 
     <br />

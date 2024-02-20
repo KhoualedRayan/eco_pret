@@ -44,7 +44,7 @@ necessary files. If not, or you're curious, see :ref:`Manual Setup <manual-insta
 Usage
 -----
 
-You can now create custom Stimulus controllers inside of the ``assets/controllers.``
+You can now create custom Stimulus controllers inside of the ``assets/controllers``
 directory. In fact, you should have an example controller there already: ``hello_controller.js``:
 
 .. code-block:: javascript
@@ -57,7 +57,15 @@ directory. In fact, you should have an example controller there already: ``hello
         }
     }
 
-Use the Twig functions from this bundle to activate your controllers:
+Then, activate the controller in your HTML:
+
+.. code-block:: html+twig
+
+    <div data-controller="hello">
+       ...
+    </div>
+
+Optionally, this bundle has a Twig function to render the attribute:
 
 .. code-block:: html+twig
 
@@ -65,11 +73,24 @@ Use the Twig functions from this bundle to activate your controllers:
         ...
     </div>
 
+    <!-- would render -->
+    <div data-controller="hello">
+       ...
+    </div>
+
 That's it! Whenever this element appears on the page, the ``hello`` controller
 will activate.
 
 There's a *lot* more to learn about Stimulus. See the `Stimulus Documentation`_
 for all the goodies.
+
+TypeScript Controllers
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to use `TypeScript`_ to define your controllers, you can! Install and set up the
+`sensiolabs/typescript-bundle`_. Then be sure to add the ``assets/controllers`` path to the
+`sensiolabs_typescript.source_dir` configuration. Finally, create your controller in that
+directory and you're good to go.
 
 .. _ux-packages:
 
@@ -159,6 +180,17 @@ Stimulus Twig Helpers
 This bundle adds 3 Twig functions/filters to help add Stimulus controllers,
 actions & targets in your templates.
 
+.. note::
+
+    Though this bundle provides these helpful Twig functions/filters, it's
+    recommended to use raw data attributes instead, as they're straightforward.
+
+.. tip::
+
+    If you use PhpStorm IDE - you may want to install
+    [Stimulus plugin](https://plugins.jetbrains.com/plugin/18940-stimulus)
+    to get nice auto-completion for the attributes.
+
 stimulus_controller
 ~~~~~~~~~~~~~~~~~~~
 
@@ -240,6 +272,11 @@ there's also a ``stimulus_controller`` filter:
 .. code-block:: html+twig
 
     <div {{ stimulus_controller('chart', { 'name': 'Likes' })|stimulus_controller('other-controller') }}>
+        Hello
+    </div>
+
+    <!-- would render -->
+    <div data-controller="chart other-controller" data-chart-name-value="Likes">
         Hello
     </div>
 
@@ -541,3 +578,5 @@ it will normalize it:
 .. _`Vue`: https://vuejs.org/
 .. _`stimulus-use`: https://stimulus-use.github.io/stimulus-use
 .. _`stimulus-components`: https://stimulus-components.netlify.app/
+.. _`TypeScript`: https://www.typescriptlang.org/
+.. _`sensiolabs/typescript-bundle`: https://github.com/sensiolabs/AssetMapperTypeScriptBundle

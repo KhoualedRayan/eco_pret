@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
-
+use Doctrine;
 class HomePageController extends AbstractController
 {
     #[Route('', name: 'app_home_page')]

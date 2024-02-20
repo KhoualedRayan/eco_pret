@@ -1,8 +1,10 @@
-
-
-
 :root {
     --couleurFancy: #26b326;
+    --couleurTexte: #333;
+    --couleurFond: white; 
+    --couleurFondMain: #f5f5f5;
+    --couleurFondInput: white; 
+    --couleurFilet: #ddd;
 }
 
 body {
@@ -48,13 +50,6 @@ header a {
     font-weight: bold;
 }
 
-.material-icons.theme {
-    font-size: 18px;
-    margin-left: 15px;
-    cursor: pointer;
-    color: var(--couleurTexte);
-}
-
 .aDroite {
     display: flex;
     align-items: center;
@@ -65,6 +60,17 @@ header a {
     margin-right: 10px;
     border-bottom: 1px solid;
     cursor: pointer;
+}
+
+.solde {
+    border-right: 1px solid black;
+    padding-right: 10px;
+    display: flex;
+}
+
+.material-icons {
+    vertical-align: middle;
+    font-size: 18px;
 }
 
 .lien:hover {

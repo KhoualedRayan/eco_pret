@@ -4,13 +4,13 @@
     "\\src",
     "\\src\\Controller",
     "\\src\\Entity",
-    "\\src\\Form",
-    "\\src\\Repository",
     "\\templates",
     "\\templates\\home_page",
+    "\\templates\\inscription",
     "\\templates\\offre_service",
-    "\\templates\\pret_materiel"
+    "\\templates\\pret_materiel",
+    "\\templates\\registration"
   ],
-  "SelectedNode": "\\src\\Controller\\PretMaterielController.php",
+  "SelectedNode": "\\assets\\app.js",
   "PreviewInSolutionExplorer": false
 }

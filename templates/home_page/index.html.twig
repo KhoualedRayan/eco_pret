@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 {% endblock %}
 
+{% block title %}EcoPrêt{% endblock %}
 {# templates/base.html.twig #}
 
 {% block body %}
@@ -31,7 +32,7 @@
                     <tr>
                         <td class="border-bottom text-left">{{anoServ.getTitre()}}</td>
                         <td class="border-bottom text-left">{{anoServ.getDescription()}}</td>
-                        <td class="border-bottom text-left">{{anoServ.getPrix()}}€</td>
+                        <td class="border-bottom text-left">{{anoServ.getPrix()}}</td>
                         <td class="border-bottom text-left">{{anoServ.getStatut()}}</td>
                         <td class="border-bottom text-left">{{anoServ.getPosteur().getUsername()}}</td>
                     </tr>
@@ -56,7 +57,7 @@
                     <tr>
                         <td class="border-bottom text-left">{{anoMat.getTitre()}}</td>
                         <td class="border-bottom text-left">{{anoMat.getDescription()}}</td>
-                        <td class="border-bottom text-left">{{anoMat.getPrix()}}€</td>
+                        <td class="border-bottom text-left">{{anoMat.getPrix()}}</td>
                         <td class="border-bottom text-left">{{anoMat.getStatut()}}</td>
                         <td class="border-bottom text-left">{{anoMat.getPosteur().getUsername()}}</td>
                     </tr>

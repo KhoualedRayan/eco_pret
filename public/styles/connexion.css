@@ -1,0 +1,82 @@
+button {
+    align-items: center;
+    background-clip: padding-box;
+    background-color: var(--couleurFancy);
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    color: #fff;
+    display: inline-flex;
+    font-family: system-ui;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 6px;
+}
+
+button:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    transform: translateY(-1px);
+}
+
+
+button:active {
+  background-color: #136e13;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+
+.inputbox{
+    position:relative;
+    margin-bottom:25px;
+}
+
+.inputbox label {
+    position:absolute;
+    top:0px;
+    left:0px;
+    font-size:16px;
+    pointer-events:none;
+    transition: all 0.2s ease-in-out;
+}
+
+.inputbox input{ 
+  border:0;
+  border-bottom:1px solid #555;
+  background:transparent;
+  width: 100%;
+  font-size:16px;
+}
+
+.inputbox input:focus{ 
+ border: none;
+ outline:none;
+ border-bottom:1px solid var(--couleurFancy);
+}
+
+.inputbox input:focus + label,
+.inputbox input:not(:placeholder-shown) + label {
+    top: -14px;
+    font-size: 13px;
+}
+
+.content {
+    flex: 0;
+    padding: 10px 3em;
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    text-align: center;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+    border-radius: .5rem;
+}
+
+.signup {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.alert {
+    color: red;
+}

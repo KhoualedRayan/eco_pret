@@ -1,26 +1,147 @@
-.custom-choice-box {
-    
-    margin: 30px;
-    margin-right: 10px;
-    padding-left: 2Opx;
-    display: block;
-    
+.content {
+    padding: 1em;
+    border-radius: .5rem;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+    flex: 0;
+        display: inline-block;
+        height: fit-content;
+        margin: auto;
 }
 
-.custom-choice-box label {
-    
-    margin-right: 20px;
-    font-size: 16px; 
+/* BOUTON S'INSCRIRE */
+
+button {
+    align-items: center;
+    background-clip: padding-box;
+    background-color: var(--couleurFancy);
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    color: #fff;
+    display: inline-flex;
+    font-family: system-ui;
+    font-size: 16px;
     font-weight: bold;
-    font-style: italic;
-    
+    padding: 6px;
 }
 
-.custom-choice-box input {
-    
-    margin-right: 7px;
-    border-radius: 2px black solid;
-    
+button:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    transform: translateY(-1px);
 }
 
 
+.but:active {
+  background-color: #136e13;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+
+/* DEDIE AUX INPUT BASIQUES */
+
+.input-container{
+    position:relative;
+    margin-bottom:25px;
+}
+
+.input-container:last-child {
+    margin-bottom: 0;
+}
+
+
+.input-container label {
+    position:absolute;
+    top:0px;
+    left:0px;
+    font-size:16px;
+    pointer-events:none;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color:red;
+    font-size: 14px;
+}
+
+.help {
+    font-size: 14px;
+    text-align: right;
+}
+
+.input-container input{ 
+  border:0;
+  border-bottom:1px solid #555;
+  background:transparent;
+  min-width: 50dvh;
+  font-size:16px;
+}
+.input-container input:focus{ 
+ border:none;
+ outline:none;
+ border-bottom:1px solid var(--couleurFancy);
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: -14px;
+    font-size: 13px;
+}
+
+
+/* DEDIE AUX FORMULES D'ABONNEMENT */
+.plans {
+    display: flex;
+    margin: 15px 0;
+}
+
+/* Le message d'erreur n'apparait pas si je décommente
+input[type="radio"] {
+    visibility: hidden;
+} */
+
+.plans label {
+    background-color: var(--couleurFond);
+    color: var(--couleurTexte);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: auto;
+    margin-right: 20px;
+    text-wrap: nowrap;
+    box-shadow: 0 0 7px rgba(100, 100, 100, 0.315);
+    align-items: center;
+    border-radius: .5rem;
+    cursor: pointer;
+    font-family: system-ui;
+    font-size: 16px;
+  }
+  
+  /* Style for checked label */
+input[type="radio"]:checked + label {
+    color: white;
+    background: linear-gradient(45deg, rgba(0, 0, 255, 0.9), rgba(255, 0, 0, 0.9));
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.infos {
+    margin-right: 18px;
+    font-weight: normal;
+}
+
+.plans li {
+    text-align: left;
+    margin: 5px 0;
+}
+
+.login {
+    text-decoration: none;
+    color: #007bff;
+}
