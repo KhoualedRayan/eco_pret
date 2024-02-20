@@ -2,9 +2,7 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
-
 {% endblock %}
-
 
 {% block body %}
 <h2>Nouvelle Annonce</h2>
@@ -23,22 +21,60 @@
         {% for serv in categories %}
             <option value="{{ serv.getId() }}">{{ serv.getNomService() }}</option>
         {% endfor %}
-
     </select><br />
+
+    <label for="recurrence">Récurrence :</label>
+    <select name="recurrence" id="recurrence">
+        <option value="">Sélectionnez une récurrence</option>
+        <option value="hebdomadaire">Hebdomadaire</option>
+        <option value="quotidienne">Quotidienne</option>
+        <option value="mensuelle">Mensuelle</option>
+    </select><br>
     
+    <div id="jours" style="display:none;">
+        <label for="jour_fin">Jour de fin (compris):</label>
+        <input type="date" name="jour_fin" id="jour_fin" min="{{ "now"|date("Y-m-d") }}T00:00" required><br>
+    </div>
+    
+    <div id="mois" style="display:none;">
+        <label for="mois_fin">Mois de fin (compris) :</label>
+        <input type="month" name="mois_fin" id="mois_fin" min="{{ "now"|date("Y-m") }}T00:00" required><br>
+    </div>
+
+    <div id="semaine" style="display:none;">
+        <label for="semaine_fin">Semaine de fin (comprise) :</label>
+        <input type="week" name="semaine_fin" id="semaine_fin" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" required><br>
+    </div>
     
     <br />
     <label for="prix">Prix :</label>
-    <input type="text" class="input_small" name="prix" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez un prix valide (par exemple, 10.50)" required /><br />
-
+    <input type="text" class="input_small" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10)" required /><br />
 
     <br />
     <label for="description">Description</label><br />
     <textarea name="description" ></textarea><br />
 
-
     <button>Valider</button>
     <button>Annuler</button>
 </form>
+
+<script>
+    document.getElementById('recurrence').addEventListener('change', function() {
+        var recurrence = this.value;
+        if (recurrence === 'quotidienne') {
+            document.getElementById('jours').style.display = 'block';
+            document.getElementById('mois').style.display = 'none';
+            document.getElementById('semaine').style.display = 'none';
+        } else if (recurrence === 'mensuelle') {
+            document.getElementById('jours').style.display = 'none';
+            document.getElementById('mois').style.display = 'block';
+            document.getElementById('semaine').style.display = 'none';
+        } else if (recurrence === 'hebdomadaire') {
+            document.getElementById('jours').style.display = 'none';
+            document.getElementById('mois').style.display = 'none';
+            document.getElementById('semaine').style.display = 'block';
+        }
+    });
+</script>
 
 {% endblock %}
