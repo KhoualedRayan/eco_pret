@@ -31,6 +31,7 @@
             </div>
             <div class="aDroite">
                 {% if app.user %}
+                    <div class="solde">Solde : {{ app.user.nbflorains }} <span class="material-icons">attach_money</span></a></div>
                     <div class='lien'><a href='#'>Mon Profil</a></div>
                     <div class='lien'><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
                 {% else %}
