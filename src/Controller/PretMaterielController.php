@@ -17,6 +17,11 @@ class PretMaterielController extends AbstractController
     #[Route('/pret/materiel', name: 'app_pret_materiel')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        #Check si l'utilisateur est connecter ou non.
+        $connecter = $this->estConnecter();
+        if ($connecter !== null) {
+            return $connecter;
+        }
         $categories = $entityManager->getRepository(CategorieMateriel::class)->findAll();
         return $this->render('pret_materiel/index.html.twig', [
             'controller_name' => 'PretMaterielController',
@@ -26,9 +31,8 @@ class PretMaterielController extends AbstractController
     #[Route('/handle_form_submission', name: 'handle_form_submission')]
     public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
     {
-        $users = $entityManager->getRepository(User::class);
-        $user = $users->find(5);
-        //$posteur_id = $this->getUser();
+
+        $user = $this->getUser();
         $titre = $request->request->get('titre');
         $date = new DateTime();
         $prix = $request->request->get('prix');
@@ -51,5 +55,15 @@ class PretMaterielController extends AbstractController
         $entityManager->flush();
         $this->addFlash('notificationAnnonces', 'Félicitations, votre annonce à été publiée !');
         return $this->redirectToRoute('app_home_page');
+    }
+    public function estConnecter()
+    {
+        #Si l'utilisateur n'est pas connecté, renvoit vers la page d'accueil
+        #Changer page d'accueil vers login quand fait
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            return $this->redirectToRoute('app_login');
+        }
+        return null;
     }
 }
