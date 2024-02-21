@@ -20,6 +20,9 @@ class AnnonceService extends Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_debut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -48,7 +51,7 @@ class AnnonceService extends Annonce
 
         return $this;
     }
-    
+
     public function getPosteur(): ?User
     {
         return $this->posteur;
@@ -60,5 +63,18 @@ class AnnonceService extends Annonce
 
         return $this;
     }
+
+    public function getDateDebut(): ?\DateTimeInterface
+    {
+        return $this->date_debut;
+    }
+
+    public function setDateDebut(?\DateTimeInterface $date_debut): static
+    {
+        $this->date_debut = $date_debut;
+
+        return $this;
+    }
+
 
 }
