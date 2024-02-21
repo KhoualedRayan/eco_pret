@@ -15,7 +15,7 @@ class TestsConnexionTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Connexion');
         #test pour savoir si l'utilisateur est bien sur la page de connexion
     }
-    public function testLogin()
+    public function testLoginUsername()
     {
         $client = static::createClient();
 
@@ -24,6 +24,21 @@ class TestsConnexionTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $form = $crawler->filter('#login')->form();
         $form['id'] = 'test2';
+        $form['password'] = '123456';
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertRouteSame('app_home_page');
+
+    }
+    public function testLoginMail()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->filter('#login')->form();
+        $form['id'] = 'test2@test.fr';
         $form['password'] = '123456';
         $client->submit($form);
         $crawler = $client->followRedirect();
