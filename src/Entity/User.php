@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -68,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?int $nb_florains = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateAbonnement = null;
 
     public function __construct()
     {
@@ -396,6 +400,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNbFlorains(?int $nb_florains): static
     {
         $this->nb_florains = $nb_florains;
+
+        return $this;
+    }
+
+    public function getDateAbonnement(): ?\DateTimeInterface
+    {
+        return $this->dateAbonnement;
+    }
+
+    public function setDateAbonnement(?\DateTimeInterface $dateAbonnement): static
+    {
+        $this->dateAbonnement = $dateAbonnement;
 
         return $this;
     }
