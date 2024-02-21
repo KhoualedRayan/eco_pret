@@ -73,6 +73,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateAbonnement = null;
 
+    #[ORM\ManyToOne]
+    private ?Abonnement $nextAbonnement = null;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
@@ -412,6 +415,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateAbonnement(?\DateTimeInterface $dateAbonnement): static
     {
         $this->dateAbonnement = $dateAbonnement;
+
+        return $this;
+    }
+
+    public function getNextAbonnement(): ?Abonnement
+    {
+        return $this->nextAbonnement;
+    }
+
+    public function setNextAbonnement(?Abonnement $nextAbonnement): static
+    {
+        $this->nextAbonnement = $nextAbonnement;
 
         return $this;
     }

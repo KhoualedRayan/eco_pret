@@ -21,7 +21,7 @@
     </div>
     <div style="display: flex;">
         <div class="solde">Solde :&nbsp;<span class="bold">{{ app.user.nbflorains }}</span> <span class="material-icons spe">attach_money</span></div>
-        Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>
+        Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>&nbsp;(fin : {{ app.user.dateAbonnement|date_modify('+1 year')|date('d/m/Y') }})
     </div>
 </div>
 
@@ -57,15 +57,49 @@
                     <label>Nom</label><br>
                     <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
                 </div>
+                <div>
+                    Abonnement* :<br>
+                    {% for abo in abonnements %}
+                        {% if abo.getNiveau() == 1 %}
+                        <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                        <label for="option1">
+                            <div class="title">{{ abo.nom }}</div>
+                            <div class="infos">
+                                <ul>
+                                    <li>Prix : {{ abo.prix }} €/an</li>
+                                    <li>Fonctionalités :
+                                        <ul>
+                                            <li>Prêter du matériel</li>
+                                            <li>Offrir des services</li>
+                                            <li>Recevoir des services</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </label>
+                        {% else %}
+                        <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                        <label for="option2">
+                            <div class="title">{{ abo.nom }}</div>
+                            <div class="infos">
+                                <ul>
+                                    <li>Prix : {{ abo.prix }} €/an</li>
+                                    <li>Fonctionalités bonus :
+                                        <ul>
+                                            <li>Emprunter du matériel</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </label>
+                        {% endif %}
+                    {% endfor %}
+                    *correspond à l'abonnement après la fin de votre abonnement en cours
+                </div>
                 <button type="submit" name="valider" {% if not edit_mode %}class="validerBouton"{% endif %}>Valider les modifications</button>
                 <br><button>Changer de mot de passe</button>
             </form>
         </div>
-        <div>
-            Abonnement
-        </div>
-
-        
         <div>
         </div>
     </div>
