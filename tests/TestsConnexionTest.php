@@ -30,4 +30,19 @@ class TestsConnexionTest extends WebTestCase
         $this->assertRouteSame('app_home_page');
 
     }
+    public function testFailLogin()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->filter('#login')->form();
+        $form['id'] = 'test112';
+        $form['password'] = '123456';
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertRouteSame('app_login');
+
+    }
 }
