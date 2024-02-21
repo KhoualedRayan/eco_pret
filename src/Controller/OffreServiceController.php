@@ -12,6 +12,7 @@ use App\Entity\AnnonceService;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Abonnement;
+use App\Entity\DatePonctuelleService;
 
 
 class OffreServiceController extends AbstractController
@@ -46,11 +47,28 @@ class OffreServiceController extends AbstractController
         $annonce->setPrix($prix);
         $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");
-        $annonce->setDateFin($date);
+
+        
+
+        $additionalDates = $request->request->all()['additional_date'] ?? null;
+        echo "TESSSSSSSSSSSSSSSSSSSSSSSSSSST";
+    echo "TE";
+    dump($request->request->all());
+
+    if(is_array($additionalDates)) {
+        foreach ($additionalDates as $date) {
+            echo("toto" . $date);
+            $dateponct = new DatePonctuelleService();
+            $dateponct->setDate(new DateTime($date));
+            $entityManager->persist($dateponct);
+            $annonce->addDatePonct($dateponct);
+        }
+    } else {
+    }
         $entityManager->persist($annonce);
         $entityManager->flush();
 
         $this->addFlash('notificationAnnonces', 'Félicitations, votre annonce a été publiée !');
-        return $this->redirectToRoute('app_home_page');
+        return null;
     }
 }

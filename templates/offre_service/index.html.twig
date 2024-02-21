@@ -91,6 +91,16 @@
         }
     });
     document.getElementById('addDateButton').addEventListener('click', function() {
+        console.log('ICI');
+
+        var additionalDates = document.getElementsByName('additional_date[]');
+
+        // Parcourir tous les champs de dates
+        for (var i = 0; i < additionalDates.length; i++) {
+            // Afficher la valeur de chaque champ dans la console
+            console.log("Date optionnelle " + (i + 1) + ": " + additionalDates[i].value);
+        }
+
         var additionalDatesDiv = document.getElementById('additionalDates');
         var newInput = document.createElement('input');
         newInput.type = 'datetime-local';
