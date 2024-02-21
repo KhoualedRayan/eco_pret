@@ -31,6 +31,7 @@ class RegistrationController extends AbstractController
             $user->setUsername($form->get('username')->getData());
             $user->setEmail($form->get('email')->getData());
             $user->setAbonnement($form->get('abonnement')->getData());
+            $user->setNextAbonnement($form->get('abonnement')->getData());
             $date = new DateTime();
             $user->setDateAbonnement($date);
             // encode the plain password

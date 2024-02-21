@@ -28,5 +28,18 @@ function edit(icone) {
     elems['prenom'].readOnly = !elems['prenom'].readOnly;
     elems['email'].readOnly = !elems['email'].readOnly;
 
+    var abo = elems['options'];
+    for (var i = 0; i < abo.length; i++) {
+        abo[i].disabled = !abo[i].disabled;
+    }
+
     elems['valider'].style.display = icone.innerHTML == 'cancel' ? 'block' : 'none';
+}
+
+function clickAbo(clique, actuel) {
+    document.getElementById('changeAbo').disabled = clique == actuel;
+}
+
+function changeAbo() {
+
 }
