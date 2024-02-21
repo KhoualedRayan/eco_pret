@@ -67,7 +67,58 @@
 
     <div id="tab2" class="tab">
         <h3>Mes Annonces</h3>
-        <p>En construction</p>
+        <div class="table-container">
+            <div class="table-wrapper">
+                <h3>Services</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="border-bottom text-left">Titre</th>
+                            <th class="border-bottom text-left">Description</th>
+                            <th class="border-bottom text-left">Prix</th>
+                            <th class="border-bottom text-left">Statut</th>
+                            <th class="border-bottom text-left">Posteur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for anoServ in annonce_service %}
+                            <tr>
+                                <td class="border-bottom text-left">{{anoServ.getTitre()}}</td>
+                                <td class="border-bottom text-left">{{anoServ.getDescription()}}</td>
+                                <td class="border-bottom text-left">{{anoServ.getPrix()}}</td>
+                                <td class="border-bottom text-left">{{anoServ.getStatut()}}</td>
+                                <td class="border-bottom text-left">{{anoServ.getPosteur().getUsername()}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrapper">
+                <h3>Matériels</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="border-bottom text-left">Titre</th>
+                            <th class="border-bottom text-left">Description</th>
+                            <th class="border-bottom text-left">Prix</th>
+                            <th class="border-bottom text-left">Statut</th>
+                            <th class="border-bottom text-left">Posteur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for anoMat in annonce_materiel %}
+                            <tr>
+                                <td class="border-bottom text-left">{{anoMat.getTitre()}}</td>
+                                <td class="border-bottom text-left">{{anoMat.getDescription()}}</td>
+                                <td class="border-bottom text-left">{{anoMat.getPrix()}}</td>
+                                <td class="border-bottom text-left">{{anoMat.getStatut()}}</td>
+                                <td class="border-bottom text-left">{{anoMat.getPosteur().getUsername()}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div id="tab3" class="tab">

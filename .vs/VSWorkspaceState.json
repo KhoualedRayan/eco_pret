@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\config\\packages",
-    "\\config\\routes",
     "\\src",
+    "\\src\\Controller",
     "\\src\\Entity",
     "\\src\\Security",
     "\\templates",
@@ -11,6 +10,6 @@
     "\\templates\\registration",
     "\\templates\\security"
   ],
-  "SelectedNode": "\\src\\Controller\\PretMaterielController.php",
+  "SelectedNode": "\\templates\\pret_materiel\\index.html.twig",
   "PreviewInSolutionExplorer": false
 }

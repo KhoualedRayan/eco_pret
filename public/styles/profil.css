@@ -1,4 +1,4 @@
-.content {
+﻿.content {
     margin: 1em;
     padding: 1em;
     border-radius: 10px;
@@ -102,4 +102,30 @@
 
 .validerBouton {
     display: none;
+}
+
+
+/* CSS TEMPORARIRE A CHANGER DES 'Annonces' */
+.table-container {
+    display: flex;
+}
+
+.table-wrapper {
+    flex: 1;
+    margin-right: 10px; 
+}
+
+/* Pour que les deux tableaux aient le m�me style */
+.table-wrapper table {
+    width: 100%;
+}
+
+.table-wrapper th {
+    border-bottom: 1px solid #000;
+    text-align: left;
+}
+
+.table-wrapper td {
+    border-bottom: 1px solid #ccc;
+    text-align: left;
 }

@@ -11,11 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
+use App\Entity\AnnonceService;
+use App\Entity\AnnonceMateriel;
 
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -27,12 +29,16 @@ class ProfileController extends AbstractController
             $session->remove('errors');
         } else {
             $errors = [];
-        } 
+        }
+        $annonceService = $entityManager->getRepository(AnnonceService::class)->findBy(['posteur' => $this->getUser()]);
+        $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findBy(['posteur' => $this->getUser()]);
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
             'errors' => $errors,
             'edit_mode' => $edit_mode,
+            'annonce_service' => $annonceService,
+            'annonce_materiel' => $annonceMateriel,
         ]);
     }
 
@@ -58,7 +64,7 @@ class ProfileController extends AbstractController
                 $user->setUsername($newUsername);
             }
         }
-        
+
         if ($newEmail != $user->getEmail()) {
             if ($ur->findOneByEmail($newEmail)) {
                 $errors['email'] = 'Il existe déjà un compte associé a l\'email '.$newEmail.'.';
