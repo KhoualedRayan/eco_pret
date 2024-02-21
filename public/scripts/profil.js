@@ -68,6 +68,7 @@ function submitMotDePasseForm(event) {
 				}, 500);
             	
             } else {
+                alert(xhr.responseText);
             	document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
 				setTimeout(function () {
 				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
