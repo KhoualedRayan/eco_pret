@@ -105,7 +105,7 @@ class ProfileController extends AbstractController
         $user->setFirstName($newPrenom);
         $entityManager->persist($user);
         $entityManager->flush();
-        $this->addFlash('notificationInfos', 'Vos modifications ont été enregistrées avec succès !');
+        $this->addFlash('notifications', 'Vos modifications ont été enregistrées avec succès !');
         return $this->redirectToRoute('app_profile');
     }
 
@@ -136,7 +136,7 @@ class ProfileController extends AbstractController
             $entityManager->persist($this->getUser());
             $entityManager->flush();
         
-            $this->addFlash('notificationInfos', 'Votre mot de passe a été modifié avec succès !');
+            $this->addFlash('notifications', 'Votre mot de passe a été modifié avec succès !');
 
             return new Response("OK");
         } else {
