@@ -19,8 +19,7 @@ function openTab(evt, tabName) {
 }
 
 function edit(icone) {
-    if (icone.innerHTML == 'cancel') location.reload();
-    icone.innerHTML = 'cancel';
+    icone.innerHTML = icone.innerHTML == 'cancel' ? 'edit_square' : 'cancel';
 
     var elems = document.forms[0].elements;
 
@@ -29,5 +28,5 @@ function edit(icone) {
     elems['prenom'].readOnly = !elems['prenom'].readOnly;
     elems['email'].readOnly = !elems['email'].readOnly;
 
-    elems['valider'].style.display = 'block';
+    elems['valider'].style.display = icone.innerHTML == 'cancel' ? 'block' : 'none';
 }

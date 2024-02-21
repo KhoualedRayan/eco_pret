@@ -21,12 +21,18 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $session = new Session();
-        $errors = $session->has('errors') ? $session->get('errors') : [];
-        if ($session->has('errors')) $session->remove('errors');
+        $edit_mode = $session->has('errors');
+        if ($edit_mode) {
+            $errors = $session->get('errors');
+            $session->remove('errors');
+        } else {
+            $errors = [];
+        } 
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
             'errors' => $errors,
+            'edit_mode' => $edit_mode,
         ]);
     }
 
@@ -47,7 +53,7 @@ class ProfileController extends AbstractController
             $errors['username'] = 'Le nom d\'utilisateur ne peut pas contenir "@".';
         } else if ($newUsername != $user->getUsername()) {
             if ($ur->findOneByUsername($newUsername)) {
-                $errors['username'] = 'Ce pseudo est déjà utilisé par un autre utilisateur.';
+                $errors['username'] = 'Le pseudo '.$newUsername.' est déjà utilisé par un autre utilisateur.';
             } else {
                 $user->setUsername($newUsername);
             }
@@ -55,7 +61,7 @@ class ProfileController extends AbstractController
         
         if ($newEmail != $user->getEmail()) {
             if ($ur->findOneByEmail($newEmail)) {
-                $errors['email'] = 'Il existe déjà un compte associé a cet e-mail.';
+                $errors['email'] = 'Il existe déjà un compte associé a l\'email '.$newEmail.'.';
             } else {
                 $user->setEmail($newEmail);
             }

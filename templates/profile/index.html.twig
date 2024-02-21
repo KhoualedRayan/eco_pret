@@ -34,29 +34,30 @@
     </div>
 
     <div id="tab1" class="tab active">
-        <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>edit_square</span>
+        <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
+        </span>
         <h3>Vos informations personnelles</h3>
         <div>
             <form action="{{ path('handle_infos_form') }}" method="POST">
                 <div class="blockI">
                     <label>Nom d'utilisateur</label><br>
-                    <input type="text" name="username" value={{ app.user.username }} readonly><br>
+                    <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
                     <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
                 </div>
                 <div class="blockI">
                     <label>Email</label><br>
-                    <input type="email" name="email" value={{ app.user.email }} readonly><br>
+                    <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
                     <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
                 </div>
                 <div class="blockI">
                     <label>Prénom</label><br>
-                    <input type="text" name="prenom" {% if app.user.firstname %} value={{ app.user.firstname }} {% else %} placeholder="Non spécifié." {% endif %} readonly><br>
+                    <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
                 </div>
                 <div class="blockI">
                     <label>Nom</label><br>
-                    <input type="text" name="nom" {% if app.user.surname %} value={{ app.user.surname }} {% else %} placeholder="Non spécifié." {% endif %} readonly><br>    
+                    <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
                 </div>
-                <button type="submit" name="valider" class="validerBouton">Valider les modifications</button>
+                <button type="submit" name="valider" {% if not edit_mode %}class="validerBouton"{% endif %}>Valider les modifications</button>
                 <br><button>Changer de mot de passe</button>
             </form>
         </div>
