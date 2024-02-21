@@ -108,6 +108,47 @@ class ProfileController extends AbstractController
         $this->addFlash('notificationInfos', 'Vos modifications ont été enregistrées avec succès !');
         return $this->redirectToRoute('app_profile');
     }
+
+    #[Route('/ajax/mdpForm', name: 'mdp_form')]
+    public function checkMDP(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $data = $request->request;
+        
+        $motDePasseActuel = $data->get('motDePasseActuel');
+        $nouveauMotDePasse = $data->get('nouveauMotDePasse');
+        $confirmNouveauMDP = $data->get('confirmNouveauMDP');
+        
+        $bonMDPActuel = !$passwordHasher->isPasswordValid($this->getUser(), $motDePasseActuel);
+        $motDePasseSecurise = strlen($nouveauMotDePasse) >= 6;
+        $confirmerCorrect = $nouveauMotDePasse == $confirmNouveauMDP;
+        
+        if ($bonMDPActuel && $confirmerCorrect && $motDePasseSecurise) {
+    
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $nouveauMotDePasse
+                )
+            );
+            $entityManager->persist($user);
+            $entityManager->flush();
+        
+            $this->addFlash('notificationInfos', 'Votre mot de passe a été modifié avec succès !');
+
+            return new Response("OK");
+        } else {
+            if (!$motDePasseSecurise) {
+                new Response("nouveauMotDePasse");
+            } else if (!$confirmerCorrect) {
+                new Response("confirmNouveauMDP");
+            } else {
+                new Response("motDePasseActuel");
+            }
+        }
+    }
 }
 
 

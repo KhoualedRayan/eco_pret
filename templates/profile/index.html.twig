@@ -97,11 +97,48 @@
                     *correspond à l'abonnement après la fin de votre abonnement en cours
                 </div>
                 <button type="submit" name="valider" {% if not edit_mode %}class="validerBouton"{% endif %}>Valider les modifications</button>
-                <br><button>Changer de mot de passe</button>
             </form>
+            <br><button onclick="openDialog()">Changer de mot de passe</button>
         </div>
-        <div>
-        </div>
+        <!-- Boîte de dialogue pour le mot de passe -->
+        <dialog id='mdpDialog'>
+            <h2 id='test'>Changement du mot de passe</h2>
+            <form onsubmit='submitMotDePasseForm(event)'>
+                <div>
+                    <label for="motDePasseActuel">Mot de passe actuel</label>
+                    <div class='blocMDP'>
+                        <input type="password" id="motDePasseActuel" class='mdp' name="motDePasseActuel" required>
+                        <span class="material-icons visibilite" onclick="toggleVisiblite('motDePasseActuel', this)">visibility</span>
+                    </div>
+                    <span class="errone cache" id="motDePasseActuelErreur">Le mot de passe ne correspond pas</span>
+                </div>
+
+                <div>
+                    <label for="nouveauMotDePasse">Nouveau Mot de passe</label>
+                    <span class="errone cache" id="nouveauMotDePasseErreur">Le mot de passe ne respecte pas les conditions</span>
+                    <div class="blocMDP">
+                        <input type="password" id="nouveauMotDePasse" class='mdp' name="nouveauMotDePasse" required>
+                        <span class="material-icons visibilite" onclick="toggleVisiblite('nouveauMotDePasse', this)">visibility</span>
+                    </div>
+                    <span class='condMotDePasse'>Le mot de passe doit avoir au moins 6 caractères</span>
+                </div>
+
+                <div>
+                    <label for="confirmNouveauMDP">Confirmer le nouveau mot de passe</label>
+                    <div class="blocMDP">
+                        <input type="password" id="confirmNouveauMDP" class='mdp' name="confirmNouveauMDP" required>
+                        <span class="material-icons visibilite" onclick="toggleVisiblite('confirmNouveauMDP', this)">visibility</span>
+                    </div>
+                    <span class="errone cache" id="confirmNouveauMDPErreur" >Mots de passe différents</span>
+                </div>
+
+                <div class="boutonsDialog">
+                    <button type="submit" class='boutonDialog'>Valider</button>
+                    <button type="button" class='boutonDialog' onclick="closeDialog()">Annuler</button>
+                </div>
+                <span class='succes cache' id='messageSucces'>Changement réussi !</span>
+            </form>
+        </dialog>
     </div>
 
     <div id="tab2" class="tab">
