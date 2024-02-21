@@ -41,29 +41,23 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', null, [
                 'label' => '* Nom d\'utilisateur : ',
-                'required'=>false,
+                'required'=>true,
                 'attr' => ['placeholder' => ' '],
                 'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez entrer votre nom.', // Message d'erreur si le champ est vide
+                    new Assert\Regex([
+                        'pattern' => '/^[^@]$/',
+                        'message' => 'Le nom d\'utilisateur ne doit pas contenir de "@".',
                     ]),
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => '* Mail : ',
-                'required'=>false,
+                'required'=>true,
                 'attr' => ['placeholder' => ' '],
                 'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez entrer votre adresse e-mail.',
-                    ]),
                     new Assert\Email([
                         'message' => 'L\'adresse e-mail "{{ value }}" n\'est pas valide.',
                         'mode' => 'strict',
-                    ]),
-                    new Assert\Regex([
-                        'pattern' => '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-                        'message' => 'L\'adresse e-mail "{{ value }}" n\'est pas au bon format.',
                     ]),
                 ],
             ])
@@ -112,12 +106,9 @@ class RegistrationFormType extends AbstractType
                 'label' => '* Mot de passe',
                 'mapped' => true,
                 'attr' => ['autocomplete' => 'new-password', 'placeholder' => ' '],
-                'required'=>false,
+                'required'=>true,
                 'help' => '6 caractères minimum',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe.',
-                    ]),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} caractères.',
