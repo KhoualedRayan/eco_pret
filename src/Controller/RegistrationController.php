@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Abonnement;
 use App\Repository\AbonnementRepository;
 use Symfony\Component\Form\FormError;
-use Date;
+use DateTime;
 
 class RegistrationController extends AbstractController
 {
@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
             $user->setUsername($form->get('username')->getData());
             $user->setEmail($form->get('email')->getData());
             $user->setAbonnement($form->get('abonnement')->getData());
-            $date = new Date();
+            $date = new DateTime();
             $user->setDateAbonnement($date);
             // encode the plain password
             $user->setPassword(

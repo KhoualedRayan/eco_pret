@@ -45,7 +45,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['placeholder' => ' '],
                 'constraints' => [
                     new Assert\Regex([
-                        'pattern' => '/^[^@]$/',
+                        'pattern' => '/^[^@]*$/',
                         'message' => 'Le nom d\'utilisateur ne doit pas contenir de "@".',
                     ]),
                 ],

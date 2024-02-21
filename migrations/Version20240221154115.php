@@ -19,8 +19,6 @@ final class Version20240221154115 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD date_abonnement DATE DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
