@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Repository\AbonnementRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,8 +105,49 @@ class ProfileController extends AbstractController
         $user->setFirstName($newPrenom);
         $entityManager->persist($user);
         $entityManager->flush();
-        $this->addFlash('notificationInfos', 'Vos modifications ont été enregistrées avec succès !');
+        $this->addFlash('notifications', 'Vos modifications ont été enregistrées avec succès !');
         return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/ajax/mdpForm', name: 'mdp_form')]
+    public function checkMDP(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $data = $request->request;
+        
+        $motDePasseActuel = $data->get('motDePasseActuel') == null ? "" : $data->get('motDePasseActuel');
+        $nouveauMotDePasse = $data->get('nouveauMotDePasse');
+        $confirmNouveauMDP = $data->get('confirmNouveauMDP');
+        
+        $bonMDPActuel = $userPasswordHasher->isPasswordValid($this->getUser(), $motDePasseActuel);
+        $motDePasseSecurise = strlen($nouveauMotDePasse) >= 6;
+        $confirmerCorrect = $nouveauMotDePasse == $confirmNouveauMDP;
+        
+        if ($bonMDPActuel && $confirmerCorrect && $motDePasseSecurise) {
+    
+            $this->getUser()->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $this->getUser(),
+                    $nouveauMotDePasse
+                )
+            );
+            $entityManager->persist($this->getUser());
+            $entityManager->flush();
+        
+            $this->addFlash('notifications', 'Votre mot de passe a été modifié avec succès !');
+
+            return new Response("OK");
+        } else {
+            if (!$motDePasseSecurise) {
+                return new Response("nouveauMotDePasse");
+            } else if (!$confirmerCorrect) {
+                return new Response("confirmNouveauMDP");
+            } else {
+                return new Response("motDePasseActuel");
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@
         {% block javascripts %}
             <script>
             document.addEventListener("DOMContentLoaded", function () {
-                var notification = document.querySelector('.alert-notifAnnonces');
+                var notification = document.querySelector('.alert-notif');
                 if (notification) {
                     setTimeout(function() {
                         notification.remove();
@@ -42,8 +42,8 @@
         </header>
 
         {#Notifications#}
-        {% for message in app.session.flashbag.get('notificationAnnonces') %}
-            <div class="alert-notifAnnonces">
+        {% for message in app.session.flashbag.get('notifications') %}
+            <div class="alert-notif">
                 {{ message }}
             </div>
         {% endfor %}

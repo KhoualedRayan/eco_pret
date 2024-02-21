@@ -20,7 +20,7 @@ final class Version20240220014507 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD roles JSON NOT NULL');
+        //$this->addSql('ALTER TABLE user ADD roles JSON NOT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON user (username)');
     }
 

@@ -20,15 +20,7 @@ final class Version20240220165218 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE annonce ADD posteur_id INT NOT NULL');
-        $this->addSql('ALTER TABLE annonce ADD CONSTRAINT FK_F65593E59DDC44B3 FOREIGN KEY (posteur_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_F65593E59DDC44B3 ON annonce (posteur_id)');
-        $this->addSql('ALTER TABLE annonce_materiel DROP FOREIGN KEY FK_559ABE539DDC44B3');
-        $this->addSql('DROP INDEX IDX_559ABE539DDC44B3 ON annonce_materiel');
-        $this->addSql('ALTER TABLE annonce_materiel DROP posteur_id');
-        $this->addSql('ALTER TABLE annonce_service DROP FOREIGN KEY FK_1BF200B29DDC44B3');
-        $this->addSql('DROP INDEX IDX_1BF200B29DDC44B3 ON annonce_service');
-        $this->addSql('ALTER TABLE annonce_service DROP posteur_id');
+
     }
 
     public function down(Schema $schema): void
