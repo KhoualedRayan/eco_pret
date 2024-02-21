@@ -3,55 +3,53 @@
 namespace App\Entity;
 
 use App\Repository\AnnonceServiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnonceServiceRepository::class)]
 class AnnonceService extends Annonce
 {
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_fin = null;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Recurrence $id_recurrence = null;
+    #[ORM\OneToMany(mappedBy: 'annonceService', targetEntity: Recurrence::class, cascade: ['persist', 'remove'])]
+    private Collection $recurrences;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_debut = null;
-
-    public function getId(): ?int
+    public function __construct()
     {
-        return $this->id;
+        $this->recurrences = new ArrayCollection();
     }
 
-    public function getDateFin(): ?\DateTimeInterface
+    public function getRecurrences(): Collection
     {
-        return $this->date_fin;
+        return $this->recurrences;
     }
 
-    public function setDateFin(\DateTimeInterface $date_fin): static
+    public function addRecurrence(Recurrence $recurrence): self
     {
-        $this->date_fin = $date_fin;
+        if (!$this->recurrences->contains($recurrence)) {
+            $this->recurrences[] = $recurrence;
+            $recurrence->setAnnonceService($this);
+        }
 
         return $this;
     }
 
-    public function getIdRecurrence(): ?Recurrence
+    public function removeRecurrence(Recurrence $recurrence): self
     {
-        return $this->id_recurrence;
-    }
-
-    public function setIdRecurrence(?Recurrence $id_recurrence): static
-    {
-        $this->id_recurrence = $id_recurrence;
+        if ($this->recurrences->removeElement($recurrence)) {
+            // set the owning side to null (unless already changed)
+            if ($recurrence->getAnnonceService() === $this) {
+                $recurrence->setAnnonceService(null);
+            }
+        }
 
         return $this;
     }
-    
+
     public function getPosteur(): ?User
     {
         return $this->posteur;
@@ -63,18 +61,5 @@ class AnnonceService extends Annonce
 
         return $this;
     }
-
-    public function getDateDebut(): ?\DateTimeInterface
-    {
-        return $this->date_debut;
-    }
-
-    public function setDateDebut(?\DateTimeInterface $date_debut): static
-    {
-        $this->date_debut = $date_debut;
-
-        return $this;
-    }
-
 
 }
