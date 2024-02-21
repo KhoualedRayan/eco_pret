@@ -36,10 +36,47 @@ function edit(icone) {
     elems['valider'].style.display = icone.innerHTML == 'cancel' ? 'block' : 'none';
 }
 
-function clickAbo(clique, actuel) {
-    document.getElementById('changeAbo').disabled = clique == actuel;
+function closeDialog() {
+    document.getElementById('mdpDialog').close();
+}
+function openDialog() {
+	aCacher = document.querySelectorAll('.cache');
+	for (var i = 0; i < aCacher.length; i++) {
+		aCacher[i].style.display = 'none';
+	}
+	document.getElementById('motDePasseActuel').value = "";
+    document.getElementById('nouveauMotDePasse').value = "";
+    document.getElementById('confirmNouveauMDP').value = "";
+    document.getElementById('mdpDialog').showModal();
 }
 
-function changeAbo() {
+function submitMotDePasseForm(event) {
+	event.preventDefault();
+	var xhr = new XMLHttpRequest();
 
+	var data = new FormData();
+    data.append('motDePasseActuel', document.getElementById('motDePasseActuel').value);
+    data.append('nouveauMotDePasse', document.getElementById('nouveauMotDePasse').value);
+    data.append('confirmNouveauMDP', document.getElementById('confirmNouveauMDP').value);
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText == "OK") {
+            	document.getElementById('messageSucces').style.display = "block";
+            	setTimeout(function () {
+				    location.reload();
+				}, 500);
+            	
+            } else {
+                alert(xhr.responseText);
+            	document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
+				setTimeout(function () {
+				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
+				}, 4000);
+            }
+        }
+    };
+
+    xhr.open('POST', '/ajax/mdpForm', true);
+    xhr.send(data);
 }

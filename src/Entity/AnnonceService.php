@@ -18,9 +18,13 @@ class AnnonceService extends Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
+    #[ORM\OneToMany(mappedBy: 'dateponcts', targetEntity: DatePonctuelleService::class, orphanRemoval: true)]
+    private Collection $datePoncts;
+
     public function __construct()
     {
         $this->recurrences = new ArrayCollection();
+        $this->datePoncts = new ArrayCollection();
     }
 
     public function getRecurrences(): Collection
@@ -62,17 +66,34 @@ class AnnonceService extends Annonce
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    /**
+     * @return Collection<int, DatePonctuelleService>
+     */
+    public function getDatePoncts(): Collection
     {
-        return $this->date_debut;
+        return $this->datePoncts;
     }
 
-    public function setDateDebut(?\DateTimeInterface $date_debut): static
+    public function addDatePonct(DatePonctuelleService $datePonct): static
     {
-        $this->date_debut = $date_debut;
+        if (!$this->datePoncts->contains($datePonct)) {
+            $this->datePoncts->add($datePonct);
+            $datePonct->setDateponcts($this);
+        }
 
         return $this;
     }
 
+    public function removeDatePonct(DatePonctuelleService $datePonct): static
+    {
+        if ($this->datePoncts->removeElement($datePonct)) {
+            // set the owning side to null (unless already changed)
+            if ($datePonct->getDateponcts() === $this) {
+                $datePonct->setDateponcts(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

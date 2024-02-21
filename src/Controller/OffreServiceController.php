@@ -50,7 +50,7 @@ class OffreServiceController extends AbstractController
         $entityManager->persist($annonce);
         $entityManager->flush();
 
-        $this->addFlash('notificationAnnonces', 'Félicitations, votre annonce a été publiée !');
+        $this->addFlash('notifications', 'Félicitations, votre annonce a été publiée !');
         return $this->redirectToRoute('app_home_page');
     }
 }
