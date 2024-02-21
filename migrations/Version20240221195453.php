@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240220124255 extends AbstractMigration
+final class Version20240221195453 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20240220124255 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-      //  $this->addSql('ALTER TABLE annonce_materiel ADD CONSTRAINT FK_559ABE539DDC44B3 FOREIGN KEY (posteur_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE recurrence DROP date_debut, DROP date_fin');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE annonce_materiel DROP FOREIGN KEY FK_559ABE539DDC44B3');
+        $this->addSql('ALTER TABLE recurrence ADD date_debut DATETIME NOT NULL, ADD date_fin DATETIME NOT NULL');
     }
 }

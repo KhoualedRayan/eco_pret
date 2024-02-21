@@ -20,10 +20,10 @@ final class Version20240220064345 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE INDEX IDX_559ABE539DDC44B3 ON annonce_materiel (posteur_id)');
-        $this->addSql('ALTER TABLE annonce_service CHANGE posteur_id posteur_id INT NOT NULL');
-        $this->addSql('ALTER TABLE annonce_service ADD CONSTRAINT FK_1BF200B29DDC44B3 FOREIGN KEY (posteur_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_1BF200B29DDC44B3 ON annonce_service (posteur_id)');
+      //  $this->addSql('CREATE INDEX IDX_559ABE539DDC44B3 ON annonce_materiel (posteur_id)');
+        //$this->addSql('ALTER TABLE annonce_service CHANGE posteur_id posteur_id INT NOT NULL');
+        //$this->addSql('ALTER TABLE annonce_service ADD CONSTRAINT FK_1BF200B29DDC44B3 FOREIGN KEY (posteur_id) REFERENCES user (id)');
+        //$this->addSql('CREATE INDEX IDX_1BF200B29DDC44B3 ON annonce_service (posteur_id)');
     }
 
     public function down(Schema $schema): void
