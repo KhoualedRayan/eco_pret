@@ -28,22 +28,24 @@
     <br />
     
     <div id="periode">
-        <div id="jours" style="display:none;">
-            <label for="jour_fin">Jour de fin (compris):</label>
-            <input type="date" name="jour_fin" id="jour_fin" min="{{ "now"|date("Y-m-d") }}T00:00" ><br>
-        </div>
-    
-        <div id="mois" style="display:none;">
-            <label for="mois_fin">Mois de fin (compris) :</label>
-            <input type="month" name="mois_fin" id="mois_fin" min="{{ "now"|date("Y-m") }}T00:00" ><br>
-        </div>
-
-        <div id="semaine" style="display:none;">
-            <label for="semaine_fin">Semaine de fin (comprise) :</label>
-            <input type="week" name="semaine_fin" id="semaine_fin" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
-        </div>
-        <br />
+    <div id="jours" style="display:none;">
+        <label for="jour_fin">Jour de fin (compris):</label>
+        <input type="date" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m-d") }}" ><br>
     </div>
+
+    <div id="mois" style="display:none;">
+        <label for="mois_fin">Mois de fin (compris) :</label>
+        <input type="month" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m") }}" ><br>
+    </div>
+
+    <div id="semaine" style="display:none;">
+        <label for="semaine_fin">Semaine de fin (comprise) :</label>
+        <input type="week" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
+    </div>
+    <br />
+</div>
+
+
 
     <div id="additionalDates"></div>
 

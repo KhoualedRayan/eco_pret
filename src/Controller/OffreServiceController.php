@@ -48,23 +48,24 @@ class OffreServiceController extends AbstractController
         $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");
 
-        
-
         $additionalDates = $request->request->all()['additional_date'] ?? null;
-        echo "TESSSSSSSSSSSSSSSSSSSSSSSSSSST";
-    echo "TE";
-    dump($request->request->all());
+        $additionalRecu = $request->request->all()['additional_recurrence'] ?? null;
+        $additionalEnds = $request->request->all()['additional_ends'] ?? null;
 
-    if(is_array($additionalDates)) {
-        foreach ($additionalDates as $date) {
-            echo("toto" . $date);
-            $dateponct = new DatePonctuelleService();
-            $dateponct->setDate(new DateTime($date));
-            $entityManager->persist($dateponct);
-            $annonce->addDatePonct($dateponct);
+        $init_date = $request->request->get('data_pret');
+        $init_reccu = $request->request->get('recurrence');
+
+        
+        dump($request->request->all());
+
+        if(is_array($additionalDates)) {
+            foreach ($additionalDates as $date) {
+                $dateponct = new DatePonctuelleService();
+                $dateponct->setDate(new DateTime($date));
+                $entityManager->persist($dateponct);
+                $annonce->addDatePonct($dateponct);
+            }
         }
-    } else {
-    }
         $entityManager->persist($annonce);
         $entityManager->flush();
 
