@@ -21,10 +21,10 @@ class TestsDeconnexionTest extends WebTestCase
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');
 
-        // Déconnectez l'utilisateur
+        // Dï¿½connectez l'utilisateur
         $client->request('GET', '/logout');
 
-        // Vérifiez si l'utilisateur est déconnecté
-        $this->assertResponseRedirects('/'); // Assurez-vous que l'utilisateur est redirigé vers la page de connexion après la déconnexion
+        // Vï¿½rifiez si l'utilisateur est dï¿½connectï¿½
+        $this->assertResponseRedirects('/'); // Assurez-vous que l'utilisateur est redirigï¿½ vers la page de connexion aprï¿½s la dï¿½connexion
     }
 }
