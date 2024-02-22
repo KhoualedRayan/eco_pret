@@ -3,15 +3,11 @@
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use App\Entity\User;
 
-class TestProposerMaterielTest extends WebTestCase
+class ProposerServiceTest extends WebTestCase
 {
-    public function testProposerMateriel(): void
+    public function testSomething(): void
     {
-        
-        $client = static::createClient();
-
         // ON SE CONNECTE DEJA
 
         $crawler = $client->request('GET', '/login');
@@ -25,15 +21,18 @@ class TestProposerMaterielTest extends WebTestCase
         $this->assertRouteSame('app_home_page');
         $this->assertTrue($client->getCrawler()->filter('html:contains("Mon profil")')->count() > 0);
 
-        // ENSUITE ON CREE L'ANNONCE
-        $crawler = $client->request('GET', '/pret/materiel'); 
+        // on cree l'annonce
+
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/offre/service');
 
         // Remplir le formulaire
         $form = $crawler->selectButton('Valider')->form();
         $form['titre'] = 'Titre de mon annonce';
-        $form['materiel'] = 'Nom du matériel'; 
-        $form['duree_pret_valeur'] = '24'; 
-        $form['duree_pret'] = 'heures'; 
+        $form['date_pret'] = '2024-02-25T12:00'; 
+        $form['recurrence'] = 'hebdomadaire'; 
+        $form['additional_ends[0]'] = '2024-03-25';
+        $form['service'] = 'Nom du service';
         $form['prix'] = '50'; 
         $form['description'] = 'Description de mon annonce';
 
@@ -46,13 +45,14 @@ class TestProposerMaterielTest extends WebTestCase
         // Vérifier que le message de confirmation est affiché sur la page
         $this->assertTrue($client->getCrawler()->filter('html:contains("Félicitations, votre annonce à été publiée")')->count() > 0);
 
+        // on vérifie que l'annonce est affichée sur la page d'accueil
         $this->assertTrue($client->getCrawler()->filter('html:contains("Titre de mon annonce")')->count() > 0);
     }
 
     public function testNotLogin(): void 
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/pret/materiel'); 
+        $crawler = $client->request('GET', '/offre/services'); 
         // on vérifie qu'on est redirigé vers la page d'accueil
         $this->assertRouteSame('app_login');
     }

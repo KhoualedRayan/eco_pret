@@ -20,11 +20,14 @@ class TestsDeconnexionTest extends WebTestCase
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');
+        // on test que la connexion a fonctionné
+        $this->assertTrue($client->getCrawler()->filter('html:contains("Mon profil")')->count() > 0);
 
         // D�connectez l'utilisateur
         $client->request('GET', '/logout');
 
-        // V�rifiez si l'utilisateur est d�connect�
-        $this->assertResponseRedirects('/'); // Assurez-vous que l'utilisateur est redirig� vers la page de connexion apr�s la d�connexion
+        // V�rifiez si l'utilisateur est redirigé
+        $this->assertResponseRedirects('/');
+        $this->assertTrue($client->getCrawler()->filter('html:contains("Mon profil")')->count() == 0);
     }
 }

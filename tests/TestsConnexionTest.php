@@ -28,6 +28,7 @@ class TestsConnexionTest extends WebTestCase
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');
+        $this->assertTrue($client->getCrawler()->filter('html:contains("Mon profil")')->count() > 0);
 
     }
     public function testLoginMail()
@@ -43,6 +44,7 @@ class TestsConnexionTest extends WebTestCase
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');
+        $this->assertTrue($client->getCrawler()->filter('html:contains("Mon profil")')->count() > 0);
 
     }
     public function testFailLogin()
