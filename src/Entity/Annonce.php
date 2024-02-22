@@ -25,7 +25,7 @@ class Annonce
     #[ORM\Column]
     private ?int $prix = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_publication = null;
 
     #[ORM\Column(length: 127)]

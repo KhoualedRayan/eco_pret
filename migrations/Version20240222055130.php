@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240221193609 extends AbstractMigration
+final class Version20240222055130 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,8 +25,11 @@ final class Version20240221193609 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE annonce_service DROP FOREIGN KEY FK_1BF200B292699D8D');
-        $this->addSql('DROP INDEX UNIQ_1BF200B292699D8D ON annonce_service');
-        $this->addSql('ALTER TABLE annonce_service DROP id_recurrence_id, DROP date_fin, CHANGE date_debut date_ponct DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE annonce_materiel DROP FOREIGN KEY FK_559ABE53BCF5E72D');
+        $this->addSql('DROP INDEX IDX_559ABE53BCF5E72D ON annonce_materiel');
+        $this->addSql('ALTER TABLE annonce_materiel DROP categorie_id');
+        $this->addSql('ALTER TABLE annonce_service DROP FOREIGN KEY FK_1BF200B2BCF5E72D');
+        $this->addSql('DROP INDEX IDX_1BF200B2BCF5E72D ON annonce_service');
+        $this->addSql('ALTER TABLE annonce_service DROP categorie_id');
     }
 }

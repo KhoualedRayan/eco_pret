@@ -54,7 +54,7 @@
     <select name="service" required>
         <option value="">Sélectionnez un tag pour votre Service</option>
         {% for serv in categories %}
-            <option value="{{ serv.getId() }}">{{ serv.getNomService() }}</option>
+            <option value="{{ serv.getNom() }}">{{ serv.getNom() }}</option>
         {% endfor %}
     </select><br />
 

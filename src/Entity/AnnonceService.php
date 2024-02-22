@@ -21,6 +21,10 @@ class AnnonceService extends Annonce
     #[ORM\OneToMany(mappedBy: 'dateponcts', targetEntity: DatePonctuelleService::class, orphanRemoval: true)]
     private Collection $datePoncts;
 
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategorieService $categorie = null;
+
     public function __construct()
     {
         $this->recurrences = new ArrayCollection();
@@ -97,6 +101,18 @@ class AnnonceService extends Annonce
                 $datePonct->setDateponcts(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?CategorieService
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?CategorieService $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

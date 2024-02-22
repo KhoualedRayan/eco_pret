@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
 {% endblock %}
 
 {% block title %}EcoPrêt{% endblock %}
@@ -14,57 +15,21 @@
     <a href = "{{ path('app_offre_service') }}"><button>Offrir un service</button></a>
 </div>
 <h2>Annonces</h2>
-<div class="table-container">
-    <div class="table-wrapper">
-        <h3>Services</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th class="border-bottom text-left">Titre</th>
-                    <th class="border-bottom text-left">Description</th>
-                    <th class="border-bottom text-left">Prix</th>
-                    <th class="border-bottom text-left">Statut</th>
-                    <th class="border-bottom text-left">Posteur</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for anoServ in annonceService %}
-                    <tr>
-                        <td class="border-bottom text-left">{{anoServ.getTitre()}}</td>
-                        <td class="border-bottom text-left">{{anoServ.getDescription()}}</td>
-                        <td class="border-bottom text-left">{{anoServ.getPrix()}}</td>
-                        <td class="border-bottom text-left">{{anoServ.getStatut()}}</td>
-                        <td class="border-bottom text-left">{{anoServ.getPosteur().getUsername()}}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="table-wrapper">
-        <h3>Matériels</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th class="border-bottom text-left">Titre</th>
-                    <th class="border-bottom text-left">Description</th>
-                    <th class="border-bottom text-left">Prix</th>
-                    <th class="border-bottom text-left">Statut</th>
-                    <th class="border-bottom text-left">Posteur</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for anoMat in annonceMateriel %}
-                    <tr>
-                        <td class="border-bottom text-left">{{anoMat.getTitre()}}</td>
-                        <td class="border-bottom text-left">{{anoMat.getDescription()}}</td>
-                        <td class="border-bottom text-left">{{anoMat.getPrix()}}</td>
-                        <td class="border-bottom text-left">{{anoMat.getStatut()}}</td>
-                        <td class="border-bottom text-left">{{anoMat.getPosteur().getUsername()}}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+
+<div class="tout">
+    {% for annonce in annonces %}
+        <div class="blocAnnonce">
+            <div>
+                <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+            <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+            </div>
+            <div class="type">{{ annonce.getType() }}</div>
+            <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+            {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+            <h3>{{ annonce.getTitre() }}</h3>
+            <div class="description">{{ annonce.getDescription() }}</div>
+        </div>
+    {% endfor %}
 </div>
 
 
