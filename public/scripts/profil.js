@@ -19,6 +19,8 @@ function openTab(evt, tabName) {
 }
 
 function edit(icone) {
+    if (icone.innerHTML == 'cancel')
+        location.reload();
     icone.innerHTML = icone.innerHTML == 'cancel' ? 'edit_square' : 'cancel';
 
     var elems = document.forms[0].elements;
@@ -61,15 +63,8 @@ function submitMotDePasseForm(event) {
     
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            if (xhr.responseText == "OK") {
-            	document.getElementById('messageSucces').style.display = "block";
-            	setTimeout(function () {
-				    location.reload();
-				}, 500);
-            	
-            } else {
-                alert(xhr.responseText);
-            	document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
+            if (xhr.responseText != "OK") {
+                document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
 				setTimeout(function () {
 				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
 				}, 4000);
@@ -79,4 +74,14 @@ function submitMotDePasseForm(event) {
 
     xhr.open('POST', '/ajax/mdpForm', true);
     xhr.send(data);
+}
+
+function toggleVisiblite(id, elem) {
+	if (elem.innerHTML == 'visibility') {
+		document.getElementById(id).type = "text";
+		elem.innerHTML = 'visibility_off';
+	} else {
+		document.getElementById(id).type = "password";
+		elem.innerHTML = 'visibility';
+	}
 }

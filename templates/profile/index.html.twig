@@ -36,69 +36,74 @@
     <div id="tab1" class="tab active">
         <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
         </span>
+        <button class="but" onclick="openDialog()" style="float: right;">Changer mon mot de passe</button>
         <h3>Vos informations personnelles</h3>
         <div>
             <form action="{{ path('handle_infos_form') }}" method="POST">
-                <div class="blockI">
-                    <label>Nom d'utilisateur</label><br>
-                    <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
-                    <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
-                </div>
-                <div class="blockI">
-                    <label>Email</label><br>
-                    <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
-                    <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
-                </div>
-                <div class="blockI">
-                    <label>Prénom</label><br>
-                    <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
-                </div>
-                <div class="blockI">
-                    <label>Nom</label><br>
-                    <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
-                </div>
-                <div>
-                    Abonnement* :<br>
-                    {% for abo in abonnements %}
-                        {% if abo.getNiveau() == 1 %}
-                        <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
-                        <label for="option1">
-                            <div class="title">{{ abo.nom }}</div>
-                            <div class="infos">
-                                <ul>
-                                    <li>Prix : {{ abo.prix }} €/an</li>
-                                    <li>Fonctionalités :
+                <div style="display: flex;">
+                    <div>
+                        <div class="blockI">
+                            <label>Nom d'utilisateur</label><br>
+                            <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
+                            <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
+                        </div>
+                        <div class="blockI">
+                            <label>Email</label><br>
+                            <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
+                            <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
+                        </div>
+                        <div class="blockI">
+                            <label>Prénom</label><br>
+                            <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
+                        </div>
+                        <div class="blockI">
+                            <label>Nom</label><br>
+                            <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
+                        </div>
+                    </div>
+                    <div style="margin-left: auto;">
+                        Abonnement (après la fin de celui en cours) :<br>
+                        <div class="plans">
+                            {% for abo in abonnements %}
+                                {% if abo.getNiveau() == 1 %}
+                                <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                                <label for="option1">
+                                    <div class="title">{{ abo.nom }}</div>
+                                    <div class="infos">
                                         <ul>
-                                            <li>Prêter du matériel</li>
-                                            <li>Offrir des services</li>
-                                            <li>Recevoir des services</li>
+                                            <li>Prix : {{ abo.prix }} €/an</li>
+                                            <li>Fonctionalités :
+                                                <ul>
+                                                    <li>Prêter du matériel</li>
+                                                    <li>Offrir des services</li>
+                                                    <li>Recevoir des services</li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </label>
-                        {% else %}
-                        <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
-                        <label for="option2">
-                            <div class="title">{{ abo.nom }}</div>
-                            <div class="infos">
-                                <ul>
-                                    <li>Prix : {{ abo.prix }} €/an</li>
-                                    <li>Fonctionalités bonus :
+                                    </div>
+                                </label>
+                                {% else %}
+                                <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                                <label for="option2">
+                                    <div class="title">{{ abo.nom }}</div>
+                                    <div class="infos">
                                         <ul>
-                                            <li>Emprunter du matériel</li>
+                                            <li>Prix : {{ abo.prix }} €/an</li>
+                                            <li>Fonctionalités bonus :
+                                                <ul>
+                                                    <li>Emprunter du matériel</li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </label>
-                        {% endif %}
-                    {% endfor %}
-                    *correspond à l'abonnement après la fin de votre abonnement en cours
+                                    </div>
+                                </label>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" name="valider" {% if not edit_mode %}class="validerBouton"{% endif %}>Valider les modifications</button>
+                <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
             </form>
-            <br><button onclick="openDialog()">Changer de mot de passe</button>
         </div>
         <!-- Boîte de dialogue pour le mot de passe -->
         <dialog id='mdpDialog'>
@@ -133,8 +138,8 @@
                 </div>
 
                 <div class="boutonsDialog">
-                    <button type="submit" class='boutonDialog'>Valider</button>
-                    <button type="button" class='boutonDialog' onclick="closeDialog()">Annuler</button>
+                    <button type="submit" class='but boutonDialog'>Valider</button>
+                    <button type="button" class='but boutonDialog' onclick="closeDialog()">Annuler</button>
                 </div>
                 <span class='succes cache' id='messageSucces'>Changement réussi !</span>
             </form>

@@ -42,6 +42,11 @@ class AnnonceService extends Annonce
         return $this;
     }
 
+    public function getType(): String
+    {
+        return "Service";
+    }
+
     public function removeRecurrence(Recurrence $recurrence): self
     {
         if ($this->recurrences->removeElement($recurrence)) {

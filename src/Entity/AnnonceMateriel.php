@@ -45,4 +45,9 @@ class AnnonceMateriel extends Annonce
         return $this;
     }
 
+    public function getType(): String
+    {
+        return "Materiel";
+    }
+
 }

@@ -100,10 +100,23 @@
     font-size: 15px;
 }
 
-.validerBouton {
-    display: none;
+.blockI input, dialog input {
+    font-size: 16px;
 }
 
+.blockI input, dialog input { 
+    border:0;
+    border-bottom:1px solid #555;
+    background:transparent;
+    min-width: 50dvh;
+    font-size:16px;
+  }
+
+.blockI input:focus, dialog input:focus{ 
+   border:none;
+   outline:none;
+   border-bottom:1px solid var(--couleurFancy);
+  }
 
 /* CSS TEMPORARIRE A CHANGER DES 'Annonces' */
 .table-container {
@@ -163,4 +176,137 @@ dialog {
 
 .container .nogras {
     font-weight: normal;
+}
+
+.plans {
+    display: flex;
+    margin: 15px 0;
+}
+
+/* Le message d'erreur n'apparait pas si je décommente
+input[type="radio"] {
+    visibility: hidden;
+} */
+
+.plans label {
+    background-color: var(--couleurFond);
+    color: var(--couleurTexte);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: auto;
+    margin-right: 20px;
+    text-wrap: nowrap;
+    box-shadow: 0 0 7px rgba(100, 100, 100, 0.315);
+    align-items: center;
+    border-radius: .5rem;
+    cursor: pointer;
+    font-family: system-ui;
+    font-size: 14px;
+  }
+  
+  /* Style for checked label */
+input[type="radio"]:checked + label {
+    color: white;
+    background: linear-gradient(45deg, rgba(0, 0, 255, 0.9), rgba(255, 0, 0, 0.9));
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.infos {
+    margin-right: 15px;
+    font-weight: normal;
+}
+
+.plans li {
+    text-align: left;
+    margin: 5px 0;
+}
+
+.but {
+    align-items: center;
+    background-clip: padding-box;
+    background-color: var(--couleurFancy);
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    color: #fff;
+    display: inline-flex;
+    font-family: system-ui;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 6px;
+    margin-left: 2%;
+}
+
+.but:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    transform: translateY(-1px);
+}
+
+.but:active {
+  background-color: #136e13;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+
+.validerBouton {
+    display: none;
+}
+
+.container .bloc {
+    flex: 1;
+    padding: 0 2%;
+    margin-bottom: 0;
+}
+
+.succes {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.condMotDePasse {
+    flex-wrap: wrap;
+    font-size: 0.8em;
+}
+
+.visibilite {
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+
+.mdp {
+    flex: 1;
+}
+
+.blocMDP {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.boutonsDialog {
+    display: flex;
+    justify-content: space-around;
+}
+
+dialog div {
+    margin-bottom: 20px;
+}
+
+.errone {
+    color: red;
+    margin-top: 3px;
+    font-style: italic;
+}
+
+.incorrect {
+    color: red;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    padding: 5px;
 }
