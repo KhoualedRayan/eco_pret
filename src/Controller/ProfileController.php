@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Abonnement;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ProfileController extends AbstractController
 {
@@ -37,7 +38,7 @@ class ProfileController extends AbstractController
         $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findBy(['posteur' => $this->getUser()]);
         // Fusionner les annonces dans un seul tableau
         $annonces = array_merge($annonceService, $annonceMateriel);
-    
+
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -124,17 +125,17 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $data = $request->request;
-        
+
         $motDePasseActuel = $data->get('motDePasseActuel') == null ? "" : $data->get('motDePasseActuel');
         $nouveauMotDePasse = $data->get('nouveauMotDePasse');
         $confirmNouveauMDP = $data->get('confirmNouveauMDP');
-        
+
         $bonMDPActuel = $userPasswordHasher->isPasswordValid($this->getUser(), $motDePasseActuel);
         $motDePasseSecurise = strlen($nouveauMotDePasse) >= 6;
         $confirmerCorrect = $nouveauMotDePasse == $confirmNouveauMDP;
-        
+
         if ($bonMDPActuel && $confirmerCorrect && $motDePasseSecurise) {
-    
+
             $this->getUser()->setPassword(
                 $userPasswordHasher->hashPassword(
                     $this->getUser(),
@@ -143,7 +144,7 @@ class ProfileController extends AbstractController
             );
             $entityManager->persist($this->getUser());
             $entityManager->flush();
-        
+
             $this->addFlash('notifications', 'Votre mot de passe a été modifié avec succès !');
 
             return new Response("OK");
@@ -156,6 +157,43 @@ class ProfileController extends AbstractController
                 return new Response("motDePasseActuel");
             }
         }
+    }
+    #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
+    public function modifAnnonce(Request $request, EntityManagerInterface $entityManager): Response
+    {
+
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $annonceId = $data->get('annonceId');
+        $annonceType = $data->get('annonceType');
+        $nouveauPrix = $data->get('nouveauPrix');
+        $nouveauTitre = $data->get('nouveauTitre');
+        $nouvelleDescription = $data->get('nouvelleDescription');
+        var_dump($annonceId);
+        var_dump($annonceType);
+        var_dump($nouveauPrix);
+        var_dump($nouveauTitre);
+        var_dump($nouvelleDescription);
+
+
+        if($annonceType === 'Materiel'){
+
+            #$annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
+            /*
+            $annonceMateriel->setPrix($nouveauPrix);
+            $annonceMateriel->setTitre($nouveauTitre);
+            $annonceMateriel->setDescription($nouvelleDescription);
+            $entityManager->persist($annonceMateriel);
+            $entityManager->flush();
+            */
+        }
+
+
+        $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !' );
+        return new Response("OK");
     }
 }
 

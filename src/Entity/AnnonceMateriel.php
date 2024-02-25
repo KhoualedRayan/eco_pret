@@ -20,10 +20,6 @@ class AnnonceMateriel extends Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?CategorieMateriel $categorie = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getDuree(): ?string
     {

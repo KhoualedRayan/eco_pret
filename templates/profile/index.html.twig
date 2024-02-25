@@ -153,17 +153,43 @@
             {% for annonce in annonces %}
                 <div class="blocAnnonce">
                     <div>
-                        <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                        <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                        <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
                     </div>
                     <div class="type">{{ annonce.getType() }}</div>
                     <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
                     {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
                     <h3>{{ annonce.getTitre() }}</h3>
                     <div class="description">{{ annonce.getDescription() }}</div>
+                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre() }}', '{{ annonce.getDescription() }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Modifier</button>
                 </div>
             {% endfor %}
         </div>
+
+        {#Edition d'une annonce#}
+        <dialog id="editAnnonceDialog">
+            <h2>Modifier l'annonce</h2>
+            <form onsubmit="submitAnnonceForm(event)">
+                <div>
+                    <label for="editTitre">Titre :</label>
+                    <input type="text" id="editTitre" name="titre" required>
+                </div>
+                <div>
+                    <label for="editPrix">Prix :</label>
+                    <input type="text" class="input_small" id="editPrix" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10, 50)" required />$<br />
+                </div>
+                <div>
+                    <label for="editDescription">Description :</label>
+                    <textarea id="editDescription" name="description"></textarea>
+                </div>
+
+                {#Boutons#}
+                <div class="boutonsDialog">
+                    <button type="submit" class="but boutonDialog">Valider</button>
+                    <button type="button" class="but boutonDialog" onclick="closeAnnonceDialog()">Annuler</button>
+                </div>
+            </form>
+        </dialog>
     </div>
 
     <div id="tab3" class="tab">

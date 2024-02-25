@@ -3,13 +3,14 @@
     "",
     "\\src",
     "\\src\\Controller",
-    "\\src\\Entity",
-    "\\src\\Security",
     "\\templates",
+    "\\templates\\home_page",
     "\\templates\\pret_materiel",
+    "\\templates\\profile",
     "\\templates\\registration",
-    "\\templates\\security"
+    "\\templates\\security",
+    "\\tests"
   ],
-  "SelectedNode": "\\templates\\pret_materiel\\index.html.twig",
+  "SelectedNode": "\\src\\Controller\\OffreServiceController.php",
   "PreviewInSolutionExplorer": false
 }

@@ -85,3 +85,47 @@ function toggleVisiblite(id, elem) {
 		elem.innerHTML = 'visibility';
 	}
 }
+
+function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle,id,type) {
+    document.getElementById('editPrix').value = prixActuel;
+    document.getElementById('editTitre').value = titreActuel;
+    document.getElementById('editDescription').value = descriptionActuelle;
+    document.getElementById('editAnnonceDialog').setAttribute('data-id', id);
+    document.getElementById('editAnnonceDialog').setAttribute('data-type', type);
+    document.getElementById('editAnnonceDialog').showModal();
+}
+
+function closeAnnonceDialog() {
+    document.getElementById('editAnnonceDialog').close();
+}
+
+function submitAnnonceForm(event) {
+    event.preventDefault();
+    var xhr = new XMLHttpRequest();
+    var annonceId = document.getElementById('editAnnonceDialog').getAttribute('data-id');
+    var annonceType = document.getElementById('editAnnonceDialog').getAttribute('data-type');
+    var data = new FormData();
+
+    data.append('nouveauPrix', document.getElementById('editPrix').value);
+    data.append('nouveauTitre', document.getElementById('editTitre').value);
+    data.append('nouvelleDescription', document.getElementById('editDescription').value);
+    data.append('annonceId', annonceId);
+    data.append('annonceType', annonceType);
+    console.log('Type : ' + annonceType + ' ,Id:' + annonceId);
+    console.log("FormData entries:");
+    data.forEach(function (value, key) {
+        console.log(key, value);
+    });
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "OK") {
+                console.log("PAS OK")
+            }
+            else {
+                console.log(xhr.responseText);
+            }
+        }
+    };
+    xhr.open('POST', '/ajax/modif_annonce', true);
+    xhr.send(data);
+}
