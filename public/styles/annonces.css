@@ -1,0 +1,54 @@
+.blocAnnonce {
+    box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+    border-radius: 5px;
+    padding: 1em;
+    width: 350px;
+    height: 200px;
+    margin: 10px;
+    background-size: cover;
+}
+
+.tout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.prix {
+    float: right;
+    font-weight: bold;
+}
+
+.type {
+    margin-top: 10px;
+    border-radius: 1rem;
+    padding: 5px 10px;
+    background-color: var(--couleurFancy);
+    color: white;
+    font-weight: bold;
+    display: inline-flex;
+}
+
+.username {
+    display: block;
+    font-weight: bold;
+}
+
+.categorie {
+    margin-top: 10px;
+    border-radius: 1rem;
+    padding: 5px 10px;
+    background-color: #f87122;
+    color: white;
+    font-weight: bold;
+    display: inline-flex;
+}
+
+.description {
+    height: 90px;
+    overflow: auto;
+}
+
+.duree {
+    margin-top: 5px;
+}

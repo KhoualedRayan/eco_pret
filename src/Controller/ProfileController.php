@@ -33,7 +33,16 @@ class ProfileController extends AbstractController
             $errors = [];
         }
         $annonceService = $entityManager->getRepository(AnnonceService::class)->findBy(['posteur' => $this->getUser()]);
+        $entityManager->clear();
         $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findBy(['posteur' => $this->getUser()]);
+        // Fusionner les annonces dans un seul tableau
+        $annonces = array_merge($annonceService, $annonceMateriel);
+    
+        // Fonction de comparaison personnalisée pour trier par date de publication
+        usort($annonces, function($a, $b) {
+            return $b->getDatePublication() <=> $a->getDatePublication();
+        });
+
         $abonnements = $entityManager->getRepository(Abonnement::class)->findAll();
         foreach ($abonnements as $key => $abonnement) {
             if($abonnement->getNom() == 'Admin')
@@ -44,8 +53,7 @@ class ProfileController extends AbstractController
             'controller_name' => 'ProfileController',
             'errors' => $errors,
             'edit_mode' => $edit_mode,
-            'annonce_service' => $annonceService,
-            'annonce_materiel' => $annonceMateriel,
+            'annonces' => $annonces,
             'abonnements' => $abonnements,
         ]);
     }

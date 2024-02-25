@@ -18,7 +18,7 @@
     <select name="materiel" required>
         <option value="">Sélectionnez un tag pour votre matériel</option>
         {% for mats in categories %}
-            <option value="{{ mats.getId() }}">{{ mats.getNomMateriel() }}</option>
+            <option value="{{ mats.getNom() }}">{{ mats.getNom() }}</option>
         {% endfor %}
     </select><br />
     

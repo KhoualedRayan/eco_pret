@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\AnnonceMateriel;
 use DateTime;
 use App\Entity\User;
+use App\Repository\CategorieMaterielRepository;
 
 class PretMaterielController extends AbstractController
 {
@@ -29,12 +30,13 @@ class PretMaterielController extends AbstractController
         ]);
     }
     #[Route('/handle_form_submission', name: 'handle_form_submission')]
-    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
+    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request, CategorieMaterielRepository $cmr): Response
     {
         $titre = $request->request->get('titre');
         $date = new DateTime();
         $prix = $request->request->get('prix');
         $description = $request->request->get('description');
+        $categorie = $request->request->get('materiel');
         $duree_pret_valeur = $request->request->get('duree_pret_valeur');
         $duree_pret = $request->request->get('duree_pret');
         $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
@@ -45,6 +47,7 @@ class PretMaterielController extends AbstractController
         $annonce->setDescription($description);
         $annonce->setDatePublication($date);
         $annonce->setDuree($duree_pret);
+        $annonce->setCategorie($cmr->findOneByNom($categorie));
         $annonce->setPrix($prix);
         $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");

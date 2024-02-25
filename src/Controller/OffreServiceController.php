@@ -12,6 +12,8 @@ use App\Entity\AnnonceService;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Abonnement;
+use App\Entity\DatePonctuelleService;
+use App\Repository\CategorieServiceRepository;
 
 
 class OffreServiceController extends AbstractController
@@ -32,21 +34,41 @@ class OffreServiceController extends AbstractController
     }
 
     #[Route('/handle_form_service', name: 'handle_form_service')]
-    public function handleFormService(EntityManagerInterface $entityManager,Request $request): Response
+    public function handleFormService(EntityManagerInterface $entityManager,Request $request, CategorieServiceRepository $csr): Response
     {
         $titre = $request->request->get('titre');
         $date = new DateTime();
         $prix = $request->request->get('prix');
         $description = $request->request->get('description');
+        $categorie = $request->request->get('service');
 
         $annonce = new AnnonceService();
         $annonce->setTitre($titre);
         $annonce->setDescription($description);
         $annonce->setDatePublication($date);
         $annonce->setPrix($prix);
+        $annonce->setCategorie($csr->findOneByNom($categorie));
         $annonce->setPosteur($this->getUser());
         $annonce->setStatut("Disponible");
-        $annonce->setDateFin($date);
+
+        $additionalDates = $request->request->all()['additional_date'] ?? null;
+        $additionalRecu = $request->request->all()['additional_recurrence'] ?? null;
+        $additionalEnds = $request->request->all()['additional_ends'] ?? null;
+
+        $init_date = $request->request->get('data_pret');
+        $init_reccu = $request->request->get('recurrence');
+
+        
+        dump($request->request->all());
+
+        if(is_array($additionalDates)) {
+            foreach ($additionalDates as $date) {
+                $dateponct = new DatePonctuelleService();
+                $dateponct->setDate(new DateTime($date));
+                $entityManager->persist($dateponct);
+                $annonce->addDatePonct($dateponct);
+            }
+        }
         $entityManager->persist($annonce);
         $entityManager->flush();
 

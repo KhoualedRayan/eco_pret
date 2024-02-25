@@ -78,7 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->annonces = new ArrayCollection();
         $this->disponibilites = new ArrayCollection();
         $this->reclamations_envoyees = new ArrayCollection();
         $this->reclamations_traitees = new ArrayCollection();
