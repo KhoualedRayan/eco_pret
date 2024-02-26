@@ -310,3 +310,47 @@ dialog div {
     border: 1px solid;
     padding: 5px;
 }
+
+.editDescription {
+    border-radius: 0.5em;
+    width: 90%;
+    height: 10vh;
+    padding: 1em;
+    border: 1px solid var(--couleurFilet);
+    resize: none;
+}
+.modifier {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    padding: 0.5em 1em;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modifier:hover {
+    filter: brightness(130%);
+}
+
+.supprimer {
+    position: absolute;
+    bottom: 10px;
+    right: 20px; 
+    padding: 0.5em 1em;
+    background-color: #dc3545; 
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.supprimer:hover {
+    filter: brightness(130%);
+}

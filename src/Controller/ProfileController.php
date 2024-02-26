@@ -161,39 +161,94 @@ class ProfileController extends AbstractController
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
     public function modifAnnonce(Request $request, EntityManagerInterface $entityManager): Response
     {
-
+        $entityManager->clear();
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
         $data = $request->request;
-        $annonceId = $data->get('annonceId');
+        $annonceId = (int) $data->get('annonceId');
         $annonceType = $data->get('annonceType');
         $nouveauPrix = $data->get('nouveauPrix');
         $nouveauTitre = $data->get('nouveauTitre');
         $nouvelleDescription = $data->get('nouvelleDescription');
-        var_dump($annonceId);
-        var_dump($annonceType);
-        var_dump($nouveauPrix);
-        var_dump($nouveauTitre);
-        var_dump($nouvelleDescription);
-
 
         if($annonceType === 'Materiel'){
+            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
+            $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
 
-            #$annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
-            /*
+            $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
             $annonceMateriel->setPrix($nouveauPrix);
             $annonceMateriel->setTitre($nouveauTitre);
             $annonceMateriel->setDescription($nouvelleDescription);
             $entityManager->persist($annonceMateriel);
             $entityManager->flush();
-            */
+            $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !');
+            return new Response("OK");
+        }
+        else if($annonceType === 'Service'){
+            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
+            $test = $entityManager->getRepository(AnnonceService::class)->findAll();
+
+            $annonceService = $entityManager->getRepository(AnnonceService::class)->find($annonceId);
+            $annonceService->setPrix($nouveauPrix);
+            $annonceService->setTitre($nouveauTitre);
+            $annonceService->setDescription($nouvelleDescription);
+            $entityManager->persist($annonceService);
+            $entityManager->flush();
+            $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !');
+            return new Response("OK");
         }
 
+        return new Response("Erreur");
+    }
+    #[Route('/ajax/suppr_annonce', name: 'suppr_annonce')]
+    public function supprAnnonce(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->clear();
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
 
-        $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !' );
-        return new Response("OK");
+        $data = $request->request;
+        $annonceId = (int) $data->get('annonceId');
+        $annonceType = $data->get('annonceType');
+
+
+        if($annonceType === 'Materiel'){
+            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
+            $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
+
+            $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
+            if ($annonceMateriel) {
+                // Supprime l'annonce de la base de données
+                $entityManager->remove($annonceMateriel);
+                $entityManager->flush();
+
+                $this->addFlash('notifications', 'Votre annonce a été supprimée avec succès !');
+                return new Response("OK");
+            } else {
+                $this->addFlash('error', 'Annonce non trouvée.');
+            }
+        }
+        else if($annonceType === 'Service'){
+            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
+            $test = $entityManager->getRepository(AnnonceService::class)->findAll();
+
+            $annonceService = $entityManager->getRepository(AnnonceService::class)->find($annonceId);
+            if ($annonceService) {
+                // Supprime l'annonce de la base de données
+                $entityManager->remove($annonceService);
+                $entityManager->flush();
+
+                $this->addFlash('notifications', 'Votre annonce a été supprimée avec succès !');
+                return new Response("OK");
+            } else {
+                $this->addFlash('error', 'Annonce non trouvée.');
+            }
+        }
+
+        return new Response("Erreur sur la suppresion de l'annonce");
     }
 }
 

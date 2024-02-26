@@ -85,7 +85,7 @@ function toggleVisiblite(id, elem) {
 		elem.innerHTML = 'visibility';
 	}
 }
-
+/*Modifcation d'une annonce avec une boite de dialogue */
 function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle,id,type) {
     document.getElementById('editPrix').value = prixActuel;
     document.getElementById('editTitre').value = titreActuel;
@@ -111,21 +111,47 @@ function submitAnnonceForm(event) {
     data.append('nouvelleDescription', document.getElementById('editDescription').value);
     data.append('annonceId', annonceId);
     data.append('annonceType', annonceType);
-    console.log('Type : ' + annonceType + ' ,Id:' + annonceId);
-    console.log("FormData entries:");
-    data.forEach(function (value, key) {
-        console.log(key, value);
-    });
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText != "OK") {
-                console.log("PAS OK")
+                //Erreur
+                console.log(xhr.responseText)
             }
             else {
+                //Annonce modifiée avec succès :D
                 console.log(xhr.responseText);
+                location.reload();
             }
         }
     };
     xhr.open('POST', '/ajax/modif_annonce', true);
     xhr.send(data);
+}
+
+/*Suppresion d'une annonce */
+function confirmerSuppression(event,id,type) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette annonce ?")) {
+        event.preventDefault();
+        var xhr = new XMLHttpRequest();
+        var data = new FormData();
+        data.append('annonceId', id);
+        data.append('annonceType', type);
+        console.log("Type : " + type + ", Id : " + id);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.responseText != "OK") {
+                    //Erreur
+                    console.log(xhr.responseText)
+                }
+                else {
+                    //Annonce supprimé avec succès :D
+                    console.log(xhr.responseText);
+                    location.reload();
+                }
+            }
+        };
+        xhr.open('POST', '/ajax/suppr_annonce', true);
+        xhr.send(data);
+    }
 }

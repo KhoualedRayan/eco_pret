@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public\\scripts",
+    "\\public\\styles",
     "\\src",
-    "\\src\\Controller",
+    "\\src\\Entity",
     "\\templates",
-    "\\templates\\home_page",
-    "\\templates\\pret_materiel",
     "\\templates\\profile",
     "\\templates\\registration",
     "\\templates\\security",
     "\\tests"
   ],
-  "SelectedNode": "\\src\\Controller\\OffreServiceController.php",
+  "SelectedNode": "\\src\\Controller\\ProfileController.php",
   "PreviewInSolutionExplorer": false
 }

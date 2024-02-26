@@ -161,7 +161,8 @@
                     {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
                     <h3>{{ annonce.getTitre() }}</h3>
                     <div class="description">{{ annonce.getDescription() }}</div>
-                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre() }}', '{{ annonce.getDescription() }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Modifier</button>
+                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Modifier</button>
+                    <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}', '{{ annonce.getType() }}')">Supprimer</button>
                 </div>
             {% endfor %}
         </div>
@@ -180,7 +181,8 @@
                 </div>
                 <div>
                     <label for="editDescription">Description :</label>
-                    <textarea id="editDescription" name="description"></textarea>
+                    <br />
+                    <textarea id="editDescription" class="editDescription" name="description"></textarea>
                 </div>
 
                 {#Boutons#}
