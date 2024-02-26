@@ -161,7 +161,6 @@ class ProfileController extends AbstractController
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
     public function modifAnnonce(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->clear();
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -205,7 +204,6 @@ class ProfileController extends AbstractController
     #[Route('/ajax/suppr_annonce', name: 'suppr_annonce')]
     public function supprAnnonce(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->clear();
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
