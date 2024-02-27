@@ -86,12 +86,35 @@ function toggleVisiblite(id, elem) {
 	}
 }
 /*Modifcation d'une annonce avec une boite de dialogue */
-function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle,id,type) {
+function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle,id,type,categorie,duree,dateService) {
     document.getElementById('editPrix').value = prixActuel;
     document.getElementById('editTitre').value = titreActuel;
-    document.getElementById('editDescription').value = descriptionActuelle;
+    document.getElementById('editDescription').value = descriptionActuelle;    
     document.getElementById('editAnnonceDialog').setAttribute('data-id', id);
     document.getElementById('editAnnonceDialog').setAttribute('data-type', type);
+    
+
+    if (type == "Materiel")
+    {
+        document.getElementById('editCategorieMat').value = categorie;
+        var result = duree.match(/^(\d+)\s*(.*)$/);
+        document.getElementById('editDureeNombre').value = result[1];
+        document.getElementById('editDureePeriode').value = result[2];
+        
+        //Affiche le bloc Matériel et cache le bloc service
+        document.getElementById("blocMateriel").style.display = "block";
+        document.getElementById("blocService").style.display = "none";
+        document.getElementById("editCategorieService").required = false;
+        document.getElementById("editDatePret").required = false;
+        
+    } else if (type == "Service") {
+        document.getElementById('editCategorieService').value = categorie;
+        // l'inverse
+        document.getElementById("blocMateriel").style.display = "none";
+        document.getElementById("blocService").style.display = "block";
+        document.getElementById("editDureeNombre").required = false;
+        document.getElementById("editCategorieMat").required = false;
+    }
     document.getElementById('editAnnonceDialog').showModal();
 }
 
@@ -111,6 +134,16 @@ function submitAnnonceForm(event) {
     data.append('nouvelleDescription', document.getElementById('editDescription').value);
     data.append('annonceId', annonceId);
     data.append('annonceType', annonceType);
+    if (annonceType == "Materiel") {
+        data.append('nouvelleCategorie', document.getElementById('editCategorieMat').value);
+        data.append('nouvelleDureeValeur', document.getElementById('editDureeNombre').value);
+        data.append('nouvelleDureePeriode', document.getElementById('editDureePeriode').value);
+        console.log(document.getElementById('editDureeNombre').value);
+        console.log(document.getElementById('editDureePeriode').value);
+        console.log(document.getElementById('editCategorieMat').value);
+    } else if (annonceType == "Service") {
+        data.append('nouvelleCategorie', document.getElementById('editCategorieService'));
+    }
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {

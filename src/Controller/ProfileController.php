@@ -16,6 +16,10 @@ use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Abonnement;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use App\Entity\CategorieMateriel;
+use App\Entity\CategorieService;
+use App\Repository\CategorieServiceRepository;
+use App\Repository\CategorieMaterielRepository;
 
 class ProfileController extends AbstractController
 {
@@ -49,6 +53,9 @@ class ProfileController extends AbstractController
             if($abonnement->getNom() == 'Admin')
                 unset($abonnements[$key]);
         }
+        $categoriesService = $entityManager->getRepository(CategorieService::class)->findAll();
+        #$entityManager->clear();
+        $categoriesMateriel = $entityManager->getRepository(CategorieMateriel::class)->findAll();
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
@@ -56,6 +63,8 @@ class ProfileController extends AbstractController
             'edit_mode' => $edit_mode,
             'annonces' => $annonces,
             'abonnements' => $abonnements,
+            'catMat' => $categoriesMateriel,
+            'catService' => $categoriesService,
         ]);
     }
 
@@ -159,7 +168,7 @@ class ProfileController extends AbstractController
         }
     }
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
-    public function modifAnnonce(Request $request, EntityManagerInterface $entityManager): Response
+    public function modifAnnonce(Request $request, EntityManagerInterface $entityManager, CategorieMaterielRepository $cmr, CategorieServiceRepository $csr): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -171,17 +180,28 @@ class ProfileController extends AbstractController
         $nouveauPrix = $data->get('nouveauPrix');
         $nouveauTitre = $data->get('nouveauTitre');
         $nouvelleDescription = $data->get('nouvelleDescription');
+        $nouvelleCategorie = $data->get('nouvelleCategorie');
 
         if($annonceType === 'Materiel'){
+            $duree_pret_valeur = $data->get('nouvelleDureeValeur');
+            $duree_pret = $data->get('nouvelleDureePeriode');
+            $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
             #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
             $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
-
             $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
+            $annonceMateriel->setDuree("temp");
+            $entityManager->flush();
             $annonceMateriel->setPrix($nouveauPrix);
             $annonceMateriel->setTitre($nouveauTitre);
+
+            $annonceMateriel->setDuree($duree_pret);
+
             $annonceMateriel->setDescription($nouvelleDescription);
+            $annonceMateriel->setCategorie($cmr->findOneByNom($nouvelleCategorie));
             $entityManager->persist($annonceMateriel);
+
             $entityManager->flush();
+
             $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !');
             return new Response("OK");
         }
@@ -193,6 +213,7 @@ class ProfileController extends AbstractController
             $annonceService->setPrix($nouveauPrix);
             $annonceService->setTitre($nouveauTitre);
             $annonceService->setDescription($nouvelleDescription);
+            $annonceService->setCategorie($csr->findOneByNom($nouvelleCategorie));
             $entityManager->persist($annonceService);
             $entityManager->flush();
             $this->addFlash('notifications', 'Votre annonce a été modifié avec succès !');

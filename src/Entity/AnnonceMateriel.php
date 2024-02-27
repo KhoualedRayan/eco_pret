@@ -32,6 +32,12 @@ class AnnonceMateriel extends Annonce
 
         return $this;
     }
+    public function setDureeNull(): static
+    {
+        $this->duree = null;
+
+        return $this;
+    }
 
     public function getPosteur(): ?User
     {

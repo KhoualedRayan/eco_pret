@@ -1,11 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public\\scripts",
-    "\\public\\styles",
+    "\\public",
     "\\src",
+    "\\src\\Controller",
     "\\src\\Entity",
-    "\\templates",
+    "\\src\\Repository",
     "\\templates\\profile",
     "\\templates\\registration",
     "\\templates\\security",
