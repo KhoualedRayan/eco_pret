@@ -189,8 +189,7 @@ class ProfileController extends AbstractController
             #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
             $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
             $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
-            $annonceMateriel->setDuree("temp");
-            $entityManager->flush();
+
             $annonceMateriel->setPrix($nouveauPrix);
             $annonceMateriel->setTitre($nouveauTitre);
 
