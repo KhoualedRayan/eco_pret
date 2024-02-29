@@ -130,6 +130,7 @@ class ProfileController extends AbstractController
     #[Route('/ajax/mdpForm', name: 'mdp_form')]
     public function checkMDP(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -166,6 +167,24 @@ class ProfileController extends AbstractController
                 return new Response("motDePasseActuel");
             }
         }
+    }
+    #[Route('/ajax/desaboForm', name: 'desabo_form')]
+    public function checkDesabo(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+       
+        // Marque l'utilisateur comme désabonné 
+        $this->getUser()->setAbonnement(null);
+        $this->getUser()->setNextAbonnement(null);
+
+        #$entityManager->persist($this->getUser());
+        $entityManager->flush();
+
+        return new Response("OK");
+       
+    
     }
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
     public function modifAnnonce(Request $request, EntityManagerInterface $entityManager, CategorieMaterielRepository $cmr, CategorieServiceRepository $csr): Response

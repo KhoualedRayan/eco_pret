@@ -38,10 +38,15 @@ function edit(icone) {
     elems['valider'].style.display = icone.innerHTML == 'cancel' ? 'block' : 'none';
 }
 
-function closeDialog() {
+function closeDialogMDP() {
     document.getElementById('mdpDialog').close();
 }
-function openDialog() {
+
+function closeDialogDesabo() {
+    document.getElementById('desaboDialog').close();
+}
+
+function openDialogMDP() {
 	aCacher = document.querySelectorAll('.cache');
 	for (var i = 0; i < aCacher.length; i++) {
 		aCacher[i].style.display = 'none';
@@ -52,7 +57,17 @@ function openDialog() {
     document.getElementById('mdpDialog').showModal();
 }
 
+function openDialogDesabo() {
+	aCacher = document.querySelectorAll('.cache');
+	for (var i = 0; i < aCacher.length; i++) {
+		aCacher[i].style.display = 'none';
+	}
+    document.getElementById('desaboDialog').showModal();
+}
+
 function submitMotDePasseForm(event) {
+    console.log("Édition en cours...");
+
 	event.preventDefault();
 	var xhr = new XMLHttpRequest();
 
@@ -75,6 +90,31 @@ function submitMotDePasseForm(event) {
     xhr.open('POST', '/ajax/mdpForm', true);
     xhr.send(data);
 }
+
+function submitDesaboForm(event) {
+    console.log("Édition en cours...");
+
+	event.preventDefault();
+	var xhr = new XMLHttpRequest();
+
+	var data = new FormData();
+    
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "OK") {
+                document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
+				setTimeout(function () {
+				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
+				}, 4000);
+            }
+        }
+    };
+
+    xhr.open('POST', '/ajax/desaboForm', true);
+    xhr.send(data);
+}
+
 
 function toggleVisiblite(id, elem) {
 	if (elem.innerHTML == 'visibility') {
