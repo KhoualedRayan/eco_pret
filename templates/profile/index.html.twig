@@ -120,7 +120,7 @@
 
                             {% if abo.getNiveau() == 1 %}
 
-                                <input type="radio" id="option1" name="options" value="" {% if not edit_mode %}disabled{% endif %}>
+                                <input type="radio" id="option1" name="options" value= {{ abo.nom }} {% if not edit_mode %}disabled{% endif %}>
                                 <label for="option1">
                                     <div class="title">{{ abo.nom  }}</div>
                                     <div class="infos">
@@ -137,9 +137,9 @@
                                     </div>
                                 </label>
 
-                            {% else %}
+                            {% elseif abo.getNiveau() == 2 %}
 
-                                <input type="radio" id="option2" name="options" value="" {% if not edit_mode %}disabled{% endif %}>
+                                <input type="radio" id="option2" name="options" value=  {{ abo.nom }} {% if not edit_mode %}disabled{% endif %}>
                                 <label for="option2">
                                     <div class="title">{{ abo.nom }}</div>
                                     <div class="infos">

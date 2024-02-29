@@ -20,6 +20,9 @@ use App\Entity\CategorieMateriel;
 use App\Entity\CategorieService;
 use App\Repository\CategorieServiceRepository;
 use App\Repository\CategorieMaterielRepository;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\VarDumper\VarDumper;
+
 
 class ProfileController extends AbstractController
 {
@@ -81,7 +84,16 @@ class ProfileController extends AbstractController
         $errors = [];
         $user = $this->getUser();
 
+       
+
         $newAbo = $ar->findOneByName($newAbo);
+
+        if (!$user->getAbonnement()) {
+            $user->setAbonnement($newAbo);
+            $user->setNextAbonnement($newAbo);
+        }
+
+      
 
         if ($user->getNextAbonnement() != $newAbo) {
             // cas Standard, Standard + Premium -> Premium, Premium + Payer x euros (différence)
@@ -92,6 +104,13 @@ class ProfileController extends AbstractController
             } else {
                 $user->setNextAbonnement($newAbo);
             }
+
+            if (!$user->getAbonnement()) {
+                $user->setAbonnement($newAbo);
+                $user->setNextAbonnement($newAbo);
+            }
+
+           
         }
 
         // Check if new username contains "@" or already exists
@@ -121,6 +140,12 @@ class ProfileController extends AbstractController
 
         $user->setSurname($newNom);
         $user->setFirstName($newPrenom);
+        $user->setAbonnement($newAbo);
+
+        $user->setNextAbonnement($newAbo);
+
+      
+
         $entityManager->persist($user);
         $entityManager->flush();
         $this->addFlash('notifications', 'Vos modifications ont été enregistrées avec succès !');
@@ -179,11 +204,12 @@ class ProfileController extends AbstractController
         $this->getUser()->setAbonnement(null);
         $this->getUser()->setNextAbonnement(null);
 
-        #$entityManager->persist($this->getUser());
+        $entityManager->persist($this->getUser());
         $entityManager->flush();
 
-        return new Response("OK");
-       
+        $this->addFlash('notifications', 'Vous êtes bien désabonné !');
+
+        return $this->redirectToRoute('app_profile');
     
     }
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
