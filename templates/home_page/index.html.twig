@@ -3,6 +3,7 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<script src="{{ asset('scripts/accueil.js') }}"></script>
 {% endblock %}
 
 {% block title %}EcoPrêt{% endblock %}
@@ -28,6 +29,9 @@
             {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
             <h3>{{ annonce.getTitre() }}</h3>
             <div class="description">{{ annonce.getDescription() }}</div>
+            {% if app.user.abonnement == "2" %}
+                <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

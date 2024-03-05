@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // private Collection $annoncesService;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Abonnement $abonnement = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Disponibilite::class, orphanRemoval: true)]

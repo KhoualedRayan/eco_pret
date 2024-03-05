@@ -14,9 +14,6 @@ class AnnonceService extends Annonce
     #[ORM\OneToMany(mappedBy: 'annonceService', targetEntity: Recurrence::class, cascade: ['persist', 'remove'])]
     private Collection $recurrences;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $posteur = null;
 
     #[ORM\OneToMany(mappedBy: 'dateponcts', targetEntity: DatePonctuelleService::class, orphanRemoval: true)]
     private Collection $datePoncts;
@@ -63,17 +60,6 @@ class AnnonceService extends Annonce
         return $this;
     }
 
-    public function getPosteur(): ?User
-    {
-        return $this->posteur;
-    }
-
-    public function setPosteur(?User $posteur): static
-    {
-        $this->posteur = $posteur;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, DatePonctuelleService>

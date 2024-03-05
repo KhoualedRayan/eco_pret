@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\AnnonceRepository;
@@ -9,12 +9,19 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnonceRepository::class)]
-class Annonce
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap(["materiel" => AnnonceMateriel::class, "service" => AnnonceService::class])]
+abstract class Annonce
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $posteur = null;
 
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
@@ -24,6 +31,7 @@ class Annonce
 
     #[ORM\Column]
     private ?int $prix = null;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_publication = null;
@@ -42,6 +50,17 @@ class Annonce
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getPosteur(): ?User
+    {
+        return $this->posteur;
+    }
+
+    public function setPosteur(?User $posteur): static
+    {
+        $this->posteur = $posteur;
+
+        return $this;
     }
 
     public function getTitre(): ?string

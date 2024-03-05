@@ -48,27 +48,21 @@ h2 {
     display: block;
 }
 
-/* CSS TEMPORARIRE A CHANGER DES 'Annonces' */
-.table-container {
-    display: flex;
-}
 
-.table-wrapper {
-    flex: 1;
-    margin-right: 10px; 
-}
 
-/* Pour que les deux tableaux aient le m�me style */
-.table-wrapper table {
-    width: 100%;
+.emprunter {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    padding: 0.5em 1em;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
-
-.table-wrapper th {
-    border-bottom: 1px solid #000;
-    text-align: left;
-}
-
-.table-wrapper td {
-    border-bottom: 1px solid #ccc;
-    text-align: left;
+.emprunter:hover {
+    filter: brightness(130%);
 }
