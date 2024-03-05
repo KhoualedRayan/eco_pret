@@ -30,17 +30,17 @@
     <div id="periode">
     <div id="jours" style="display:none;">
         <label for="jour_fin">Jour de fin (compris):</label>
-        <input type="date" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m-d") }}" required><br>
+        <input type="date" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m-d") }}"><br>
     </div>
 
     <div id="mois" style="display:none;">
         <label for="mois_fin">Mois de fin (compris) :</label>
-        <input type="month" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m") }}" required><br>
+        <input type="month" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m") }}" ><br>
     </div>
 
     <div id="semaine" style="display:none;">
         <label for="semaine_fin">Semaine de fin (comprise) :</label>
-        <input type="week" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" required><br>
+        <input type="week" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
     </div>
     <br />
 </div>
@@ -129,8 +129,6 @@
     });
 
     document.getElementById('addDateButton').addEventListener('click', function() {
-        console.log('ICI');
-
         var additionalDates = document.getElementsByName('additional_date[]');
 
         // Parcourir tous les champs de dates

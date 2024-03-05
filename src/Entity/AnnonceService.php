@@ -40,7 +40,7 @@ class AnnonceService extends Annonce
     {
         if (!$this->recurrences->contains($recurrence)) {
             $this->recurrences[] = $recurrence;
-            $recurrence->setAnnonceService($this);
+            #$recurrence->setAnnonceService($this);
         }
 
         return $this;
