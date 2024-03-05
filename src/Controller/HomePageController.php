@@ -64,11 +64,11 @@ class HomePageController extends AbstractController
 
         return new Response("Erreur lors de l'emprunt");
     }
-    public function creationTransaction(Annonce $annonceMateriel,EntityManagerInterface $entityManagerInterface){
+    public function creationTransaction(Annonce $annonce,EntityManagerInterface $entityManagerInterface){
         $transaction = new Transaction();
         $date = new DateTime();
         $transaction->setStatutTransaction("En cours");
-        $transaction->setAnnonce(4);
+        $transaction->setAnnonceMateriel($annonce);
         $transaction->setClient($this->getUser());
         $transaction->setDateTransaction($date);
         $entityManagerInterface->persist($transaction);
