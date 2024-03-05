@@ -29,7 +29,7 @@
             {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
             <h3>{{ annonce.getTitre() }}</h3>
             <div class="description">{{ annonce.getDescription() }}</div>
-            {% if app.user.abonnement == "2" %}
+            {% if app.user and app.user.abonnement == "2" %}
                 <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
             {% endif %}
         </div>
