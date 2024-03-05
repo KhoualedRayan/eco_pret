@@ -61,8 +61,8 @@ class OffreServiceController extends AbstractController
 
         #FIRST DATE
         if($init_reccu == ""){#DATE PONCTUELLE
-            $first_dat = new DatePonctuelleService() ;
-            $first_dat->setDate(new DateTime($init_date));
+            $first_date = new DatePonctuelleService() ;
+            $first_date->setDate(new DateTime($init_date));
             $entityManager->persist($first_date);
             $annonce->addDatePonct($first_date);
         }else{#RECCURENCE
