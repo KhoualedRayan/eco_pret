@@ -243,7 +243,7 @@
                     {% if annonce.getType() == "Service" %}
                         <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,null)">Modifier</button>
                     {% endif %}
-                    <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}', '{{ annonce.getType() }}')">Supprimer</button>
+                    <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
                 </div>
             {% endfor %}
         </div>
@@ -286,7 +286,7 @@
                 <div id="blocService">
                     <div>
                         <label for="editCategorieService">Service : </label>
-                        <select name="service" id="editCategorieService" required>
+                        <select name="editCategorieService" id="editCategorieService" required>
                             <option value="">Sélectionnez un tag pour votre Service</option>
                             {% for serv in catService %}
                                 <option value="{{ serv.getNom() }}">{{ serv.getNom() }}</option>
