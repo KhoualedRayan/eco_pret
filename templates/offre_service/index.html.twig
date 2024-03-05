@@ -134,7 +134,7 @@
         // Parcourir tous les champs de dates
         for (var i = 0; i < additionalDates.length; i++) {
             // Afficher la valeur de chaque champ dans la console
-            console.log("Date optionnelle " + (i + 1) + ": " + additionalDates[i].value);
+            console.log("Date supplémentaire " + (i + 1) + ": " + additionalDates[i].value);
         }
 
         var additionalDatesDiv = document.getElementById('additionalDates');
@@ -144,27 +144,39 @@
         newInput.min = '{{ "now"|date("Y-m-d") }}T00:00';
         newInput.title = 'Date et heure du prêt optionnel, doit être supérieur à maintenant';
         newInput.required = true;
-        additionalDatesDiv.append('Date optionnel : ');
-        additionalDatesDiv.appendChild(newInput);
-        additionalDatesDiv.appendChild(document.createElement('br'));
+        var additionalRecurrencesDiv = document.getElementById('additionalDates'); //pour suppr avec le bouton, appartient au recurrence
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = "Supprimer";
+        deleteButton.addEventListener('click', function() {
+            additionalDatesDiv.removeChild(newDiv);
+            additionalRecurrencesDiv.removeChild(newDiv2);
+        });
+        var newDiv = document.createElement('div');
+        newDiv.appendChild(deleteButton);
 
-        ajoutReccurence();
-    });
-    function ajoutReccurence() {
-        var additionalRecurrencesDiv = document.getElementById('additionalDates');
+        newDiv.append('Date optionnel : ');
+        newDiv.appendChild(newInput);
+        newDiv.appendChild(document.createElement('br'));
+        newDiv.appendChild(document.createElement('br'));
+        additionalDatesDiv.appendChild(newDiv);
+
+        
+
+        //RECURRENCE
+        
         var newSelect = document.createElement('select');
         var newPeriode = document.createElement('div');
+        var newDiv2 = document.createElement('div');
 
         newSelect.name = 'additional_recurrence[]';
         newPeriode.name = 'additional_periode[]';
-
         newSelect.innerHTML = document.getElementById('recurrence').innerHTML;
         newPeriode.innerHTML = document.getElementById('periode').innerHTML;
         newPeriode.innerHTML = '';
-        additionalRecurrencesDiv.appendChild(newSelect);
-        additionalRecurrencesDiv.append(newSelect.value);
-        additionalRecurrencesDiv.appendChild(newPeriode);
-        additionalRecurrencesDiv.appendChild(document.createElement('br'));
+        newDiv2.appendChild(newSelect);
+        newDiv2.append(newSelect.value);
+        newDiv2.appendChild(newPeriode);
+        newDiv2.appendChild(document.createElement('br'));
         newSelect.addEventListener('change', function() {
             if (newSelect.value === 'quotidienne') {
                 newPeriode.innerHTML = document.getElementById('jours').innerHTML;
@@ -176,7 +188,8 @@
                 newPeriode.innerHTML = "";
             }
         });
-    }
+        additionalRecurrencesDiv.appendChild(newDiv2);
+    });
 </script>
 
 {% endblock %}
