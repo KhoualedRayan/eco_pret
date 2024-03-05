@@ -182,7 +182,7 @@ function submitAnnonceForm(event) {
         console.log(document.getElementById('editDureePeriode').value);
         console.log(document.getElementById('editCategorieMat').value);
     } else if (annonceType == "Service") {
-        data.append('nouvelleCategorie', document.getElementById('editCategorieService'));
+        data.append('nouvelleCategorie', document.getElementById('editCategorieService').value);
     }
 
     xhr.onreadystatechange = function () {
@@ -203,14 +203,12 @@ function submitAnnonceForm(event) {
 }
 
 /*Suppresion d'une annonce */
-function confirmerSuppression(event,id,type) {
+function confirmerSuppression(event,id) {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette annonce ?")) {
         event.preventDefault();
         var xhr = new XMLHttpRequest();
         var data = new FormData();
         data.append('annonceId', id);
-        data.append('annonceType', type);
-        console.log("Type : " + type + ", Id : " + id);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 if (xhr.responseText != "OK") {

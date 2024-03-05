@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
+use App\Entity\Annonce;
 use App\Entity\Abonnement;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use App\Entity\CategorieMateriel;
@@ -84,7 +85,7 @@ class ProfileController extends AbstractController
         $errors = [];
         $user = $this->getUser();
 
-       
+
 
         $newAbo = $ar->findOneByName($newAbo);
 
@@ -93,7 +94,7 @@ class ProfileController extends AbstractController
             $user->setNextAbonnement($newAbo);
         }
 
-      
+
 
         if ($user->getNextAbonnement() != $newAbo) {
             // cas Standard, Standard + Premium -> Premium, Premium + Payer x euros (différence)
@@ -110,7 +111,7 @@ class ProfileController extends AbstractController
                 $user->setNextAbonnement($newAbo);
             }
 
-           
+
         }
 
         // Check if new username contains "@" or already exists
@@ -144,7 +145,7 @@ class ProfileController extends AbstractController
 
         $user->setNextAbonnement($newAbo);
 
-      
+
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -155,7 +156,7 @@ class ProfileController extends AbstractController
     #[Route('/ajax/mdpForm', name: 'mdp_form')]
     public function checkMDP(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        
+
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -199,8 +200,8 @@ class ProfileController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-       
-        // Marque l'utilisateur comme désabonné 
+
+        // Marque l'utilisateur comme désabonné
         $this->getUser()->setAbonnement(null);
         $this->getUser()->setNextAbonnement(null);
 
@@ -210,7 +211,7 @@ class ProfileController extends AbstractController
         $this->addFlash('notifications', 'Vous êtes bien désabonné !');
 
         return $this->redirectToRoute('app_profile');
-    
+
     }
     #[Route('/ajax/modif_annonce', name: 'modif_annonce')]
     public function modifAnnonce(Request $request, EntityManagerInterface $entityManager, CategorieMaterielRepository $cmr, CategorieServiceRepository $csr): Response
@@ -231,15 +232,10 @@ class ProfileController extends AbstractController
             $duree_pret_valeur = $data->get('nouvelleDureeValeur');
             $duree_pret = $data->get('nouvelleDureePeriode');
             $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
-            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
-            $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
             $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
-
             $annonceMateriel->setPrix($nouveauPrix);
             $annonceMateriel->setTitre($nouveauTitre);
-
             $annonceMateriel->setDuree($duree_pret);
-
             $annonceMateriel->setDescription($nouvelleDescription);
             $annonceMateriel->setCategorie($cmr->findOneByNom($nouvelleCategorie));
             $entityManager->persist($annonceMateriel);
@@ -250,9 +246,6 @@ class ProfileController extends AbstractController
             return new Response("OK");
         }
         else if($annonceType === 'Service'){
-            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
-            $test = $entityManager->getRepository(AnnonceService::class)->findAll();
-
             $annonceService = $entityManager->getRepository(AnnonceService::class)->find($annonceId);
             $annonceService->setPrix($nouveauPrix);
             $annonceService->setTitre($nouveauTitre);
@@ -275,40 +268,13 @@ class ProfileController extends AbstractController
 
         $data = $request->request;
         $annonceId = (int) $data->get('annonceId');
-        $annonceType = $data->get('annonceType');
 
-
-        if($annonceType === 'Materiel'){
-            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
-            $test = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
-
-            $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
-            if ($annonceMateriel) {
-                // Supprime l'annonce de la base de données
-                $entityManager->remove($annonceMateriel);
-                $entityManager->flush();
-
-                $this->addFlash('notifications', 'Votre annonce a été supprimée avec succès !');
-                return new Response("OK");
-            } else {
-                $this->addFlash('error', 'Annonce non trouvée.');
-            }
-        }
-        else if($annonceType === 'Service'){
-            #Cette ligne est obligatoire sinon bug, je sais pas pourquoi mais ne pas toucher !!
-            $test = $entityManager->getRepository(AnnonceService::class)->findAll();
-
-            $annonceService = $entityManager->getRepository(AnnonceService::class)->find($annonceId);
-            if ($annonceService) {
-                // Supprime l'annonce de la base de données
-                $entityManager->remove($annonceService);
-                $entityManager->flush();
-
-                $this->addFlash('notifications', 'Votre annonce a été supprimée avec succès !');
-                return new Response("OK");
-            } else {
-                $this->addFlash('error', 'Annonce non trouvée.');
-            }
+        $annonce = $entityManager->getRepository(Annonce::class)->find($annonceId);
+        if($annonce){
+            $entityManager->remove($annonce);
+            $entityManager->flush();
+            $this->addFlash('notifications', 'Votre annonce a été supprimée avec succès !');
+            return new Response("OK");
         }
 
         return new Response("Erreur sur la suppresion de l'annonce");
