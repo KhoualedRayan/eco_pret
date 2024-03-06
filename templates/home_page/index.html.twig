@@ -29,8 +29,16 @@
             {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
             <h3>{{ annonce.getTitre() }}</h3>
             <div class="description">{{ annonce.getDescription() }}</div>
-            {% if app.user and app.user.abonnement == "2" %}
-                <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+            {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id %}
+                {% if app.user.getDemandes() is not empty%}
+                    {% for transaction in app.user.getDemandes() %}
+                        {% if transaction.contientUserDansAnnonce(app.user,annonce) == false %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                {% endif %}
             {% endif %}
         </div>
     {% endfor %}

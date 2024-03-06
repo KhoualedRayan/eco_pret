@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Annonce;
+use App\Entity\Transaction;
 use App\Entity\Abonnement;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use App\Entity\CategorieMateriel;
@@ -41,12 +42,9 @@ class ProfileController extends AbstractController
         } else {
             $errors = [];
         }
-        $annonceService = $entityManager->getRepository(AnnonceService::class)->findBy(['posteur' => $this->getUser()]);
-        $entityManager->clear();
-        $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findBy(['posteur' => $this->getUser()]);
-        // Fusionner les annonces dans un seul tableau
-        $annonces = array_merge($annonceService, $annonceMateriel);
 
+        $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser()]);
+        $transactions = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -69,6 +67,7 @@ class ProfileController extends AbstractController
             'abonnements' => $abonnements,
             'catMat' => $categoriesMateriel,
             'catService' => $categoriesService,
+            'transactions' => $transactions,
         ]);
     }
 

@@ -16,7 +16,7 @@ function confirmerEmprunt(event, id, type) {
                 else {
                     //Annonce supprimé avec succès :D
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.href = '/profile';
                 }
             }
         };

@@ -38,6 +38,10 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?User $client = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $posteur = null;
+
     #[ORM\ManyToOne(inversedBy: 'transactions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Annonce $annonce = null;
@@ -139,6 +143,18 @@ class Transaction
         return $this;
     }
 
+    public function getPosteur(): ?User
+    {
+        return $this->posteur;
+    }
+
+    public function setPosteur(?User $posteur): static
+    {
+        $this->posteur = $posteur;
+
+        return $this;
+    }
+
     public function getAnnonce(): ?Annonce
     {
         return $this->annonce;
@@ -179,5 +195,13 @@ class Transaction
         }
 
         return $this;
+    }
+
+    public function contientUserDansAnnonce(?User $user, ?Annonce $annonce): bool{
+        if ($this->client->getId() == $user->getId() && $this->annonce->getId() == $annonce->getId())
+            return true;
+        if ($this->posteur->getId() == $user->getId() && $this->annonce->getId() == $annonce->getId())
+            return true;
+        return false;
     }
 }
