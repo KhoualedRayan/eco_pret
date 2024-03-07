@@ -39,8 +39,8 @@ abstract class Annonce
     #[ORM\Column(length: 127)]
     private ?string $statut = null;
 
-    #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: Transaction::class, orphanRemoval: true)]
-    private Collection $transactions;
+    #[ORM\OneToOne(inversedBy: 'annonce', cascade: ['persist', 'remove'])]
+    private ?Transaction $transaction = null;
 
     public function __construct()
     {
@@ -123,33 +123,14 @@ abstract class Annonce
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Transaction>
-     */
-    public function getTransactions(): Collection
+    public function getTransaction(): ?Transaction
     {
-        return $this->transactions;
+        return $this->transaction;
     }
 
-    public function addTransaction(Transaction $transaction): static
+    public function setTransaction(?Transaction $transaction): static
     {
-        if (!$this->transactions->contains($transaction)) {
-            $this->transactions->add($transaction);
-            $transaction->setAnnonce($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTransaction(Transaction $transaction): static
-    {
-        if ($this->transactions->removeElement($transaction)) {
-            // set the owning side to null (unless already changed)
-            if ($transaction->getAnnonce() === $this) {
-                $transaction->setAnnonce(null);
-            }
-        }
+        $this->transaction = $transaction;
 
         return $this;
     }

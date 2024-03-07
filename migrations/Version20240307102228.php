@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240307095010 extends AbstractMigration
+final class Version20240307102228 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,10 +25,11 @@ final class Version20240307095010 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE recurrence DROP FOREIGN KEY FK_1FB7F221B6FC418C');
-        $this->addSql('DROP INDEX IDX_1FB7F221B6FC418C ON recurrence');
-        $this->addSql('ALTER TABLE transaction ADD posteur_id INT NOT NULL');
-        $this->addSql('ALTER TABLE transaction ADD CONSTRAINT FK_723705D19DDC44B3 FOREIGN KEY (posteur_id) REFERENCES user (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
-        $this->addSql('CREATE INDEX IDX_723705D19DDC44B3 ON transaction (posteur_id)');
+        $this->addSql('ALTER TABLE transaction DROP FOREIGN KEY FK_723705D19DDC44B3');
+        $this->addSql('DROP INDEX IDX_723705D19DDC44B3 ON transaction');
+        $this->addSql('ALTER TABLE transaction DROP posteur_id');
+        $this->addSql('ALTER TABLE annonce DROP FOREIGN KEY FK_F65593E52FC0CB0F');
+        $this->addSql('DROP INDEX UNIQ_F65593E52FC0CB0F ON annonce');
+        $this->addSql('ALTER TABLE annonce DROP transaction_id');
     }
 }

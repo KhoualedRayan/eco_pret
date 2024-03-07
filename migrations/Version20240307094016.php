@@ -20,10 +20,6 @@ final class Version20240307094016 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE recurrence ADD annonce_serv_id INT NOT NULL');
-        $this->addSql('ALTER TABLE recurrence ADD CONSTRAINT FK_1FB7F221B6FC418C FOREIGN KEY (annonce_serv_id) REFERENCES annonce_service (id)');
-        $this->addSql('CREATE INDEX IDX_1FB7F221B6FC418C ON recurrence (annonce_serv_id)');
-        $this->addSql('ALTER TABLE transaction DROP FOREIGN KEY FK_723705D19DDC44B3');
         $this->addSql('DROP INDEX IDX_723705D19DDC44B3 ON transaction');
         $this->addSql('ALTER TABLE transaction DROP posteur_id');
     }

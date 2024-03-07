@@ -42,12 +42,11 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'transactions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Annonce $annonce = null;
-
     #[ORM\OneToMany(mappedBy: 'transaction', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
+
+    #[ORM\OneToOne(mappedBy: 'transaction', cascade: ['persist', 'remove'])]
+    private ?Annonce $annonce = null;
 
     public function __construct()
     {
@@ -155,18 +154,6 @@ class Transaction
         return $this;
     }
 
-    public function getAnnonce(): ?Annonce
-    {
-        return $this->annonce;
-    }
-
-    public function setAnnonce(?Annonce $annonce): static
-    {
-        $this->annonce = $annonce;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Message>
      */
@@ -203,5 +190,27 @@ class Transaction
         if ($this->posteur->getId() == $user->getId() && $this->annonce->getId() == $annonce->getId())
             return true;
         return false;
+    }
+
+    public function getAnnonce(): ?Annonce
+    {
+        return $this->annonce;
+    }
+
+    public function setAnnonce(?Annonce $annonce): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($annonce === null && $this->annonce !== null) {
+            $this->annonce->setTransaction(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($annonce !== null && $annonce->getTransaction() !== $this) {
+            $annonce->setTransaction($this);
+        }
+
+        $this->annonce = $annonce;
+
+        return $this;
     }
 }
