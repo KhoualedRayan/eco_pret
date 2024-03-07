@@ -42,9 +42,13 @@ abstract class Annonce
     #[ORM\OneToOne(inversedBy: 'annonce', cascade: ['persist', 'remove'])]
     private ?Transaction $transaction = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'annoncesOuJAttends')]
+    private Collection $gensEnAttente;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->gensEnAttente = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +135,30 @@ abstract class Annonce
     public function setTransaction(?Transaction $transaction): static
     {
         $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getGensEnAttente(): Collection
+    {
+        return $this->gensEnAttente;
+    }
+
+    public function addGensEnAttente(User $gensEnAttente): static
+    {
+        if (!$this->gensEnAttente->contains($gensEnAttente)) {
+            $this->gensEnAttente->add($gensEnAttente);
+        }
+
+        return $this;
+    }
+
+    public function removeGensEnAttente(User $gensEnAttente): static
+    {
+        $this->gensEnAttente->removeElement($gensEnAttente);
 
         return $this;
     }

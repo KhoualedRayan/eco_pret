@@ -280,6 +280,26 @@ class ProfileController extends AbstractController
 
         return new Response("Erreur sur la suppresion de l'annonce");
     }
+    #[Route('/ajax/suppr_transaction', name: 'suppr_transaction')]
+    public function supprTransaction(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $transactionId = (int) $data->get('transactionId');
+
+        $transaction = $entityManager->getRepository(Transaction::class)->find($transactionId);
+        if ($transaction) {
+            $entityManager->remove($transaction);
+            $entityManager->flush();
+            $this->addFlash('notifications', 'Votre transaction a été annulé avec succès !');
+            return new Response("OK");
+        }
+
+        return new Response("Erreur sur la suppresion de l'annonce");
+    }
 }
 
 

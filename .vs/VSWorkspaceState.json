@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\scripts",
+    "\\public\\styles",
     "\\src",
     "\\src\\Controller",
-    "\\src\\Repository",
+    "\\src\\Entity",
     "\\templates",
     "\\templates\\home_page",
     "\\templates\\offre_service",
     "\\templates\\profile"
   ],
-  "SelectedNode": "\\public\\scripts\\accueil.js",
+  "SelectedNode": "\\src\\Controller\\ProfileController.php",
   "PreviewInSolutionExplorer": false
 }

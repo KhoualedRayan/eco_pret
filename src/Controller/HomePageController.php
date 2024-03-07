@@ -48,10 +48,17 @@ class HomePageController extends AbstractController
         if (!$annonce) {
             return new Response("Erreur l'annonce n'existe plus");
         }
-        $transaction = $this->creationTransaction($annonce, $entityManager);
-        $annonce->addTransaction($transaction);
-        $entityManager->persist($annonce);
-        $entityManager->flush();
+        if ($annonce->getGensEnAttente()->isEmpty()) {
+            $annonce->addGensEnAttente($this->getUser());
+            $transaction = $this->creationTransaction($annonce, $entityManager);
+            $annonce->setTransaction($transaction);
+            $entityManager->persist($annonce);
+            $entityManager->flush();
+        }else{
+            $annonce->addGensEnAttente($this->getUser());
+            $entityManager->persist($annonce);
+            $entityManager->flush();
+        }
         $this->addFlash('notifications', "Vous pouvez désormais communiquer avec le créateur de l'annonce !");
         return new Response("OK");
     }

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Annonce;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction
@@ -185,6 +186,7 @@ class Transaction
     }
 
     public function contientUserDansAnnonce(?User $user, ?Annonce $annonce): bool{
+
         if ($this->client->getId() == $user->getId() && $this->annonce->getId() == $annonce->getId())
             return true;
         if ($this->posteur->getId() == $user->getId() && $this->annonce->getId() == $annonce->getId())
