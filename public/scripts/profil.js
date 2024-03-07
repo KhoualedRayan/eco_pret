@@ -226,3 +226,28 @@ function confirmerSuppression(event,id) {
         xhr.send(data);
     }
 }
+
+/*Suppresion d'une transaction */
+function supprimerTransaction(event, id) {
+    if (confirm("Êtes-vous sûr de vouloir annuler cette transaction ?")) {
+        event.preventDefault();
+        var xhr = new XMLHttpRequest();
+        var data = new FormData();
+        data.append('transactionId', id);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.responseText != "OK") {
+                    //Erreur
+                    console.log(xhr.responseText)
+                }
+                else {
+                    //Annonce supprimé avec succès :D
+                    console.log(xhr.responseText);
+                    location.reload();
+                }
+            }
+        };
+        xhr.open('POST', '/ajax/suppr_transaction', true);
+        xhr.send(data);
+    }
+}
