@@ -31,9 +31,9 @@
             <div class="description">{{ annonce.getDescription() }}</div>
             {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id %}
                 {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
-                    {% if annonce.gensEnAttente is empty %}
+                    {% if annonce.attentes is empty %}
                         <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
-                    {% elseif annonce.gensEnAttente.contains(app.user) == false %}
+                    {% elseif annonce.contientUserDansFiles(app.user) == false %}
                         <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
                     {% endif %}
                 {% endif %}

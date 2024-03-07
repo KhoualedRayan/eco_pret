@@ -11,6 +11,7 @@ use App\Entity\AnnonceMateriel;
 use App\Entity\Annonce;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Transaction;
+use App\Entity\FileAttente;
 use DateTime;
 class HomePageController extends AbstractController
 {
@@ -48,14 +49,27 @@ class HomePageController extends AbstractController
         if (!$annonce) {
             return new Response("Erreur l'annonce n'existe plus");
         }
-        if ($annonce->getGensEnAttente()->isEmpty()) {
-            $annonce->addGensEnAttente($this->getUser());
+        if ($annonce->getAttentes()->isEmpty()) {
+            $file = new FileAttente();
+            $file->setUser($this->getUser());
+            $file->setAnnonce($annonce);
+            $file->setRang(0);
+            $entityManager->persist($file);
+            $entityManager->flush();
             $transaction = $this->creationTransaction($annonce, $entityManager);
+            $annonce->addAttente($file);
             $annonce->setTransaction($transaction);
             $entityManager->persist($annonce);
             $entityManager->flush();
         }else{
-            $annonce->addGensEnAttente($this->getUser());
+            $derniereFile = $annonce->getAttentes()->last();
+            $file = new FileAttente();
+            $file->setUser($this->getUser());
+            $file->setAnnonce($annonce);
+            $file->setRang($derniereFile->getRang()+1);
+            $entityManager->persist($file);
+            $entityManager->flush();
+            $annonce->addAttente($file);
             $entityManager->persist($annonce);
             $entityManager->flush();
         }

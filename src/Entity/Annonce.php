@@ -39,11 +39,13 @@ abstract class Annonce
     #[ORM\Column(length: 127)]
     private ?string $statut = null;
 
-    #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: Transaction::class, orphanRemoval: true)]
-    private Collection $transactions;
+    #[ORM\OneToOne(inversedBy: 'annonce', cascade: ['persist', 'remove'])]
+    private ?Transaction $transaction = null;
+
 
     #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: FileAttente::class, orphanRemoval: true)]
     private Collection $attentes;
+
 
     public function __construct()
     {
@@ -127,45 +129,23 @@ abstract class Annonce
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Transaction>
-     */
-    public function getTransactions(): Collection
+    public function getTransaction(): ?Transaction
     {
-        return $this->transactions;
+        return $this->transaction;
     }
 
-    public function addTransaction(Transaction $transaction): static
+    public function setTransaction(?Transaction $transaction): static
     {
-        if (!$this->transactions->contains($transaction)) {
-            $this->transactions->add($transaction);
-            $transaction->setAnnonce($this);
-        }
+        $this->transaction = $transaction;
 
         return $this;
     }
 
-    public function removeTransaction(Transaction $transaction): static
-    {
-        if ($this->transactions->removeElement($transaction)) {
-            // set the owning side to null (unless already changed)
-            if ($transaction->getAnnonce() === $this) {
-                $transaction->setAnnonce(null);
-            }
-        }
 
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, FileAttente>
-     */
     public function getAttentes(): Collection
     {
         return $this->attentes;
     }
-
     public function addAttente(FileAttente $attente): static
     {
         if (!$this->attentes->contains($attente)) {
@@ -175,7 +155,6 @@ abstract class Annonce
 
         return $this;
     }
-
     public function removeAttente(FileAttente $attente): static
     {
         if ($this->attentes->removeElement($attente)) {
@@ -187,5 +166,14 @@ abstract class Annonce
 
         return $this;
     }
+    public function contientUserDansFiles(User $user): bool{
+        foreach ($this->attentes as $fileAttente) {
+            if ($fileAttente->getUser() == $user) {
+                return true; // L'utilisateur est trouvé dans l'une des files, donc on retourne vrai immédiatement
+            }
+        }
+        return false;
+    }
+
 
 }

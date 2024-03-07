@@ -76,9 +76,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne]
     private ?Abonnement $nextAbonnement = null;
 
-    #[ORM\ManyToMany(targetEntity: Annonce::class, mappedBy: 'gensEnAttente')]
-    private Collection $annoncesOuJAttends;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: FileAttente::class, orphanRemoval: true)]
     private Collection $annoncesOuJattends;
 
@@ -437,31 +434,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
     /**
-     * @return Collection<int, Annonce>
+     * @return Collection|FileAttente[]
      */
-    public function getAnnoncesOuJAttends(): Collection
+    public function getAnnoncesOuJattends(): Collection
     {
-        return $this->annoncesOuJAttends;
+        return $this->annoncesOuJattends;
     }
 
-    public function addAnnoncesOuJAttend(Annonce $annoncesOuJAttend): static
+    public function addAnnonceOuJattends(FileAttente $annonceOuJattends): self
     {
-        if (!$this->annoncesOuJAttends->contains($annoncesOuJAttend)) {
-            $this->annoncesOuJAttends->add($annoncesOuJAttend);
-            $annoncesOuJAttend->addGensEnAttente($this);
+        if (!$this->annoncesOuJattends->contains($annonceOuJattends)) {
+            $this->annoncesOuJattends[] = $annonceOuJattends;
+            $annonceOuJattends->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeAnnoncesOuJAttend(Annonce $annoncesOuJAttend): static
+    public function removeAnnonceOuJattends(FileAttente $annonceOuJattends): self
     {
-        if ($this->annoncesOuJAttends->removeElement($annoncesOuJAttend)) {
-            $annoncesOuJAttend->removeGensEnAttente($this);
+        if ($this->annoncesOuJattends->removeElement($annonceOuJattends)) {
+            // Si la relation était configurée pour être bidirectionnelle, définissez le côté opposé à null (sauf si déjà changé)
+            if ($annonceOuJattends->getUser() === $this) {
+                $annonceOuJattends->setUser(null);
+            }
         }
 
         return $this;
     }
+
 }
