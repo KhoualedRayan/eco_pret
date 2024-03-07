@@ -23,6 +23,10 @@ class Recurrence
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_fin = null;
 
+    #[ORM\ManyToOne(inversedBy: 'recurrence')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?AnnonceService $annonceServ = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Recurrence
     public function setDateFin(\DateTimeInterface $date_fin): static
     {
         $this->date_fin = $date_fin;
+
+        return $this;
+    }
+
+    public function getAnnonceServ(): ?AnnonceService
+    {
+        return $this->annonceServ;
+    }
+
+    public function setAnnonceServ(?AnnonceService $annonceServ): static
+    {
+        $this->annonceServ = $annonceServ;
 
         return $this;
     }

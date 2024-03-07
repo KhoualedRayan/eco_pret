@@ -11,9 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AnnonceServiceRepository::class)]
 class AnnonceService extends Annonce
 {
-    #[ORM\OneToMany(mappedBy: 'annonceService', targetEntity: Recurrence::class, cascade: ['persist', 'remove'])]
-    private Collection $recurrences;
-
 
     #[ORM\OneToMany(mappedBy: 'dateponcts', targetEntity: DatePonctuelleService::class, orphanRemoval: true)]
     private Collection $datePoncts;
@@ -22,42 +19,22 @@ class AnnonceService extends Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?CategorieService $categorie = null;
 
+    #[ORM\OneToMany(mappedBy: 'annonceServ', targetEntity: Recurrence::class, orphanRemoval: true)]
+    private Collection $recurrence;
+
     public function __construct()
     {
         $this->recurrences = new ArrayCollection();
         $this->datePoncts = new ArrayCollection();
+        $this->recurrence = new ArrayCollection();
     }
 
-    public function getRecurrences(): Collection
-    {
-        return $this->recurrences;
-    }
 
-    public function addRecurrence(Recurrence $recurrence): self
-    {
-        if (!$this->recurrences->contains($recurrence)) {
-            $this->recurrences[] = $recurrence;
-            #$recurrence->setAnnonceService($this);
-        }
-
-        return $this;
-    }
+    
 
     public function getType(): String
     {
         return "Service";
-    }
-
-    public function removeRecurrence(Recurrence $recurrence): self
-    {
-        if ($this->recurrences->removeElement($recurrence)) {
-            // set the owning side to null (unless already changed)
-            if ($recurrence->getAnnonceService() === $this) {
-                $recurrence->setAnnonceService(null);
-            }
-        }
-
-        return $this;
     }
 
 
@@ -99,6 +76,36 @@ class AnnonceService extends Annonce
     public function setCategorie(?CategorieService $categorie): static
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recurrence>
+     */
+    public function getRecurrence(): Collection
+    {
+        return $this->recurrence;
+    }
+
+    public function addRecurrence(Recurrence $recurrence): static
+    {
+        if (!$this->recurrence->contains($recurrence)) {
+            $this->recurrence->add($recurrence);
+            $recurrence->setAnnonceServ($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecurrence(Recurrence $recurrence): static
+    {
+        if ($this->recurrence->removeElement($recurrence)) {
+            // set the owning side to null (unless already changed)
+            if ($recurrence->getAnnonceServ() === $this) {
+                $recurrence->setAnnonceServ(null);
+            }
+        }
 
         return $this;
     }
