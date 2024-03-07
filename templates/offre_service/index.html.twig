@@ -173,21 +173,95 @@
         newSelect.innerHTML = document.getElementById('recurrence').innerHTML;
         newPeriode.innerHTML = document.getElementById('periode').innerHTML;
         newPeriode.innerHTML = '';
+
+        newSelect.addEventListener('change', function() {
+    newPeriode.innerHTML = ""; // Efface le contenu précédent de newPeriode
+
+    if (newSelect.value === 'quotidienne') {
+        // Créer un nouvel élément div pour contenir les champs de formulaire et les libellés pour l'option "quotidienne"
+        var newJoursDiv = document.createElement('div');
+        newJoursDiv.id = 'jours_cloned';
+        var joursInputs = document.getElementById('jours').querySelectorAll('input');
+
+        joursInputs.forEach(input => {
+            // Créer un nouveau champ de formulaire cloné
+            var newInput = document.createElement('input');
+            newInput.type = input.type;
+            newInput.name = input.name;
+            newInput.required = true; // Rendre le champ requis
+
+            // Créer un libellé correspondant au champ de formulaire
+            var newLabel = document.createElement('label');
+            newLabel.textContent = input.previousElementSibling.textContent; // Utiliser le libellé précédent
+
+            // Ajouter le libellé et le champ de formulaire au div
+            newJoursDiv.appendChild(newLabel);
+            newJoursDiv.appendChild(newInput);
+            newJoursDiv.appendChild(document.createElement('br'));
+        });
+
+        // Ajouter le div contenant les champs de formulaire clonés à newPeriode
+        newPeriode.appendChild(newJoursDiv);
+    } else if (newSelect.value === 'hebdomadaire') {
+        // Créer un nouvel élément div pour contenir les champs de formulaire et les libellés pour l'option "hebdomadaire"
+        var newSemaineDiv = document.createElement('div');
+        newSemaineDiv.id = 'semaine_cloned';
+        var semaineInputs = document.getElementById('semaine').querySelectorAll('input');
+
+        semaineInputs.forEach(input => {
+            // Créer un nouveau champ de formulaire cloné
+            var newInput = document.createElement('input');
+            newInput.type = input.type;
+            newInput.name = input.name;
+            newInput.required = true; // Rendre le champ requis
+
+            // Créer un libellé correspondant au champ de formulaire
+            var newLabel = document.createElement('label');
+            newLabel.textContent = input.previousElementSibling.textContent; // Utiliser le libellé précédent
+
+            // Ajouter le libellé et le champ de formulaire au div
+            newSemaineDiv.appendChild(newLabel);
+            newSemaineDiv.appendChild(newInput);
+            newSemaineDiv.appendChild(document.createElement('br'));
+        });
+
+        // Ajouter le div contenant les champs de formulaire clonés à newPeriode
+        newPeriode.appendChild(newSemaineDiv);
+    } else if (newSelect.value === 'mensuelle') {
+        // Créer un nouvel élément div pour contenir les champs de formulaire et les libellés pour l'option "mensuelle"
+        var newMoisDiv = document.createElement('div');
+        newMoisDiv.id = 'mois_cloned';
+        var moisInputs = document.getElementById('mois').querySelectorAll('input');
+
+        moisInputs.forEach(input => {
+            // Créer un nouveau champ de formulaire cloné
+            var newInput = document.createElement('input');
+            newInput.type = input.type;
+            newInput.name = input.name;
+            newInput.required = true; // Rendre le champ requis
+
+            // Créer un libellé correspondant au champ de formulaire
+            var newLabel = document.createElement('label');
+            newLabel.textContent = input.previousElementSibling.textContent; // Utiliser le libellé précédent
+
+            // Ajouter le libellé et le champ de formulaire au div
+            newMoisDiv.appendChild(newLabel);
+            newMoisDiv.appendChild(newInput);
+            newMoisDiv.appendChild(document.createElement('br'));
+        });
+
+        // Ajouter le div contenant les champs de formulaire clonés à newPeriode
+        newPeriode.appendChild(newMoisDiv);
+    }
+    // Si aucune option n'est sélectionnée, ne rien faire
+});
+
+
         newDiv2.appendChild(newSelect);
         newDiv2.append(newSelect.value);
         newDiv2.appendChild(newPeriode);
         newDiv2.appendChild(document.createElement('br'));
-        newSelect.addEventListener('change', function() {
-            if (newSelect.value === 'quotidienne') {
-                newPeriode.innerHTML = document.getElementById('jours').innerHTML;
-            } else if (newSelect.value === 'hebdomadaire') {
-                newPeriode.innerHTML = document.getElementById('semaine').innerHTML;
-            } else if (newSelect.value === 'mensuelle') {
-                newPeriode.innerHTML = document.getElementById('mois').innerHTML;
-            } else {
-                newPeriode.innerHTML = "";
-            }
-        });
+        
         additionalRecurrencesDiv.appendChild(newDiv2);
     });
 </script>
