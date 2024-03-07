@@ -343,13 +343,30 @@ class ProfileController extends AbstractController
     #[Route('/ajax/se_desister', name: 'se_desister')]
     public function seDesister(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->addFlash('notifications', 'Pas encore fait !');
-        return new Response("OK");
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $annonceId = (int) $data->get('annonceId');
+
+        $annonce = $entityManager->getRepository(Annonce::class)->find($annonceId);
+        $annoncesOuJattends = $this->getUser()->getAnnoncesOuJattends();
+        foreach($annoncesOuJattends as $file){
+            if($file->getAnnonce($annonce)){
+                $entityManager->remove($file);
+                $entityManager->flush();
+                $this->addFlash('notifications', "File d'attente retirée avec succès !");
+                return new Response("OK");
+            }
+        }
+        $this->addFlash('notifications', "Erreur sur la désistation.");
+        return new Response("Erreur sur la désistation.");
     }
     #[Route('/ajax/annul_transaction', name: 'annul_transaction')]
     public function annulerTransactionAvecClient(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->addFlash('notifications', 'Pas encore fait !');
+        $this->addFlash('notifications', 'Pas encore fait 22 !');
         return new Response("OK");
     }
     public function creationTransaction(Annonce $annonce, EntityManagerInterface $entityManagerInterface,User $user)

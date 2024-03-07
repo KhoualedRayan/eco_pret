@@ -332,12 +332,6 @@
                     <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                     <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
-                    {%if transaction.getAnnonce().attentes.isEmpty() == false%}
-                        Ordre dans la file d'attente :
-                        {%for file in transaction.annonce.attentes %}
-                            {{ file.user.username }} ->
-                        {%endfor%}
-                    {%endif%}
                 </div>
             {% endfor %}
             <h4>Posteur:</h4>
@@ -346,7 +340,8 @@
                 <div class="blocAnnonce">
                     <div>
                         <span class="prix" >{{ transaction.getAnnonce().getPrix() }}<span class="material-icons">attach_money</span></span>
-                        <span class="username">{{ transaction.getAnnonce().getPosteur().getUsername() }}</span>
+                        <span class="username">Vous : {{ transaction.getPosteur().getUsername() }}</span>
+                        <span class="usernameClient">Client : {{ transaction.getClient().getUsername() }}</span>
                     </div>
                     <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                     <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
@@ -354,12 +349,6 @@
                     <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                     <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
-                    {%if transaction.getAnnonce().attentes.isEmpty() == false%}
-                        Ordre dans la file d'attente :
-                        {%for file in transaction.annonce.attentes %}
-                            {{ file.user.username }} ->
-                        {%endfor%}
-                    {%endif%}
                 </div>
             {% endfor %}
             <h4>En Attente:</h4>
@@ -375,7 +364,8 @@
                     {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
                     <h3>{{ annonce.getTitre() }}</h3>
                     <div class="description">{{ annonce.getDescription() }}</div>
-                    <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Annuler la transaction</button>
+                    <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
+                    <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Quitter la file</button>
                 </div>
             {% endfor %}
         </div>

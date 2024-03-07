@@ -174,6 +174,16 @@ abstract class Annonce
         }
         return false;
     }
-
+    public function positionFileAttente(Annonce $annonce,User $user) :string{
+        $compteur = 0;
+        $resultat = "x/x";
+        foreach ($this->getAttentes() as $file) {
+            if ($file->getAnnonce($annonce)) {
+                $resultat = $compteur ."";
+            }
+            $compteur++;
+        }
+        return $resultat;
+    }
 
 }

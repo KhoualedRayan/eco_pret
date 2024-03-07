@@ -86,7 +86,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reclamations_traitees = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->demandes = new ArrayCollection();
-        $this->annoncesOuJAttends = new ArrayCollection();
         $this->annoncesOuJattends = new ArrayCollection();
     }
 
