@@ -333,10 +333,10 @@
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                     <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
                     {%if transaction.getAnnonce().getGensEnAttente.isEmpty() == false%}
-                        Ordre dans la file d'attente : 
-                        {{ transaction.getAnnonce().getGensEnAttente.get(0).getUsername() }}
-                        {{ transaction.getAnnonce().getGensEnAttente.get(1).getUsername() }}
-                        {{ transaction.getAnnonce().getGensEnAttente.get(2).getUsername() }}
+                        Ordre dans la file d'attente :
+                        {%for user in transaction.annonce.gensEnAttente %}
+                            {{ user.username }} ,
+                        {%endfor%}
                     {%endif%}
                 </div>
             {% endfor %}
