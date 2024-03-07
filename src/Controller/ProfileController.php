@@ -292,6 +292,7 @@ class ProfileController extends AbstractController
 
         $transaction = $entityManager->getRepository(Transaction::class)->find($transactionId);
         if ($transaction) {
+            $transaction->getAnnonce()->removeGensEnAttente($this->getUser());
             $entityManager->remove($transaction);
             $entityManager->flush();
             $this->addFlash('notifications', 'Votre transaction a été annulé avec succès !');
