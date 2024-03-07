@@ -44,7 +44,8 @@ class ProfileController extends AbstractController
         }
 
         $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser()]);
-        $transactions = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
+        $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
+        $transactionsPosteur = $entityManager->getRepository(Transaction::class)->findBy(['posteur' => $this->getUser()]);
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -67,7 +68,8 @@ class ProfileController extends AbstractController
             'abonnements' => $abonnements,
             'catMat' => $categoriesMateriel,
             'catService' => $categoriesService,
-            'transactions' => $transactions,
+            'transactionsClient' => $transactionsClient,
+            'transactionsPosteur' => $transactionsPosteur,
         ]);
     }
 

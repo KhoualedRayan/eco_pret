@@ -318,7 +318,16 @@
     <div id="tab3" class="tab">
         <h3>Mes transactions</h3>
         <div class="tout">
-            {% for transaction in transactions %}
+            <h4>Client</h4>
+            {# Transactions ou l'utilisateur est un client #}
+            {% for transaction in transactionsClient %}
+                <div class="blocAnnonce">
+                    {{ transaction.getClient().getUsername() }}
+                </div>
+            {% endfor %}
+            <h4>Posteur:</h4>
+            {# Transactions ou l'utilisateur est un posteur #}
+            {% for transaction in transactionsPosteur %}
                 <div class="blocAnnonce">
                     {{ transaction.getClient().getUsername() }}
                 </div>
