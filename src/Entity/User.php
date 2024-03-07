@@ -42,6 +42,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $sleep_mode = null;
 
+    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceMateriel::class, orphanRemoval: true)]
+    // private Collection $annoncesMateriel;
+
+    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceService::class, orphanRemoval: true)]
+    // private Collection $annoncesService;
+
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Abonnement $abonnement = null;
@@ -73,6 +79,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Annonce::class, mappedBy: 'gensEnAttente')]
     private Collection $annoncesOuJAttends;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: FileAttente::class, orphanRemoval: true)]
+    private Collection $annoncesOuJattends;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -81,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->demandes = new ArrayCollection();
         $this->annoncesOuJAttends = new ArrayCollection();
+        $this->annoncesOuJattends = new ArrayCollection();
     }
 
     public function getId(): ?int

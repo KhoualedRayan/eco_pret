@@ -39,16 +39,16 @@ abstract class Annonce
     #[ORM\Column(length: 127)]
     private ?string $statut = null;
 
-    #[ORM\OneToOne(inversedBy: 'annonce', cascade: ['persist', 'remove'])]
-    private ?Transaction $transaction = null;
+    #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: Transaction::class, orphanRemoval: true)]
+    private Collection $transactions;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'annoncesOuJAttends')]
-    private Collection $gensEnAttente;
+    #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: FileAttente::class, orphanRemoval: true)]
+    private Collection $attentes;
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
-        $this->gensEnAttente = new ArrayCollection();
+        $this->attentes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,38 +127,63 @@ abstract class Annonce
         return $this;
     }
 
-    public function getTransaction(): ?Transaction
-    {
-        return $this->transaction;
-    }
-
-    public function setTransaction(?Transaction $transaction): static
-    {
-        $this->transaction = $transaction;
-
-        return $this;
-    }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Transaction>
      */
-    public function getGensEnAttente(): Collection
+    public function getTransactions(): Collection
     {
-        return $this->gensEnAttente;
+        return $this->transactions;
     }
 
-    public function addGensEnAttente(User $gensEnAttente): static
+    public function addTransaction(Transaction $transaction): static
     {
-        if (!$this->gensEnAttente->contains($gensEnAttente)) {
-            $this->gensEnAttente->add($gensEnAttente);
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions->add($transaction);
+            $transaction->setAnnonce($this);
         }
 
         return $this;
     }
 
-    public function removeGensEnAttente(User $gensEnAttente): static
+    public function removeTransaction(Transaction $transaction): static
     {
-        $this->gensEnAttente->removeElement($gensEnAttente);
+        if ($this->transactions->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getAnnonce() === $this) {
+                $transaction->setAnnonce(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FileAttente>
+     */
+    public function getAttentes(): Collection
+    {
+        return $this->attentes;
+    }
+
+    public function addAttente(FileAttente $attente): static
+    {
+        if (!$this->attentes->contains($attente)) {
+            $this->attentes->add($attente);
+            $attente->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttente(FileAttente $attente): static
+    {
+        if ($this->attentes->removeElement($attente)) {
+            // set the owning side to null (unless already changed)
+            if ($attente->getAnnonce() === $this) {
+                $attente->setAnnonce(null);
+            }
+        }
 
         return $this;
     }
