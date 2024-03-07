@@ -76,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne]
     private ?Abonnement $nextAbonnement = null;
 
+    #[ORM\ManyToMany(targetEntity: Annonce::class, mappedBy: 'gensEnAttente')]
+    private Collection $annoncesOuJAttends;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -83,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reclamations_traitees = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->demandes = new ArrayCollection();
+        $this->annoncesOuJAttends = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -426,6 +430,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNextAbonnement(?Abonnement $nextAbonnement): static
     {
         $this->nextAbonnement = $nextAbonnement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Annonce>
+     */
+    public function getAnnoncesOuJAttends(): Collection
+    {
+        return $this->annoncesOuJAttends;
+    }
+
+    public function addAnnoncesOuJAttend(Annonce $annoncesOuJAttend): static
+    {
+        if (!$this->annoncesOuJAttends->contains($annoncesOuJAttend)) {
+            $this->annoncesOuJAttends->add($annoncesOuJAttend);
+            $annoncesOuJAttend->addGensEnAttente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnoncesOuJAttend(Annonce $annoncesOuJAttend): static
+    {
+        if ($this->annoncesOuJAttends->removeElement($annoncesOuJAttend)) {
+            $annoncesOuJAttend->removeGensEnAttente($this);
+        }
 
         return $this;
     }
