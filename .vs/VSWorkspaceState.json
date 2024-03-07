@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\config",
-    "\\config\\routes",
-    "\\migrations",
+    "\\public",
+    "\\public\\scripts",
     "\\src",
     "\\src\\Controller",
-    "\\src\\Entity",
     "\\src\\Repository",
     "\\templates",
-    "\\templates\\offre_service"
+    "\\templates\\home_page",
+    "\\templates\\offre_service",
+    "\\templates\\profile"
   ],
-  "SelectedNode": "\\src\\Entity\\AnnonceService.php",
+  "SelectedNode": "\\public\\scripts\\accueil.js",
   "PreviewInSolutionExplorer": false
 }

@@ -44,32 +44,24 @@ class HomePageController extends AbstractController
         $data = $request->request;
         $annonceId = (int) $data->get('annonceId');
         $annonceType = $data->get('annonceType');
-
-
-        if ($annonceType === 'Materiel') {
-            $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
-            $annonce = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
-            if(!$annonce){
-                return new Response("Erreur l'annonce n'existe plus");
-            }
-            $transaction = $this->creationTransaction($annonce,$entityManager);
-            #$annonce->addTransaction($transaction);
-            #$entityManager->persist($annonce);
-            #$entityManager->flush();
-            $this->addFlash('notifications', "Vous pouvez désormais communiquer avec le créateur de l'annonce !");
+        $annonce = $entityManager->getRepository(Annonce::class)->find($annonceId);
+        if (!$annonce) {
+            return new Response("Erreur l'annonce n'existe plus");
         }
-        else if ($annonceType === 'Service') {
-
-        }
-
-        return new Response("Erreur lors de l'emprunt");
+        $transaction = $this->creationTransaction($annonce, $entityManager);
+        $annonce->addTransaction($transaction);
+        $entityManager->persist($annonce);
+        $entityManager->flush();
+        $this->addFlash('notifications', "Vous pouvez désormais communiquer avec le créateur de l'annonce !");
+        return new Response("OK");
     }
     public function creationTransaction(Annonce $annonce,EntityManagerInterface $entityManagerInterface){
         $transaction = new Transaction();
         $date = new DateTime();
         $transaction->setStatutTransaction("En cours");
-        $transaction->setAnnonceMateriel($annonce);
+        $transaction->setAnnonce($annonce);
         $transaction->setClient($this->getUser());
+        $transaction->setPosteur($annonce->getPosteur());
         $transaction->setDateTransaction($date);
         $entityManagerInterface->persist($transaction);
         $entityManagerInterface->flush();

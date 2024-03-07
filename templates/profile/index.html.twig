@@ -316,7 +316,23 @@
     </div>
 
     <div id="tab3" class="tab">
-        <p class="big">CIRCULEZ, IL N'Y A RIEN A VOIR.</p>
+        <h3>Mes transactions</h3>
+        <div class="tout">
+            <h4>Client</h4>
+            {# Transactions ou l'utilisateur est un client #}
+            {% for transaction in transactionsClient %}
+                <div class="blocAnnonce">
+                    {{ transaction.getClient().getUsername() }}
+                </div>
+            {% endfor %}
+            <h4>Posteur:</h4>
+            {# Transactions ou l'utilisateur est un posteur #}
+            {% for transaction in transactionsPosteur %}
+                <div class="blocAnnonce">
+                    {{ transaction.getClient().getUsername() }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
     <div id="tab4" class="tab">

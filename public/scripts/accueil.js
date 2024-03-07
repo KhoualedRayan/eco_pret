@@ -1,6 +1,6 @@
 /*Emprunter une annonce */
 function confirmerEmprunt(event, id, type) {
-    if (confirm("Êtes-vous sûr de vouloir emprunter cette annonce ?")) {
+    if (confirm("Etes-vous sÃ»r de vouloir emprunter cette annonce ?")) {
         event.preventDefault();
         var xhr = new XMLHttpRequest();
         var data = new FormData();
@@ -14,9 +14,9 @@ function confirmerEmprunt(event, id, type) {
                     console.log(xhr.responseText)
                 }
                 else {
-                    //Annonce supprimé avec succès :D
+                    //Transaction rÃ©ussi
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.href = '/profile';
                 }
             }
         };
