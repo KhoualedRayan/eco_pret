@@ -42,13 +42,15 @@ abstract class Annonce
     #[ORM\OneToOne(inversedBy: 'annonce', cascade: ['persist', 'remove'])]
     private ?Transaction $transaction = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'annoncesOuJAttends')]
-    private Collection $gensEnAttente;
+
+    #[ORM\OneToMany(mappedBy: 'annonce', targetEntity: FileAttente::class, orphanRemoval: true)]
+    private Collection $attentes;
+
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
-        $this->gensEnAttente = new ArrayCollection();
+        $this->attentes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,28 +141,49 @@ abstract class Annonce
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getGensEnAttente(): Collection
-    {
-        return $this->gensEnAttente;
-    }
 
-    public function addGensEnAttente(User $gensEnAttente): static
+    public function getAttentes(): Collection
     {
-        if (!$this->gensEnAttente->contains($gensEnAttente)) {
-            $this->gensEnAttente->add($gensEnAttente);
+        return $this->attentes;
+    }
+    public function addAttente(FileAttente $attente): static
+    {
+        if (!$this->attentes->contains($attente)) {
+            $this->attentes->add($attente);
+            $attente->setAnnonce($this);
         }
 
         return $this;
     }
-
-    public function removeGensEnAttente(User $gensEnAttente): static
+    public function removeAttente(FileAttente $attente): static
     {
-        $this->gensEnAttente->removeElement($gensEnAttente);
+        if ($this->attentes->removeElement($attente)) {
+            // set the owning side to null (unless already changed)
+            if ($attente->getAnnonce() === $this) {
+                $attente->setAnnonce(null);
+            }
+        }
 
         return $this;
+    }
+    public function contientUserDansFiles(User $user): bool{
+        foreach ($this->attentes as $fileAttente) {
+            if ($fileAttente->getUser() == $user) {
+                return true; // L'utilisateur est trouvé dans l'une des files, donc on retourne vrai immédiatement
+            }
+        }
+        return false;
+    }
+    public function positionFileAttente(Annonce $annonce,User $user) :string{
+        $compteur = 0;
+        $resultat = "x/x";
+        foreach ($this->getAttentes() as $file) {
+            if ($file->getAnnonce($annonce)) {
+                $resultat = $compteur ."";
+            }
+            $compteur++;
+        }
+        return $resultat;
     }
 
 }

@@ -16,6 +16,8 @@ use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Annonce;
 use App\Entity\Transaction;
+use App\Entity\FileAttente;
+use DateTime;
 use App\Entity\Abonnement;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use App\Entity\CategorieMateriel;
@@ -45,9 +47,19 @@ class ProfileController extends AbstractController
 
         $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser()]);
         $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
-        $transactionAttente = $this->getUser()->getAnnoncesOuJAttends()->map(function($value) {return $value->getTransaction(); });
-        $t = array_merge($transactionsClient, $transactionAttente->toArray());
         $transactionsPosteur = $entityManager->getRepository(Transaction::class)->findBy(['posteur' => $this->getUser()]);
+        $filesDattentes = $this->getUser()->getAnnoncesOuJattends();
+        $annoncesEnAttente = []; // Pour stocker les annonces où l'utilisateur n'est pas premier
+
+        foreach ($filesDattentes as $fileDattente) {
+            // Vérifiez si l'utilisateur n'est pas le premier de la file
+            // Cela dépend de la structure de votre entité FileAttente, par exemple :
+            if ( $fileDattente != $fileDattente->getAnnonce()->getAttentes()->first() ) {
+                 $annonce = $fileDattente->getAnnonce();
+                 $annoncesEnAttente[] = $annonce;
+            }
+        }
+
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -70,8 +82,9 @@ class ProfileController extends AbstractController
             'abonnements' => $abonnements,
             'catMat' => $categoriesMateriel,
             'catService' => $categoriesService,
-            'transactionsClient' => $t,
+            'transactionsClient' => $transactionsClient,
             'transactionsPosteur' => $transactionsPosteur,
+            'annoncesEnAttente' => $annoncesEnAttente,
         ]);
     }
 
@@ -293,15 +306,81 @@ class ProfileController extends AbstractController
         $transactionId = (int) $data->get('transactionId');
 
         $transaction = $entityManager->getRepository(Transaction::class)->find($transactionId);
+        $annonce = $transaction->getAnnonce();
         if ($transaction) {
-            $transaction->getAnnonce()->removeGensEnAttente($this->getUser());
-            $entityManager->remove($transaction);
-            $entityManager->flush();
-            $this->addFlash('notifications', 'Votre transaction a été annulé avec succès !');
-            return new Response("OK");
+            $files = $transaction->getAnnonce()->getAttentes();
+            if($files && !$files->isEmpty()){
+                //On supprime l'utilisateur de la file d'attente
+                $transaction->getAnnonce()->removeAttente($files->first());
+                $entityManager->flush();
+
+                //On met le prochain utilisateur si il y'en a en transaction
+                $nouvelleFile = $transaction->getAnnonce()->getAttentes()->first();
+                if($nouvelleFile){
+                    //Nouvelle transaction avec le premier de la file d'attente
+                    $nouveauUser = $nouvelleFile->getUser();
+                    $nouvelleTransaction = $this->creationTransaction($transaction->getAnnonce(),$entityManager,$nouveauUser);
+                    $this->getUser()->removeDemande($transaction);
+                    $annonce->setTransaction($nouvelleTransaction);
+
+                    $entityManager->flush();
+                }else{
+                    //Personne dans la file d'attente
+                    $this->getUser()->removeDemande($transaction);
+                    $annonce->setTransaction(null);
+                    $entityManager->flush();
+                }
+
+                $this->addFlash('notifications', 'Vous avez désisté la trannsaction en succès !');
+                return new Response("OK");
+            }
+
         }
 
         return new Response("Erreur sur la suppresion de l'annonce");
+    }
+
+    #[Route('/ajax/se_desister', name: 'se_desister')]
+    public function seDesister(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $annonceId = (int) $data->get('annonceId');
+
+        $annonce = $entityManager->getRepository(Annonce::class)->find($annonceId);
+        $annoncesOuJattends = $this->getUser()->getAnnoncesOuJattends();
+        foreach($annoncesOuJattends as $file){
+            if($file->getAnnonce($annonce)){
+                $entityManager->remove($file);
+                $entityManager->flush();
+                $this->addFlash('notifications', "File d'attente retirée avec succès !");
+                return new Response("OK");
+            }
+        }
+        $this->addFlash('notifications', "Erreur sur la désistation.");
+        return new Response("Erreur sur la désistation.");
+    }
+    #[Route('/ajax/annul_transaction', name: 'annul_transaction')]
+    public function annulerTransactionAvecClient(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->addFlash('notifications', 'Pas encore fait 22 !');
+        return new Response("OK");
+    }
+    public function creationTransaction(Annonce $annonce, EntityManagerInterface $entityManagerInterface,User $user)
+    {
+        $transaction = new Transaction();
+        $date = new DateTime();
+        $transaction->setStatutTransaction("En cours");
+        $transaction->setAnnonce($annonce);
+        $transaction->setClient($user);
+        $transaction->setPosteur($annonce->getPosteur());
+        $transaction->setDateTransaction($date);
+        $entityManagerInterface->persist($transaction);
+        $entityManagerInterface->flush();
+        return $transaction;
     }
 }
 

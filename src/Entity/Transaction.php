@@ -46,7 +46,7 @@ class Transaction
     #[ORM\OneToMany(mappedBy: 'transaction', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
-    #[ORM\OneToOne(mappedBy: 'transaction', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'transaction')]
     private ?Annonce $annonce = null;
 
     public function __construct()
