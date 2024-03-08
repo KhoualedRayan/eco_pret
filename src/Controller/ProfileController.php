@@ -36,6 +36,9 @@ class ProfileController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        if ($this->getUser()->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
+        }
         $session = new Session();
         $edit_mode = $session->has('errors');
         if ($edit_mode) {
@@ -369,6 +372,16 @@ class ProfileController extends AbstractController
         $this->addFlash('notifications', 'Pas encore fait 22 !');
         return new Response("OK");
     }
+
+    #[Route('/ajax/activeSleepMode', name: 'activeSleepMode')]
+    public function activeSleepMode(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $this->getUser()->setSleepMode(true);
+        $entityManager->flush();
+        $this->addFlash('notifications', 'Compte en mode sommeil');
+        return new Response("OK");
+    }
+
     public function creationTransaction(Annonce $annonce, EntityManagerInterface $entityManagerInterface,User $user)
     {
         $transaction = new Transaction();

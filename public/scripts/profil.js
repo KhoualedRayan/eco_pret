@@ -65,6 +65,27 @@ function openDialogDesabo() {
     document.getElementById('desaboDialog').showModal();
 }
 
+function activeModeSommeil(){
+    console.log("sleepmode activé");
+    var xhr = new XMLHttpRequest();
+    var data = new FormData();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "OK") {
+                document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
+				setTimeout(function () {
+				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
+				}, 4000);
+            }else{
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        }
+    };
+    xhr.open('POST', '/ajax/activeSleepMode', true);
+    xhr.send(data);
+}
+
 function submitMotDePasseForm(event) {
     console.log("Édition en cours...");
 

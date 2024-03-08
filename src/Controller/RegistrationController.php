@@ -45,6 +45,7 @@ class RegistrationController extends AbstractController
             $user->setSurname($form->get('surname')->getData());
 
             $user->setNbFlorains(1000);
+            $user->setSleepMode(false);
 
             $entityManager->persist($user);
             $entityManager->flush();
