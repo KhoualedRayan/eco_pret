@@ -350,6 +350,7 @@
                     {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
                     <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
+                    <button class="modifier">Valider à faire</button>
                     <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
                 </div>
             {% endfor %}

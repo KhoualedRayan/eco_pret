@@ -2,7 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\scripts",
+    "\\public\\styles",
     "\\src",
     "\\src\\Controller",
     "\\src\\Entity",
@@ -11,6 +11,6 @@
     "\\templates\\offre_service",
     "\\templates\\profile"
   ],
-  "SelectedNode": "\\src\\Controller\\ProfileController.php",
+  "SelectedNode": "\\src\\Entity\\Transaction.php",
   "PreviewInSolutionExplorer": false
 }

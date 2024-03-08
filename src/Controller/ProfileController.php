@@ -26,6 +26,7 @@ use App\Repository\CategorieServiceRepository;
 use App\Repository\CategorieMaterielRepository;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\VarDumper\VarDumper;
+use App\Entity\Notification;
 
 
 class ProfileController extends AbstractController
@@ -325,10 +326,17 @@ class ProfileController extends AbstractController
                     $nouvelleTransaction = $this->creationTransaction($transaction->getAnnonce(),$entityManager,$nouveauUser);
                     $this->getUser()->removeDemande($transaction);
                     $annonce->setTransaction($nouvelleTransaction);
-
                     $entityManager->flush();
+                    $contenuNotif1 = $this->getUser()->getUsername() . " a annulé la transaction avec vous concernant l'annonce : " . $annonce->getTitre() .".";
+                    $this->envoieNotificationA($entityManager, $contenuNotif1, $annonce->getPosteur());
+                    $contenuNotif2 = "Vous avez une nouvelle transaction avec ". $nouvelleFile->getUser()->getUsername() . ". Allez dans votre profil pour finaliser la transaction !";
+                    $this->envoieNotificationA($entityManager, $contenuNotif2, $annonce->getPosteur());
+                    $contenuNotif3 = "Vous avez une nouvelle transaction avec " . $annonce->getPosteur()->getUsername() . ". Allez dans votre profil pour finaliser la transaction !";
+                    $this->envoieNotificationA($entityManager, $contenuNotif3, $nouvelleFile->getUser());
                 }else{
                     //Personne dans la file d'attente
+                    $contenuNotif = $this->getUser()->getUsername() . " a annulé la transaction avec vous concernant l'annonce : ". $annonce->getTitre(). ".";
+                    $this->envoieNotificationA($entityManager,$contenuNotif,$annonce->getPosteur());
                     $this->getUser()->removeDemande($transaction);
                     $annonce->setTransaction(null);
                     $entityManager->flush();
@@ -356,10 +364,10 @@ class ProfileController extends AbstractController
         $annonce = $entityManager->getRepository(Annonce::class)->find($annonceId);
         $annoncesOuJattends = $this->getUser()->getAnnoncesOuJattends();
         foreach($annoncesOuJattends as $file){
-            if($file->getAnnonce($annonce)){
+            if($file->getAnnonce() == $annonce){
                 $entityManager->remove($file);
                 $entityManager->flush();
-                $this->addFlash('notifications', "File d'attente retirée avec succès !");
+                $this->addFlash('notifications', "Vous avez quitté la file d'attente avec succès !");
                 return new Response("OK");
             }
         }
@@ -369,8 +377,50 @@ class ProfileController extends AbstractController
     #[Route('/ajax/annul_transaction', name: 'annul_transaction')]
     public function annulerTransactionAvecClient(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->addFlash('notifications', 'Pas encore fait 22 !');
-        return new Response("OK");
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $transactionId = (int) $data->get('transactionId');
+        $transaction = $entityManager->getRepository(Transaction::class)->find($transactionId);
+        $annonce = $transaction->getAnnonce();
+        if ($transaction) {
+            $files = $transaction->getAnnonce()->getAttentes();
+            if ($files && !$files->isEmpty()) {
+                //On supprime l'utilisateur de la file d'attente
+                $ancienUser = $annonce->getAttentes()->first()->getUser();
+                $transaction->getAnnonce()->removeAttente($files->first());
+                $entityManager->flush();
+
+                //On met le prochain utilisateur si il y'en a en transaction
+                $nouvelleFile = $transaction->getAnnonce()->getAttentes()->first();
+                if ($nouvelleFile) {
+                    //Nouvelle transaction avec le premier de la file d'attente
+                    $nouveauUser = $nouvelleFile->getUser();
+                    $nouvelleTransaction = $this->creationTransaction($transaction->getAnnonce(), $entityManager, $nouveauUser);
+                    $ancienUser->removeDemande($transaction);
+                    $annonce->setTransaction($nouvelleTransaction);
+                    $entityManager->flush();
+                    $contenuNotif1 = $this->getUser()->getUsername() . " a annulé la transaction avec vous concernant l'annonce : " . $annonce->getTitre() . ".";
+                    $this->envoieNotificationA($entityManager, $contenuNotif1, $ancienUser);
+                    $contenuNotif2 = "Vous avez une nouvelle transaction avec " . $this->getUser()->getUsername() . ". Allez dans votre profil pour finaliser la transaction !";
+                    $this->envoieNotificationA($entityManager, $contenuNotif2, $nouvelleFile->getUser());
+                } else {
+                    //Personne dans la file d'attente
+                    $contenuNotif1 = $this->getUser()->getUsername() . " a annulé la transaction avec vous concernant l'annonce : " . $annonce->getTitre() . ".";
+                    $this->envoieNotificationA($entityManager, $contenuNotif1, $ancienUser);
+                    $ancienUser->removeDemande($transaction);
+                    $annonce->setTransaction(null);
+                    $entityManager->flush();
+                }
+
+                $this->addFlash('notifications', 'Vous avez annuler la transaction avec le client avec succès !');
+                return new Response("OK");
+            }
+        }
+        $this->addFlash('notifications', "Erreur lors de l'annulation de la transaction avec le client !");
+        return new Response("Erreur lors de l'annulation de la transaction avec le client ...");
     }
 
     #[Route('/ajax/activeSleepMode', name: 'activeSleepMode')]
@@ -394,6 +444,18 @@ class ProfileController extends AbstractController
         $entityManagerInterface->persist($transaction);
         $entityManagerInterface->flush();
         return $transaction;
+    }
+    public function envoieNotificationA(EntityManagerInterface $entityManagerInterface,string $contenu,User $user)
+    {
+        $notif = new Notification();
+        $date = new DateTime();
+
+        $notif->setAEteLu(false);
+        $notif->setContenu($contenu);
+        $notif->setDateEnvoi($date);
+        $notif->setUser($user);
+        $entityManagerInterface->persist($notif);
+        $entityManagerInterface->flush();
     }
 }
 

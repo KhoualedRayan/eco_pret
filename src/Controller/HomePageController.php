@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Transaction;
 use App\Entity\FileAttente;
 use DateTime;
+use App\Entity\Notification;
 class HomePageController extends AbstractController
 {
     #[Route('', name: 'app_home_page')]
@@ -59,8 +60,8 @@ class HomePageController extends AbstractController
             $transaction = $this->creationTransaction($annonce, $entityManager);
             $annonce->addAttente($file);
             $annonce->setTransaction($transaction);
-            $entityManager->persist($annonce);
             $entityManager->flush();
+            $this->envoieNotification($annonce, $entityManager);
         }else{
             $derniereFile = $annonce->getAttentes()->last();
             $file = new FileAttente();
@@ -70,7 +71,6 @@ class HomePageController extends AbstractController
             $entityManager->persist($file);
             $entityManager->flush();
             $annonce->addAttente($file);
-            $entityManager->persist($annonce);
             $entityManager->flush();
         }
         $this->addFlash('notifications', "Vous pouvez désormais communiquer avec le créateur de l'annonce !");
@@ -87,5 +87,17 @@ class HomePageController extends AbstractController
         $entityManagerInterface->persist($transaction);
         $entityManagerInterface->flush();
         return $transaction;
+    }
+    public function envoieNotification(Annonce $annonce, EntityManagerInterface $entityManagerInterface){
+        $notif = new Notification();
+        $date = new DateTime();
+        $contenu = "Vous avez une nouvelle transaction ! Allez dans votre profil pour finaliser votre transaction avec ". $this->getUser()->getUsername().".";
+
+        $notif->setAEteLu(false);
+        $notif->setContenu($contenu);
+        $notif->setDateEnvoi($date);
+        $notif->setUser($annonce->getPosteur());
+        $entityManagerInterface->persist($notif);
+        $entityManagerInterface->flush();
     }
 }
