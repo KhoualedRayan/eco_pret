@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
+{% endblock %}
+
 {% block title %}Hello SleepModeController!{% endblock %}
 
 {% block body %}
@@ -11,6 +15,9 @@
 <div class="example-wrapper">
     <h1>Mode sommeil activé</h1>
     <form action="{{ path('form_sleepmode') }}" method="post">
+    <span class="material-icons">star</span>
+    <span class="material-icons">dark_mode</span>
+    <span class="material-icons">bed</span>
     <button class="but" name= "but" style="float: right;">Désactiver le mode sommeil</button>
     </form>
 </div>
