@@ -42,7 +42,7 @@ class ProfileController extends AbstractController
                 return $this->redirectToRoute('app_sleep_mode');
             }
         }
-        
+
         $session = new Session();
         $edit_mode = $session->has('errors');
         if ($edit_mode) {
@@ -345,7 +345,7 @@ class ProfileController extends AbstractController
                     $entityManager->flush();
                 }
 
-                $this->addFlash('notifications', 'Vous avez désisté la trannsaction en succès !');
+                $this->addFlash('notifications', 'Vous avez désisté la transaction en succès !');
                 return new Response("OK");
             }
 
@@ -428,7 +428,7 @@ class ProfileController extends AbstractController
 
     #[Route('/ajax/activeSleepMode', name: 'activeSleepMode')]
     public function activeSleepMode(Request $request, EntityManagerInterface $entityManager): Response
-    {   
+    {
         $this->getUser()->setSleepMode(true);
         $entityManager->flush();
         $this->addFlash('notifications', 'Compte en mode sommeil');
@@ -452,14 +452,29 @@ class ProfileController extends AbstractController
     {
         $notif = new Notification();
         $date = new DateTime();
-
+        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
+        $messageCrypter = $this->crypterMessage($contenu, $cleSecrete);
         $notif->setAEteLu(false);
-        $notif->setContenu($contenu);
+        $notif->setContenu($messageCrypter);
         $notif->setDateEnvoi($date);
         $notif->setUser($user);
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
     }
+    function crypterMessage($message, $key)
+    {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
+        return base64_encode($iv . $messageCrypte);
+    }
+    function decrypterMessage($messageCrypte, $key)
+    {
+        $messageCrypte = base64_decode($messageCrypte);
+        $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
+        $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
+        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $key, 0, $iv);
+    }
+
 }
 
 
