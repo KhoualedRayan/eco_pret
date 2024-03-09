@@ -18,6 +18,11 @@ class PretMaterielController extends AbstractController
     #[Route('/pret/materiel', name: 'app_pret_materiel')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
+        }
         // redirige l'utilisateur vers la page de connexion si non connecté
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');

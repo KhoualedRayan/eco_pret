@@ -19,6 +19,11 @@ class HomePageController extends AbstractController
     #[Route('', name: 'app_home_page')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
+        }
         $annonceService = $entityManager->getRepository(AnnonceService::class)->findAll();
         $entityManager->clear();
         $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findAll();

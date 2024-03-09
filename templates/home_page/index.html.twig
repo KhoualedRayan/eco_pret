@@ -19,7 +19,8 @@
 
 <div class="tout">
     {% for annonce in annonces %}
-        <div class="blocAnnonce">
+        {% if annonce.getPosteur().isSleepMode() == false %}
+            <div class="blocAnnonce">
             <div>
                 <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
             <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
@@ -39,6 +40,7 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% endif %}
     {% endfor %}
 </div>
 

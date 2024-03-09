@@ -37,9 +37,12 @@ class ProfileController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        if ($this->getUser()->isSleepMode()) {
-            return $this->redirectToRoute('app_sleep_mode');
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
         }
+        
         $session = new Session();
         $edit_mode = $session->has('errors');
         if ($edit_mode) {
