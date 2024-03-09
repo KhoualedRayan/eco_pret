@@ -28,6 +28,10 @@ table {
     border: 4px solid black;
   }
 
+  .previous-day { 
+    background-color: rgb(200, 200, 200);
+  }
+
   .btns{
     text-align: center;
   }

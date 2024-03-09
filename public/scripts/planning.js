@@ -29,11 +29,16 @@ function generateCalendar(year, month) {
         const cell = row.insertCell();
         if ((i === 0 && j < firstDayIndex) || dateCounter > lastDay) { // Condition modifiée ici
           cell.innerText = "";
+          cell.classList.add("previous-day");
         } else {
           cell.innerText = dateCounter;
           if (dateCounter === new Date().getDate() && year === new Date().getFullYear() && month === new Date().getMonth() + 1) {
             cell.classList.add("current-day"); // Ajouter la classe "current-day" si c'est le jour actuel
           }
+          if (new Date(year, month - 1, dateCounter) < new Date() && (year < new Date().getFullYear() || (year === new Date().getFullYear() && month <= new Date().getMonth() + 1)) && !(dateCounter === new Date().getDate() && year === new Date().getFullYear() && month === new Date().getMonth() + 1)) {
+            cell.classList.add("previous-day");
+          }
+          
           dateCounter++;
         }
       }
@@ -69,8 +74,8 @@ function generateCalendar(year, month) {
   });
   document.getElementById("current-month").addEventListener("click", function() {
     const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
+    currentYear = currentDate.getFullYear();
+    currentMonth = currentDate.getMonth() + 1;
     generateCalendar(currentYear, currentMonth);
   });
     
