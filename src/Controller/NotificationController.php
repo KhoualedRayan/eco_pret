@@ -56,10 +56,10 @@ class NotificationController extends AbstractController
     {
         $notification = $entityManager->getRepository(Notification::class)->find($id);
         if ($notification && $notification->getUser() === $this->getUser()) {
-            $notification->setAEteLu(true);
+            $entityManager->remove($notification);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Notification marquée comme lue.');
+            $this->addFlash('success', 'Notification supprimée.');
         } else {
             $this->addFlash('error', 'Notification non trouvée ou accès refusé.');
         }
