@@ -452,8 +452,7 @@ class ProfileController extends AbstractController
     {
         $notif = new Notification();
         $date = new DateTime();
-        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
-        $messageCrypter = $this->crypterMessage($contenu, $cleSecrete);
+        $messageCrypter = $this->crypterMessage($contenu);
         $notif->setAEteLu(false);
         $notif->setContenu($messageCrypter);
         $notif->setDateEnvoi($date);
@@ -461,18 +460,20 @@ class ProfileController extends AbstractController
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
     }
-    function crypterMessage($message, $key)
+    function crypterMessage($message)
     {
+        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
+        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $cleSecrete, 0, $iv);
         return base64_encode($iv . $messageCrypte);
     }
-    function decrypterMessage($messageCrypte, $key)
+    function decrypterMessage($messageCrypte)
     {
+        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
         $messageCrypte = base64_decode($messageCrypte);
         $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
         $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
-        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $key, 0, $iv);
+        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
     }
 
 }
