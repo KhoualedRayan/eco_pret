@@ -1,0 +1,164 @@
+.content {
+    margin: 10px;
+    padding: 1em;
+    border-radius: 10px;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    margin: 0 10%;
+    height: 100vh;
+}
+
+.colonne-gauche {
+    width: 30%;
+    background-color: #f0f0f0;
+    height: 100vh;
+    overflow-y: auto; /* Permet le défilement si la liste est longue */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.titre-messages {
+    height: 5%;
+    width: 100%; /* Assure que le rectangle prend toute la largeur disponible */
+    background-color: #007bff; /* Une couleur de fond distincte pour le rectangle */
+    color: white; /* Couleur de texte pour assurer le contraste */
+    display: flex;
+    align-items: center; /* Centre le texte verticalement dans le rectangle */
+    justify-content: center; /* Centre le texte horizontalement */
+    padding: 10px 0; /* Ajoute un peu de padding vertical pour de l'espace autour du texte */
+    box-sizing: border-box; /* S'assure que le padding est inclus dans la hauteur calculée */
+    border-bottom: 2px solid #0056b3; /* Ajoute une bordure en bas pour la démarcation */
+    margin-bottom:1%;
+}
+.destinataire {
+    background-color: #e0e0e0; /* Gris par défaut */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transition douce pour le changement de couleur */
+}
+
+    .destinataire:hover {
+        background-color: #d0d0d0; /* Un peu plus clair au survol */
+    }
+
+    .destinataire.selectionne {
+        background-color: #03a5c1; /* Bleu pour l'élément sélectionné */
+        color: white;
+    }
+
+    .destinataire .nom {
+        font-weight: bold; /* Nom du destinataire en gras */
+    }
+
+    .destinataire .preview-message {
+        font-size: 0.9em; /* Légèrement plus petit que le texte par défaut */
+        color: black; /* Gris foncé pour le texte du message */
+    }
+
+    .destinataire .date {
+        font-size: 0.8em; /* Encore plus petit pour la date */
+        margin-top: 5px; /* Un peu d'espace au-dessus de la date */
+    }
+
+
+.colonne-droite {
+    width: 58%; /* 100% - 30% - 2% d'espace = 68%, puis répartir l'espace restant */
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-haut {
+    display: flex;
+    align-items: center; /* Centre les éléments verticalement */
+    justify-content: space-between; /* Positionne le nom à gauche et le bouton à droite */
+    background-color: #dcdcdc;
+    height: 8%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+    .section-haut h2 {
+        margin: 0; /* Enlève la marge par défaut du titre */
+        flex-grow: 1; /* Permet au titre de prendre l'espace nécessaire */
+    }
+
+    .section-haut button {
+        width: 40px; /* Définissez la largeur du bouton */
+        height: 40px; /* Définissez la hauteur du bouton pour correspondre à la largeur, créant ainsi un cercle */
+        padding: 0; /* Ajustement du padding si nécessaire */
+        border-radius: 50%; /* Rend les bords complètement arrondis pour former un cercle */
+        display: flex; /* Utilisez flexbox pour centrer l'icône à l'intérieur du bouton */
+        align-items: center; /* Centre verticalement l'icône dans le bouton */
+        justify-content: center; /* Centre horizontalement l'icône dans le bouton */
+        background-color: #007bff; /* Ou toute autre couleur de votre choix */
+        color: white; /* Couleur de l'icône */
+        border: none; /* Supprime la bordure par défaut */
+        cursor: pointer; /* Change le curseur en pointeur */
+    }
+
+        /* Assurez-vous que l'icône est bien centrée et a la taille appropriée */
+        .section-haut button .material-icons {
+            font-size: 20px; /* Ajustez la taille de l'icône selon vos besoins */
+        }
+
+.section-bas {
+    background-color: #eaeaea; /* Couleur de fond pour distinguer la section */
+    flex-grow: 1; /* Prend tout l'espace restant */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Permet le défilement si le contenu dépasse */
+}
+.section-messages {
+    flex-grow: 1; /* Prend tout l'espace restant après la section-haut */
+    background-color: white; /* Fond blanc pour la section des messages */
+    overflow-y: auto; /* Permet le défilement si la liste de messages est longue */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.message {
+    background-color: #f9f9f9; /* Un léger fond gris pour chaque message pour les distinguer */
+    margin-bottom: 10px; /* Petit espace entre chaque message */
+    padding: 10px; /* Espacement intérieur pour chaque message */
+    border-radius: 5px; /* Coins arrondis pour un look plus doux */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Ombre légère pour un effet de profondeur */
+}
+
+    .message .nom {
+        font-weight: bold; /* Nom du destinataire en gras */
+        margin-bottom: 5px; /* Petit espace entre le nom et la date */
+    }
+
+    .message .date {
+        color: #666; /* Couleur gris foncé pour la date */
+        font-size: 0.9em; /* La date un peu plus petite que le texte normal */
+        margin-bottom: 10px; /* Espace entre la date et le message */
+    }
+
+    .message .texte-message {
+        line-height: 1.4; /* Espacement des lignes pour une meilleure lisibilité */
+    }
+
+button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

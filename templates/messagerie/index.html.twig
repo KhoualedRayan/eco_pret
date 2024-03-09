@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/messagerie.css') }}">
+    <script src="{{ asset('scripts/messagerie.js') }}"></script>
+{% endblock %}
+
+{% block title %}Messages{% endblock %}
+{# templates/base.html.twig #}
+
+{% block body %}
+    <div class="container">
+        <div class="colonne-gauche">
+            <div class="titre-messages">
+                <h2>Messages</h2>
+            </div>
+            <div class="destinataire selectionne">
+                <p class="nom">Son Goku</p>
+                <p class="preview-message">Vous avez un nouveau message !</p>
+                <p class="date">09/03/2024</p>
+            </div>
+            <div class="destinataire">
+                <p class="nom">Jules César</p>
+                <p class="preview-message">Je suis pas mort en fait...</p>
+                <p class="date">10/03/2024</p>
+            </div>
+        </div>
+        <div class="colonne-droite">
+            <div class="section-haut">
+                <h2>Son Goku</h2>
+                <button><span class="material-icons">reply</span></button>
+            </div>
+            <div class="section-bas">
+                <div class="message">
+                    <p class="nom">Son Goku</p>
+                    <p class="date">09/03/2024, 14:30</p>
+                    <p class="texte-message">Salut ! Tu veux te battre contre moi ?</p>
+                </div>
+                <div class="message">
+                    <p class="nom">Son Goku</p>
+                    <p class="date">09/03/2024, 14:31</p>
+                    <p class="texte-message">Le css de malade d'ailleurs j'suis chokbar de bz.</p>
+                </div>
+                <!-- Messages ici -->
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
