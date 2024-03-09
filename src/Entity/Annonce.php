@@ -168,7 +168,7 @@ abstract class Annonce
     }
     public function contientUserDansFiles(User $user): bool{
         foreach ($this->attentes as $fileAttente) {
-            if ($fileAttente->getUser() == $user) {
+            if ($fileAttente->getUser()->getId() == $user->getId()) {
                 return true; // L'utilisateur est trouvé dans l'une des files, donc on retourne vrai immédiatement
             }
         }
@@ -178,7 +178,7 @@ abstract class Annonce
         $compteur = 0;
         $resultat = "x/x";
         foreach ($this->getAttentes() as $file) {
-            if ($file->getAnnonce($annonce)) {
+            if ($file->getAnnonce()->getId() == $annonce->getId()) {
                 $resultat = $compteur ."";
             }
             $compteur++;

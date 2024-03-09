@@ -97,12 +97,26 @@ class HomePageController extends AbstractController
         $notif = new Notification();
         $date = new DateTime();
         $contenu = "Vous avez une nouvelle transaction ! Allez dans votre profil pour finaliser votre transaction avec ". $this->getUser()->getUsername().".";
-
+        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
+        $messageCrypter = $this->crypterMessage($contenu, $cleSecrete);
         $notif->setAEteLu(false);
-        $notif->setContenu($contenu);
+        $notif->setContenu($messageCrypter);
         $notif->setDateEnvoi($date);
         $notif->setUser($annonce->getPosteur());
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
+    }
+    function crypterMessage($message, $key)
+    {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
+        return base64_encode($iv . $messageCrypte);
+    }
+    function decrypterMessage($messageCrypte, $key)
+    {
+        $messageCrypte = base64_decode($messageCrypte);
+        $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
+        $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
+        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $key, 0, $iv);
     }
 }
