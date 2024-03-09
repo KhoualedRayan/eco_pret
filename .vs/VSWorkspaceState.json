@@ -3,14 +3,14 @@
     "",
     "\\public",
     "\\public\\styles",
+    "\\public\\styles\\themes",
     "\\src",
     "\\src\\Controller",
     "\\src\\Entity",
     "\\templates",
-    "\\templates\\home_page",
     "\\templates\\offre_service",
     "\\templates\\profile"
   ],
-  "SelectedNode": "\\src\\Entity\\Transaction.php",
+  "SelectedNode": "\\src\\Controller\\ProfileController.php",
   "PreviewInSolutionExplorer": false
 }

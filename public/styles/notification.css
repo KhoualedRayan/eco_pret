@@ -1,12 +1,19 @@
+.content {
+    margin: 10px;
+    padding: 1em;
+    border-radius: 10px;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+}
 /* Style de base pour les onglets */
 .tab {
     display: none;
 }
 
-    /* Style pour les onglets actifs */
-    .tab.active {
-        display: block;
-    }
+/* Style pour les onglets actifs */
+.tab.active {
+    display: block;
+}
 
 /* Style pour le conteneur des boutons d'onglet */
 .tab-buttons {
@@ -28,11 +35,41 @@
     text-align: center; /* Centrer le texte */
 }
 
-    .tab-button:hover {
-        text-decoration: underline;
+.tab-button:hover {
+    text-decoration: underline;
+}
+
+/* Style pour les boutons d'onglet actifs */
+.tab-button.active {
+    background-color: #ccc;
+}
+.notif {
+    display: flex;
+    box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+    border-radius: 5px;
+    padding: 1em;
+    width: 97%;
+    margin: 10px;
+    background-size: cover;
+    align-items: center; /* Centre verticalement les éléments fils */
+    justify-content: space-between; /* Répartit l'espace entre les éléments */
+    box-sizing: border-box;
+
+}
+
+
+.notif button {
+    padding: 5px 10px; /* Padding du bouton */
+    cursor: pointer; /* Change le curseur en pointeur */
+    background-color: #4CAF50; /* Couleur de fond du bouton */
+    color: white; /* Couleur du texte du bouton */
+    border: none; /* Supprime la bordure du bouton */
+    border-radius: 5px; /* Arrondit les coins du bouton */
+}
+
+
+    .notif .delete {
+        background-color: #d32f2f;
     }
 
-    /* Style pour les boutons d'onglet actifs */
-    .tab-button.active {
-        background-color: #ccc;
-    }
+

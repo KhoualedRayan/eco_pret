@@ -21,25 +21,35 @@
     {% for annonce in annonces %}
         {% if annonce.getPosteur().isSleepMode() == false %}
             <div class="blocAnnonce">
-            <div>
-                <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-            <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
-            </div>
-            <div class="type">{{ annonce.getType() }}</div>
-            <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-            {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-            <h3>{{ annonce.getTitre() }}</h3>
-            <div class="description">{{ annonce.getDescription() }}</div>
-            {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id %}
-                {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
-                    {% if annonce.attentes is empty %}
-                        <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
-                    {% elseif annonce.contientUserDansFiles(app.user) == false %}
-                        <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
+                <div>
+                    <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+                {# L'utilisateur est prenium #}
+                {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}
+                    {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
+                        {% if annonce.attentes is empty %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                        {% elseif annonce.contientUserDansFiles(app.user) == false %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
+                        {% endif %}
+                    {% endif %}
+                {# L'utilisateur n'est pas prenium, ne peut pas emprunter les matériels #}
+                {%elseif app.user and app.user.abonnement == "1" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}
+                    {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
+                        {% if annonce.attentes is empty and annonce.getType() == "Service" %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                        {% elseif annonce.contientUserDansFiles(app.user) == false and annonce.getType() == "Service" %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
+            </div>
         {% endif %}
     {% endfor %}
 </div>
