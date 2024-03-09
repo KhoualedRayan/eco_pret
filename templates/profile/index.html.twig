@@ -3,6 +3,7 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/planning.css') }}">
 <script src="{{ asset('scripts/profil.js') }}"></script>
 {% endblock %}
 
@@ -375,7 +376,17 @@
     </div>
 
     <div id="tab4" class="tab">
-        <p class="big">CIRCULEZ, IL N'Y A RIEN A VOIR.</p>
+        <h1 id="month-year"></h1>
+
+        <table id="calendar"></table>
+        </br>
+        <div class= "btns" id="btn-container">
+            <button class="button_calendar" id="prev-month"><span class="material-icons">arrow_back</span></button>
+            <button class="button_calendar" id="current-month"><span class="material-icons">calendar_today</span></button>
+            <button class="button_calendar" id="next-month"><span class="material-icons">arrow_forward</span></button>
+        </div>
+
+        <script src="{{ asset('scripts/planning.js') }}"></script>
     </div>
 </div>
 

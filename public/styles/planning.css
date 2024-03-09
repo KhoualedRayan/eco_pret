@@ -1,0 +1,49 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #000; 
+  }
+  
+  th {
+    color: white; 
+    font-weight: bold; 
+  }
+  
+  td {
+    font-family: Arial, sans-serif;
+  }
+
+  .days{
+    font-weight: bold;
+    font-size: large; 
+    background-color: lightgreen;
+  }
+  
+  .current-day { 
+    border: 4px solid black;
+  }
+
+  .btns{
+    text-align: center;
+  }
+  .button_calendar{
+    align-items: center;
+    background-clip: padding-box;
+    background-color: var(--couleurFancy);
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    color: #fff;
+    display: inline-flex;
+    font-family: system-ui;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 6px;
+    margin-left: 2%;
+  }
+  
