@@ -19,6 +19,9 @@ class NotificationController extends AbstractController
         }
 
         $notifications = $entityManager->getRepository(Notification::class)->findBy(['user' => $this->getUser()]);
+        usort($notifications, function ($a, $b) {
+            return $b->getDateEnvoi() <=> $a->getDateEnvoi();
+        });
         $notifsDecryptees = [];
         foreach ($notifications as $notification) {
             $contenuDecrypte = $this->decrypterMessage($notification->getContenu());
@@ -27,7 +30,6 @@ class NotificationController extends AbstractController
                 'contenu' => $contenuDecrypte,
                 'dateEnvoi' => $notification->getDateEnvoi(),
                 'aEteLu' => $notification->isAEteLu(),
-                // Ajoutez ici d'autres propriétés si nécessaire
             ];
         }
 
@@ -44,9 +46,24 @@ class NotificationController extends AbstractController
             $notification->setAEteLu(true);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Notification marquée comme lue.');
+            $this->addFlash('notifications', 'Notification marquÃ©e comme lue.');
         } else {
-            $this->addFlash('error', 'Notification non trouvée ou accès refusé.');
+            $this->addFlash('notifications', 'Notification non trouvÃ©e ou accÃ¨s refusÃ©.');
+        }
+
+        return $this->redirectToRoute('app_notification');
+    }
+    #[Route('/notification/marquer_comme_non_lu/{id}', name: 'marquer_comme_non_lu_route')]
+    public function marquerCommeNonLu(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $notification = $entityManager->getRepository(Notification::class)->find($id);
+        if ($notification && $notification->getUser() === $this->getUser()) {
+            $notification->setAEteLu(false);
+            $entityManager->flush();
+
+            $this->addFlash('notifications', 'Notification marquÃ©e comme non lue.');
+        } else {
+            $this->addFlash('notifications', 'Notification non trouvÃ©e ou accÃ¨s refusÃ©.');
         }
 
         return $this->redirectToRoute('app_notification');
@@ -59,9 +76,9 @@ class NotificationController extends AbstractController
             $entityManager->remove($notification);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Notification supprimée.');
+            $this->addFlash('success', 'Notification supprimÃ©e.');
         } else {
-            $this->addFlash('error', 'Notification non trouvée ou accès refusé.');
+            $this->addFlash('error', 'Notification non trouvÃ©e ou accÃ¨s refusÃ©.');
         }
 
         return $this->redirectToRoute('app_notification');

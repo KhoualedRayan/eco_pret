@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
-    <script src="{{ asset('scripts/profil.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('styles/notification.css') }}">
+    <script src="{{ asset('scripts/notification.js') }}"></script>
 {% endblock %}
 
 {% block title %}Notifications{% endblock %}
@@ -18,32 +18,41 @@
     </div>
 
     <div id="tab1" class="tab active">
-    {% for notification in notifications %}
-       <div style="display: flex; justify-content: space-between; align-items: center;">
-           {% if not notification.aEteLu %}
-                <div>
-                    <p>Contenu: {{ notification.contenu }}</p>
-                    <p>Date d'envoi: {{ notification.dateEnvoi|date('Y-m-d H:i') }}</p>
-                    <button onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'">Marquer comme lue</button>
-                    <!-- Affichez ici d'autres propriétés si nécessaire -->
+        {% for notification in notifications %}
+            {% if not notification.aEteLu %}
+                <div class="notif">
+                    <div class="notif-date">
+                        <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
+                    </div>
+                    <div class="notif-content">
+                        {{ notification.contenu }}
+                    </div>
+                    <div class="notif-buttons">
+                        <button onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility_off</span></button>
+                    </div>
                 </div>
-           {% endif %}
-        </div>
-    {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
     <div id="tab2" class="tab">
         {% for notification in notifications %}
-           <div class="notif">
-               {% if notification.aEteLu %}
-                    <div>
-                        <p>Contenu: {{ notification.contenu }}</p>
-                        <p>Date d'envoi: {{ notification.dateEnvoi|date('Y-m-d H:i') }}</p>
-                        <button onclick="location.href='{{ path('supprimer_la_notif_route', {'id': notification.id}) }}'">Supprimer la notification</button>
+            {% if notification.aEteLu %}
+                <div class="notif">
+                    <div class="notif-date">
+                        <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
                     </div>
-               {% endif %}
-            </div>
+                    <div class="notif-content">
+                        {{ notification.contenu }}
+                    </div>
+                    <div class="notif-buttons">
+                        <button onclick="location.href='{{ path('marquer_comme_non_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility</span></button>
+                        <button class="delete" onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">delete</span></button>
+                    </div>
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
+
 </div>
 
 {% endblock %}
