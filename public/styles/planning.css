@@ -32,6 +32,10 @@ table {
     background-color: rgb(200, 200, 200);
   }
 
+  .edited-day {
+    background-color: red; /* Couleur rouge pour les jours modifiés en mode édition */
+  }
+
   .btns{
     text-align: center;
   }

@@ -27,7 +27,7 @@ use App\Repository\CategorieMaterielRepository;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\VarDumper\VarDumper;
 use App\Entity\Notification;
-
+use App\Entity\Disponibilite;
 
 class ProfileController extends AbstractController
 {
@@ -435,6 +435,62 @@ class ProfileController extends AbstractController
         return new Response("OK");
     }
 
+    #[Route('/ajax/planning_validate', name: 'planning_validate')]
+    public function planning_validate(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $this->getUser()->clearDisponibilites();
+        $data = $request->request;
+        $list_mois_jours = json_decode($data->get('editedDays'), true);
+        dump($list_mois_jours);
+        foreach ($list_mois_jours as $monthYear => $daysArray) {
+            foreach ($daysArray as $day) {
+                if($day !=null){
+                    $dispo = new Disponibilite();
+                    $date = DateTime::createFromFormat('Y-m-d', $day);
+                    dump($date);
+                    $dispo->setDate($date);
+                    $entityManager->persist($dispo);
+                    $this->getUser()->addDisponibilite($dispo);
+                } 
+            }
+        }
+        $entityManager->flush();
+        $this->addFlash('notifications', 'Planning sauvegardé');
+        return new Response("OK");
+    }
+
+    #[Route('/ajax/planning_init', name: 'planning_init')]
+    public function planning_init(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $liste_dates = $this->getUser()->getDisponibilites(); 
+
+        $dates_par_mois = [];
+        
+        foreach ($liste_dates as $date) {
+            $annee = $date->format("Y");
+            $mois = $date->format("n");
+        
+            $key = $annee . "-" . $mois;
+        
+            if (!isset($dates_par_mois[$key])) {
+                $dates_par_mois[$key] = [];
+            }
+        
+            $dates_par_mois[$key][] = $date;
+        }
+        
+
+        return new Response($dates_par_mois);
+    }
+
+    
+
     public function creationTransaction(Annonce $annonce, EntityManagerInterface $entityManagerInterface,User $user)
     {
         $transaction = new Transaction();
@@ -475,6 +531,8 @@ class ProfileController extends AbstractController
         $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
         return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
     }
+
+    
 
 }
 

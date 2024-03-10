@@ -266,6 +266,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function clearDisponibilites(): static
+{
+    foreach ($this->disponibilites as $disponibilite) {
+        $this->removeDisponibilite($disponibilite);
+    }
+
+    return $this;
+}
+
+
     public function removeDisponibilite(Disponibilite $disponibilite): static
     {
         if ($this->disponibilites->removeElement($disponibilite)) {
