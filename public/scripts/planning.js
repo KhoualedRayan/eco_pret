@@ -103,11 +103,13 @@ document.getElementById("edit-mode").addEventListener("click", toggleEditMode);
 function toggleEditMode() {
   editMode = !editMode; 
   const validateButton = document.getElementById("validate-edits");
+  const tuto_planning = document.getElementById("tuto_planning");
 
   if (editMode) {
     // Activation du mode édition
     document.getElementById("edit-mode").innerText = "Annuler";
-    validateButton.style.display = "inline"; 
+    validateButton.style.display = "inline";
+    tuto_planning.style.display = "inline";  
     const cells = document.querySelectorAll("#calendar td:not(.previous-day)");
     cells.forEach(cell => {
       cell.addEventListener("click", toggleCellEdit);
@@ -116,6 +118,7 @@ function toggleEditMode() {
     // Désactivation du mode édition
     document.getElementById("edit-mode").innerText = "Mode édition";
     validateButton.style.display = "none"; 
+    tuto_planning.style.display = "none";  
     const cells = document.querySelectorAll("#calendar td:not(.previous-day)");
     cells.forEach(cell => {
       cell.removeEventListener("click", toggleCellEdit);
