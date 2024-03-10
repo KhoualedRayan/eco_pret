@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Disponibilite;
+use DateTime;
+
 
 class SleepModeController extends AbstractController
 {
@@ -28,6 +31,9 @@ class SleepModeController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $this->getUser()->setSleepMode(false);
+        $dispo = new Disponibilite();
+        $today = new DateTime();
+        $this->getUser()->removeDisponibiliteByDate($today);
         $entityManager->flush();
         $this->addFlash('notifications', 'Mode sommeil désactivé');
         return $this->redirectToRoute('app_profile');

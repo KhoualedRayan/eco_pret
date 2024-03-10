@@ -33,7 +33,7 @@ table {
   }
 
   .edited-day {
-    background-color: red; /* Couleur rouge pour les jours modifiés en mode édition */
+    background-color: rgba(236, 0, 0, 0.555); /* Couleur rouge pour les jours modifiés en mode édition */
   }
 
   .btns{
