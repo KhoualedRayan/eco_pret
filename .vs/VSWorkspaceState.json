@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\styles",
+    "\\public\\scripts",
     "\\src",
     "\\src\\Controller",
+    "\\src\\Entity",
     "\\templates",
     "\\templates\\messagerie",
     "\\templates\\notification",

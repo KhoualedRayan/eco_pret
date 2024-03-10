@@ -80,4 +80,12 @@ class Message
 
         return $this;
     }
+    function getMessageDecrypter()
+    {
+        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
+        $messageCrypte = base64_decode($this->contenu);
+        $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
+        $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
+        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
+    }
 }

@@ -28,9 +28,7 @@ class MessagerieController extends AbstractController
             if (!$b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {
                 return $b->getMessages()->last()->getDateEnvoi() <=> $a->getMessages()->last()->getDateEnvoi();
             }
-            if ($b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {
-                return $a;
-            }
+
 
             return $b->getId() <=> $a->getId();
         });
@@ -39,6 +37,29 @@ class MessagerieController extends AbstractController
             'controller_name' => 'MessagerieController',
             'transactions' => $transactions,
         ]);
+    }
+    #[Route('/messagerie_refresh', name: 'massgerie_refresh')]
+    public function refreshMessages(EntityManagerInterface $entityManager): Response{
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } else if ($this->getUser() && $this->getUser()->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
+        }
+        $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($this->getUser());
+        usort($transactions, function ($a, $b) {
+            if (!$b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {
+                return $b->getMessages()->last()->getDateEnvoi() <=> $a->getMessages()->last()->getDateEnvoi();
+            }
+
+
+            return $b->getId() <=> $a->getId();
+        });
+
+        $html = $this->renderView('messagerie/messagesRefresh.html.twig', [
+            'transactions' => $transactions,
+        ]);
+
+        return $this->json(['html' => $html]);
     }
 
     #[Route('/charger-messages/{id}', name: 'charger_messages')]
@@ -88,12 +109,11 @@ class MessagerieController extends AbstractController
             }
             if($user){
                 $this->envoieMessage($entityManager, $transaction, $message, $user);
-                $this->addFlash('notifications', "Vous avez envoyé un nouveau message !");
                 return new Response('OK');
             }
         }
 
-        $this->addFlash('notifications', "Erreur lors de l'annulation de la transaction avec le client !");
+        $this->addFlash('notifications', "Erreur lors de l'envoie d'un message!");
         return new Response("Erreur lors de l'envoi du message ...");
     }
     function envoieMessage(EntityManagerInterface $entityManager,Transaction $transaction, string $contenu,User $user){

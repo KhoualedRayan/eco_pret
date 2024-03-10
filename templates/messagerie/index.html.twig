@@ -24,7 +24,7 @@
                     {%endif%}
                     {% if transaction.messages is not empty %}
                         {% set dernierMessage = transaction.messages|last %}
-                        <p class="preview-message">{{ dernierMessage.contenu }}</p>
+                        <p class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</p>
                         <p class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</p>
                     {%else%}
                         <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
@@ -44,17 +44,20 @@
         </div>
         <!-- Boîte de dialogue pour un nouveau message -->
         <dialog id='nouveauMessageDialog'>
-            <h2 id='test'>Ecrire un nouveau message</h2>
-            <form >
+            <form>
+                <div class="nvMsgIcon">
+                    <span class="material-icons">edit</span>
+                    <span>Nouveau message</span>
+                </div>
                 <div>
                     <label for="destinataire"><b>Destinataire</b></label>
-                    <div class='destinataire'>
+                    <div class='destinataireMessage'>
                         <input type="text" id="destinataire" class='text' name="destinataire" disabled required>
                     </div>
                 </div>
 
                 <div>
-                    <label for="nouveauMessage"><b>Message :</b></label>
+                    <label for="nouveauMessage"><b>Message</b></label>
                     <br />
                     <textarea id="nouveauMessage" class="nouveauMessage" name="message"></textarea>
                 </div>

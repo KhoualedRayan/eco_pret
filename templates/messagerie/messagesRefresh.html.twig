@@ -1,0 +1,19 @@
+<div class="titre-messages">
+    <h2>Messages</h2>
+</div>
+{% for transaction in transactions %}
+    <div class="destinataire" id="{{transaction.id}}" >
+        {% if transaction.client == app.user %}
+            <p class="nom">{{transaction.posteur.username}}</p>
+        {%else%}
+            <p class="nom">{{transaction.client.username}}</p>
+        {%endif%}
+        {% if transaction.messages is not empty %}
+            {% set dernierMessage = transaction.messages|last %}
+            <p class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</p>
+            <p class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</p>
+        {%else%}
+            <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
+        {% endif %}
+    </div>
+{% endfor %}

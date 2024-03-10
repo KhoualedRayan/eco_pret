@@ -192,6 +192,7 @@ dialog {
     color: var(--couleurTexte);
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+    width:40%;
 }
 .nouveauMessage {
     border-radius: 0.5em;
@@ -208,4 +209,15 @@ dialog {
 
 dialog div {
     margin-bottom: 20px;
+}
+
+.nvMsgIcon {
+    font-size: 16px;
+    color: #8f949b;
+}
+.destinataireMessage .text {
+    width: 92%;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 1%;
 }
