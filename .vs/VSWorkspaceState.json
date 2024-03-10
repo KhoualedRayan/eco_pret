@@ -3,14 +3,14 @@
     "",
     "\\public",
     "\\public\\styles",
-    "\\public\\styles\\themes",
     "\\src",
     "\\src\\Controller",
-    "\\src\\Entity",
     "\\templates",
-    "\\templates\\offre_service",
+    "\\templates\\messagerie",
+    "\\templates\\notification",
+    "\\templates\\pret_materiel",
     "\\templates\\profile"
   ],
-  "SelectedNode": "\\src\\Controller\\ProfileController.php",
+  "SelectedNode": "\\src\\Controller\\MessagerieController.php",
   "PreviewInSolutionExplorer": false
 }

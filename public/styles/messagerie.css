@@ -30,47 +30,47 @@ body, html {
 
 .titre-messages {
     height: 5%;
-    width: 100%; /* Assure que le rectangle prend toute la largeur disponible */
-    background-color: #007bff; /* Une couleur de fond distincte pour le rectangle */
-    color: white; /* Couleur de texte pour assurer le contraste */
+    width: 100%; 
+    background-color: #007bff; 
+    color: white; 
     display: flex;
-    align-items: center; /* Centre le texte verticalement dans le rectangle */
-    justify-content: center; /* Centre le texte horizontalement */
-    padding: 10px 0; /* Ajoute un peu de padding vertical pour de l'espace autour du texte */
+    align-items: center; 
+    justify-content: center; 
+    padding: 10px 0; 
     box-sizing: border-box; /* S'assure que le padding est inclus dans la hauteur calculée */
     border-bottom: 2px solid #0056b3; /* Ajoute une bordure en bas pour la démarcation */
     margin-bottom:1%;
 }
 .destinataire {
-    background-color: #e0e0e0; /* Gris par défaut */
+    background-color: #e0e0e0; /* Gris */
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Transition douce pour le changement de couleur */
+    transition: background-color 0.3s ease; 
 }
 
     .destinataire:hover {
-        background-color: #d0d0d0; /* Un peu plus clair au survol */
+        background-color: #d0d0d0;
     }
 
     .destinataire.selectionne {
-        background-color: #03a5c1; /* Bleu pour l'élément sélectionné */
+        background-color: #03a5c1; 
         color: white;
     }
 
     .destinataire .nom {
-        font-weight: bold; /* Nom du destinataire en gras */
+        font-weight: bold; 
     }
 
     .destinataire .preview-message {
         font-size: 0.9em; /* Légèrement plus petit que le texte par défaut */
-        color: black; /* Gris foncé pour le texte du message */
+        color: black; 
     }
 
     .destinataire .date {
         font-size: 0.8em; /* Encore plus petit pour la date */
-        margin-top: 5px; /* Un peu d'espace au-dessus de la date */
+        margin-top: 5px; 
     }
 
 
@@ -83,7 +83,7 @@ body, html {
 
 .section-haut {
     display: flex;
-    align-items: center; /* Centre les éléments verticalement */
+    align-items: center; 
     justify-content: space-between; /* Positionne le nom à gauche et le bouton à droite */
     background-color: #dcdcdc;
     height: 8%;
@@ -92,31 +92,30 @@ body, html {
 }
 
     .section-haut h2 {
-        margin: 0; /* Enlève la marge par défaut du titre */
+        margin: 0;
         flex-grow: 1; /* Permet au titre de prendre l'espace nécessaire */
     }
 
     .section-haut button {
-        width: 40px; /* Définissez la largeur du bouton */
-        height: 40px; /* Définissez la hauteur du bouton pour correspondre à la largeur, créant ainsi un cercle */
-        padding: 0; /* Ajustement du padding si nécessaire */
-        border-radius: 50%; /* Rend les bords complètement arrondis pour former un cercle */
-        display: flex; /* Utilisez flexbox pour centrer l'icône à l'intérieur du bouton */
-        align-items: center; /* Centre verticalement l'icône dans le bouton */
-        justify-content: center; /* Centre horizontalement l'icône dans le bouton */
-        background-color: #007bff; /* Ou toute autre couleur de votre choix */
-        color: white; /* Couleur de l'icône */
-        border: none; /* Supprime la bordure par défaut */
-        cursor: pointer; /* Change le curseur en pointeur */
+        width: 40px; 
+        height: 40px; 
+        padding: 0; 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        background-color: #007bff; 
+        color: white; 
+        border: none; 
+        cursor: pointer; 
     }
 
-        /* Assurez-vous que l'icône est bien centrée et a la taille appropriée */
         .section-haut button .material-icons {
-            font-size: 20px; /* Ajustez la taille de l'icône selon vos besoins */
+            font-size: 20px;
         }
 
 .section-bas {
-    background-color: #eaeaea; /* Couleur de fond pour distinguer la section */
+    background-color: #eaeaea; 
     flex-grow: 1; /* Prend tout l'espace restant */
     padding: 20px;
     box-sizing: border-box;
@@ -124,23 +123,23 @@ body, html {
 }
 .section-messages {
     flex-grow: 1; /* Prend tout l'espace restant après la section-haut */
-    background-color: white; /* Fond blanc pour la section des messages */
+    background-color: white; 
     overflow-y: auto; /* Permet le défilement si la liste de messages est longue */
     padding: 10px;
     box-sizing: border-box;
 }
 
 .message {
-    background-color: #f9f9f9; /* Un léger fond gris pour chaque message pour les distinguer */
+    background-color: #f9f9f9; 
     margin-bottom: 10px; /* Petit espace entre chaque message */
     padding: 10px; /* Espacement intérieur pour chaque message */
-    border-radius: 5px; /* Coins arrondis pour un look plus doux */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Ombre légère pour un effet de profondeur */
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
     .message .nom {
-        font-weight: bold; /* Nom du destinataire en gras */
-        margin-bottom: 5px; /* Petit espace entre le nom et la date */
+        font-weight: bold; 
+        margin-bottom: 5px; 
     }
 
     .message .date {
@@ -152,7 +151,28 @@ body, html {
     .message .texte-message {
         line-height: 1.4; /* Espacement des lignes pour une meilleure lisibilité */
     }
+.message-utilisateur {
+    background-color: #007bff; /* Couleur de fond différente pour les messages de l'utilisateur */
+    color: white; /* Texte blanc pour un meilleur contraste */
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: right; /* Aligner le texte à droite */
+}
 
+    .message-utilisateur .nom,
+    .message-utilisateur .date,
+    .message-utilisateur .texte-message {
+        color: white; /* Assurez-vous que le texte reste lisible sur le fond plus foncé */
+    }
+
+/* Utiliser flexbox sur le conteneur des messages pour aligner les messages de l'utilisateur à droite */
+.message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Aligner les enfants (messages de l'utilisateur) à droite */
+}
 button {
     padding: 10px 20px;
     margin-top: 20px;
@@ -161,4 +181,31 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.section-haut .cache{
+    display:none;
+}
+
+/*CSS POUR LE DIALOG*/
+dialog {
+    background-color: var(--couleurFondMain);
+    color: var(--couleurTexte);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+}
+.nouveauMessage {
+    border-radius: 0.5em;
+    width: 90%;
+    height: 10vh;
+    padding: 1em;
+    border: 1px solid var(--couleurFilet);
+    resize: none;
+}
+.boutonsDialog {
+    display: flex;
+    justify-content: space-around;
+}
+
+dialog div {
+    margin-bottom: 20px;
 }

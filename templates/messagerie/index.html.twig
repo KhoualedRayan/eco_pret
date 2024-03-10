@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('styles/messagerie.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
     <script src="{{ asset('scripts/messagerie.js') }}"></script>
 {% endblock %}
 
@@ -14,36 +15,56 @@
             <div class="titre-messages">
                 <h2>Messages</h2>
             </div>
-            <div class="destinataire selectionne">
-                <p class="nom">Son Goku</p>
-                <p class="preview-message">Vous avez un nouveau message !</p>
-                <p class="date">09/03/2024</p>
-            </div>
-            <div class="destinataire">
-                <p class="nom">Jules César</p>
-                <p class="preview-message">Je suis pas mort en fait...</p>
-                <p class="date">10/03/2024</p>
-            </div>
+            {% for transaction in transactions %}
+                <div class="destinataire" id="{{transaction.id}}" >
+                    {% if transaction.client == app.user %}
+                        <p class="nom">{{transaction.posteur.username}}</p>
+                    {%else%}
+                        <p class="nom">{{transaction.client.username}}</p>
+                    {%endif%}
+                    {% if transaction.messages is not empty %}
+                        {% set dernierMessage = transaction.messages|last %}
+                        <p class="preview-message">{{ dernierMessage.contenu }}</p>
+                        <p class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</p>
+                    {%else%}
+                        <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
         <div class="colonne-droite">
             <div class="section-haut">
-                <h2>Son Goku</h2>
-                <button><span class="material-icons">reply</span></button>
+                <h2 class="cache"></h2>
+                <button class="cache" onclick="openNouveauMessageDialog()"><span class="material-icons">reply</span></button>
             </div>
             <div class="section-bas">
-                <div class="message">
-                    <p class="nom">Son Goku</p>
-                    <p class="date">09/03/2024, 14:30</p>
-                    <p class="texte-message">Salut ! Tu veux te battre contre moi ?</p>
-                </div>
-                <div class="message">
-                    <p class="nom">Son Goku</p>
-                    <p class="date">09/03/2024, 14:31</p>
-                    <p class="texte-message">Le css de malade d'ailleurs j'suis chokbar de bz.</p>
-                </div>
-                <!-- Messages ici -->
+                <p>Sélectionnez une transaction pour voir les messages.</p>
+                <!-- Messages ici dans messages.html.twig -->
             </div>
         </div>
+        <!-- Boîte de dialogue pour un nouveau message -->
+        <dialog id='nouveauMessageDialog'>
+            <h2 id='test'>Ecrire un nouveau message</h2>
+            <form >
+                <div>
+                    <label for="destinataire"><b>Destinataire</b></label>
+                    <div class='destinataire'>
+                        <input type="text" id="destinataire" class='text' name="destinataire" disabled required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="nouveauMessage"><b>Message :</b></label>
+                    <br />
+                    <textarea id="nouveauMessage" class="nouveauMessage" name="message"></textarea>
+                </div>
+
+                <div class="boutonsDialog">
+                    <button type="submit" class='but boutonDialog'>Valider</button>
+                    <button type="button" class='but boutonDialog' onclick="closeNouveauMessageDialog()">Annuler</button>
+                </div>
+            </form>
+        </dialog>
     </div>
 
 

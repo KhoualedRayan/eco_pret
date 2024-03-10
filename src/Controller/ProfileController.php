@@ -444,13 +444,11 @@ class ProfileController extends AbstractController
         $this->getUser()->clearDisponibilites();
         $data = $request->request;
         $list_mois_jours = json_decode($data->get('editedDays'), true);
-        dump($list_mois_jours);
         foreach ($list_mois_jours as $monthYear => $daysArray) {
             foreach ($daysArray as $day) {
                 if($day !=null){
                     $dispo = new Disponibilite();
                     $date = DateTime::createFromFormat('Y-m-d', $day);
-                    dump($date);
                     $dispo->setDate($date);
                     $entityManager->persist($dispo);
                     $this->getUser()->addDisponibilite($dispo);
@@ -484,9 +482,7 @@ class ProfileController extends AbstractController
         
             $dates_par_mois[$key][] = $date->getDate();
         }
-        dump($dates_par_mois);
         $jsonContent = json_encode($dates_par_mois);
-        dump($jsonContent);
         return new Response($jsonContent);
     }
 

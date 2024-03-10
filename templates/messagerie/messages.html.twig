@@ -1,0 +1,16 @@
+Test
+{% for msg in messages %}
+    {% if msg.expediteur == app.user %}
+        <div class="message message-utilisateur">
+            <p class="nom">{{ msg.expediteur.username }}</p>
+            <p class="date">{{ msg.dateEnvoi|date('d/m/Y H:i') }}</p>
+            <p class="texte-message">{{ msg.contenu }}</p>
+        </div>
+    {%else%}
+        <div class="message">
+            <p class="nom">{{ msg.expediteur.username }}</p>
+            <p class="date">{{ msg.dateEnvoi|date('d/m/Y H:i') }}</p>
+            <p class="texte-message">{{ msg.contenu }}</p>
+        </div>
+    {% endif %}
+{% endfor %}
