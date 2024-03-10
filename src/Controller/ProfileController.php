@@ -473,8 +473,8 @@ class ProfileController extends AbstractController
         $dates_par_mois = [];
         
         foreach ($liste_dates as $date) {
-            $annee = $date->format("Y");
-            $mois = $date->format("n");
+            $annee = $date->getDate()->format("Y");
+            $mois = $date->getDate()->format("n");
         
             $key = $annee . "-" . $mois;
         
@@ -482,11 +482,12 @@ class ProfileController extends AbstractController
                 $dates_par_mois[$key] = [];
             }
         
-            $dates_par_mois[$key][] = $date;
+            $dates_par_mois[$key][] = $date->getDate();
         }
-        
-
-        return new Response($dates_par_mois);
+        dump($dates_par_mois);
+        $jsonContent = json_encode($dates_par_mois);
+        dump($jsonContent);
+        return new Response($jsonContent);
     }
 
     
