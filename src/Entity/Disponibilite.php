@@ -49,4 +49,17 @@ class Disponibilite
 
         return $this;
     }
+
+    public function isBusyToday()
+    {
+        $today = new \DateTime(); // Créer un objet DateTime représentant aujourd'hui
+        $date = $this->date; // Supposons que $this->date contient un objet DateTime
+
+        // Comparer la date d'aujourd'hui avec la date de la disponibilité
+        if ($today->format("Y-m-d") === $date->format("Y-m-d")) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -275,6 +275,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
 }
 
+    public function IsBusy()
+    {
+        foreach ($this->disponibilites as $disponibilite) {
+            if($disponibilite->isBusyToday()){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function removeDisponibilite(Disponibilite $disponibilite): static
     {
@@ -282,6 +292,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($disponibilite->getUser() === $this) {
                 $disponibilite->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeDisponibiliteByDate(\DateTimeInterface $date): static
+    {
+        foreach ($this->disponibilites as $disponibilite) {
+            if ($disponibilite->getDate()->format('Y-m-d') === $date->format('Y-m-d')) {
+                $this->removeDisponibilite($disponibilite);
             }
         }
 

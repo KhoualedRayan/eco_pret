@@ -23,6 +23,9 @@ class OffreServiceController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         if($this->getUser()){
+            if($this->getUser()->isBusy()){
+                $this->getUser()->setSleepMode(true);
+            }
             if ($this->getUser()->isSleepMode()) {
                 return $this->redirectToRoute('app_sleep_mode');
             }
