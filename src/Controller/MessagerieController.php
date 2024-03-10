@@ -24,6 +24,16 @@ class MessagerieController extends AbstractController
             return $this->redirectToRoute('app_sleep_mode');
         }
         $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($this->getUser());
+        usort($transactions, function ($a, $b) {
+            if (!$b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {
+                return $b->getMessages()->last()->getDateEnvoi() <=> $a->getMessages()->last()->getDateEnvoi();
+            }
+            if ($b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {
+                return $a;
+            }
+
+            return $b->getId() <=> $a->getId();
+        });
 
         return $this->render('messagerie/index.html.twig', [
             'controller_name' => 'MessagerieController',
@@ -36,10 +46,19 @@ class MessagerieController extends AbstractController
     {
         $transaction = $transactionRepository->find($id);
         $messages = [];
-
         if ($transaction) {
-            $messages = $transaction->getMessages();
+            foreach ($transaction->getMessages() as $msg) {
+                $contenuDecrypte = $this->decrypterMessage($msg->getContenu());
+                $messages[] = [
+                    'id' => $msg->getId(),
+                    'contenu' => $contenuDecrypte,
+                    'dateEnvoi' => $msg->getDateEnvoi(),
+                    'expediteur' => $msg->getExpediteur(),
+                    'transaction' => $msg->getTransaction(),
+                ];
+            }
         }
+        $messages = array_reverse($messages);
         // Générer le HTML pour les messages
         $html = $this->renderView('messagerie/messages.html.twig', [
             'messages' => $messages,
