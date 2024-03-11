@@ -14,7 +14,7 @@ class NotificationController extends AbstractController
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
-        } 
+        }
 
         if($this->getUser()){
             if($this->getUser()->isBusy()){
@@ -84,9 +84,9 @@ class NotificationController extends AbstractController
             $entityManager->remove($notification);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Notification supprimée.');
+            $this->addFlash('notifications', 'Notification supprimée.');
         } else {
-            $this->addFlash('error', 'Notification non trouvée ou accès refusé.');
+            $this->addFlash('notifications', 'Notification non trouvée ou accès refusé.');
         }
 
         return $this->redirectToRoute('app_notification');

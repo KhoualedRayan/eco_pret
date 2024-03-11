@@ -46,7 +46,7 @@
                     </div>
                     <div class="notif-buttons">
                         <button onclick="location.href='{{ path('marquer_comme_non_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility</span></button>
-                        <button class="delete" onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">delete</span></button>
+                        <button class="delete" onclick="location.href='{{ path('supprimer_la_notif_route', {'id': notification.id}) }}'"><span class="material-icons">delete</span></button>
                     </div>
                 </div>
             {% endif %}
