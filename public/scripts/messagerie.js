@@ -103,4 +103,4 @@ function refresh() {
         })
         .catch(error => console.error('Erreur:', error));
 }
-const intervalId = setInterval(refresh, 2000);
+const intervalId = setInterval(refresh, 5000);
