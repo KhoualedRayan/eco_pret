@@ -10,6 +10,11 @@ use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Transaction;
 use App\Entity\FileAttente;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Annonce;
+use App\Entity\User;
+use App\Entity\Notification;
+use DateTime;
 
 class ProfileTransactionsController extends AbstractController
 {

@@ -9,7 +9,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Annonce;
 use App\Entity\CategorieMateriel;
 use App\Entity\CategorieService;
-
+use App\Repository\CategorieServiceRepository;
+use App\Repository\CategorieMaterielRepository;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\AnnonceService;
+use App\Entity\AnnonceMateriel;
 class ProfileAnnoncesController extends AbstractController
 {
     #[Route('/profile/annonces', name: 'app_profile_annonces')]
@@ -34,7 +38,7 @@ class ProfileAnnoncesController extends AbstractController
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
         });
-        
+
         $categoriesService = $entityManager->getRepository(CategorieService::class)->findAll();
         $categoriesMateriel = $entityManager->getRepository(CategorieMateriel::class)->findAll();
 
