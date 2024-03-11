@@ -32,8 +32,17 @@
             <div class="aDroite">
                 {% if app.user %}
                     <div class="solde">Solde : {{ app.user.nbflorains }} <span class="material-icons">attach_money</span></div>
-                    <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mail</span></a></div>
-                    <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications</span></a></div>
+                    {% if app.user.contientUnMsgNonLu() %}
+                        <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mark_email_unread</span></a></div>
+                    {%else%}
+                        <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mail</span></a></div>
+                    {%endif%}
+                    
+                    {%if app.user.contientUneNotifNonLu() %}
+                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications_active</span></a></div>
+                    {%else%}
+                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications</span></a></div>
+                    {%endif%}
                     <div class='lien'><a href="{{ path('app_profile') }}">Mon Profil</a></div>
                     <div class='lien'><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
                 {% else %}

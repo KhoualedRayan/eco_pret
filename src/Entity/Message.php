@@ -28,6 +28,9 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?Transaction $transaction = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $aEteLu = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,4 +91,17 @@ class Message
         $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
         return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
     }
+
+    public function isAEteLu(): ?bool
+    {
+        return $this->aEteLu;
+    }
+
+    public function setAEteLu(?bool $aEteLu): static
+    {
+        $this->aEteLu = $aEteLu;
+
+        return $this;
+    }
+
 }

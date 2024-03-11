@@ -493,5 +493,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function contientUneNotifNonLu():bool{
+        foreach($this->notifications as $notif){
+            if(!$notif->isAEteLu()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public function contientUnMsgNonLu(){
+        foreach($this->demandes as $transaction){
+            if($transaction->getMessages()->last()){
+                if($transaction->getMessages()->last()->getExpediteur() != $this){
+                    if(!$transaction->getMessages()->last()->isAEteLu()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }

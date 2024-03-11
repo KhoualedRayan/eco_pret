@@ -63,12 +63,18 @@ class MessagerieController extends AbstractController
     }
 
     #[Route('/charger-messages/{id}', name: 'charger_messages')]
-    public function chargerMessages(int $id, TransactionRepository $transactionRepository): Response
+    public function chargerMessages(int $id, TransactionRepository $transactionRepository, EntityManagerInterface $entityManager): Response
     {
         $transaction = $transactionRepository->find($id);
         $messages = [];
         if ($transaction) {
             foreach ($transaction->getMessages() as $msg) {
+                if($msg->getExpediteur() != $this->getUser()){
+                    if(!$msg->isAEteLu()){
+                        $msg->setAEteLu(true);
+                        $entityManager->flush();
+                    }
+                }
                 $contenuDecrypte = $this->decrypterMessage($msg->getContenu());
                 $messages[] = [
                     'id' => $msg->getId(),
@@ -79,6 +85,7 @@ class MessagerieController extends AbstractController
                 ];
             }
         }
+        
         $messages = array_reverse($messages);
         // Générer le HTML pour les messages
         $html = $this->renderView('messagerie/messages.html.twig', [
@@ -124,6 +131,7 @@ class MessagerieController extends AbstractController
         $message->setDateEnvoi($date);
         $message->setTransaction($transaction);
         $message->setExpediteur($user);
+        $message->setAEteLu(false);
         $entityManager->persist($message);
         $entityManager->flush();
     }
