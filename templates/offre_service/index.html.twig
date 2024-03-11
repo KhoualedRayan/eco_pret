@@ -6,15 +6,17 @@
 
 {% block body %}
 <h2>Nouvelle Annonce</h2>
-<form action="{{ path('handle_form_service') }}" method="post">
+<form class = "form_serv" action="{{ path('handle_form_service') }}" method="post">
     <label for="titre">Titre de l'annonce :</label>
     <input type="text" name="titre" required /><br />
     
     <br />
+    <div class="special-div">
     <label for="date_pret">Date et heure du service :</label>
     <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
 
 
+    <br />
     <br />
     <label for="recurrence">Récurrence :</label>
     <select name="recurrence" id="recurrence">
@@ -23,6 +25,8 @@
         <option value="quotidienne">Quotidienne</option>
         <option value="mensuelle">Mensuelle</option>
     </select>
+    <br />
+    </div>
 
     <button type="button" id="addDateButton">Ajouter une autre date</button><br />
     <br />
@@ -261,7 +265,7 @@
         newDiv2.append(newSelect.value);
         newDiv2.appendChild(newPeriode);
         newDiv2.appendChild(document.createElement('br'));
-        
+        additionalRecurrencesDiv.classList.add("special-div");
         additionalRecurrencesDiv.appendChild(newDiv2);
     });
 </script>

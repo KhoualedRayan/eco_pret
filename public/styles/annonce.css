@@ -1,16 +1,118 @@
-input {
-    border-radius: 5px;
+/* Accueil.css */
+/* Ajoutez vos styles pour le formulaire ici */
+
+/* Style pour le titre "Nouvelle Annonce" */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
 }
-.input_small {
-    width: 3%;
+
+/* Style pour les étiquettes des champs */
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
-select {
-    border-radius: 5px;
-}
+
+/* Style pour les champs de texte */
+input[type="text"],
+input[type="number"],
 textarea {
-    width: 20%;
-    height: 8em;
-    border-radius: 5%;
-    resize: none;
-    border: 1px solid #ccc; 
+    width: calc(25% - 12px); /* Largeur ajustée à un quart de l'écran */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
+
+/* Style pour les listes déroulantes */
+select {
+    width: auto; /* Ajuster la largeur en fonction du contenu */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Style pour les boutons */
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="button"] {
+    background-color: #ccc;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Style pour les messages d'erreur */
+input:invalid,
+textarea:invalid,
+select:invalid {
+    border-color: green;
+}
+
+input:invalid:focus,
+textarea:invalid:focus,
+select:invalid:focus {
+    outline-color: green;
+}
+
+/* Style pour les messages d'erreur affichés à côté des champs */
+input:invalid + span::before,
+textarea:invalid + span::before,
+select:invalid + span::before {
+    content: '⚠️';
+    margin-left: 5px;
+    color: green;
+}
+
+/* Style pour entourer les champs en vert */
+input[type="text"]:valid,
+input[type="number"]:valid,
+textarea:valid,
+select:valid {
+    border-color: green;
+}
+
+input[type="text"]:valid:focus,
+input[type="number"]:valid:focus,
+textarea:valid:focus,
+select:valid:focus {
+    outline-color: green;
+}
+
+input[type="datetime-local"],
+input[type="date"],
+input[type="week"],
+input[type="month"] {
+    width: auto; /* Ajuster la largeur en fonction du contenu */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: green;
+    box-sizing: border-box;
+}
+
+/* Style pour une div spéciale avec bordure */
+/* Style pour une div spéciale avec bordure */
+.special-div {
+    border: 2px solid #8bc34a; /* Couleur de la bordure verte claire */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 10px; /* Rembourrage pour l'espace entre la bordure et le contenu */
+    margin-bottom: 20px; /* Marge inférieure pour espacement */
+    display: inline-block; /* Permet à la div de s'adapter à la taille du contenu */
+}
+
