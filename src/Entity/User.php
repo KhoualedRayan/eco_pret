@@ -73,6 +73,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: FileAttente::class, orphanRemoval: true)]
     private Collection $annoncesOuJattends;
 
+    #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: Annonce::class, orphanRemoval: true)]
+    private Collection $annonces;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -81,6 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->demandes = new ArrayCollection();
         $this->annoncesOuJattends = new ArrayCollection();
+        $this->annonces = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -452,6 +456,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // Si la relation était configurée pour être bidirectionnelle, définissez le côté opposé à null (sauf si déjà changé)
             if ($annonceOuJattends->getUser() === $this) {
                 $annonceOuJattends->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Annonce[]
+     */
+    public function getAnnonces(): Collection
+    {
+        return $this->annonces;
+    }
+
+    public function addAnnonce(Annonce $annonce): static
+    {
+        if (!$this->annonces->contains($annonce)) {
+            $this->annonces->add($annonce);
+            $annonce->setPosteur($this);
+        }
+        return $this;
+
+    }
+
+    public function removeAnnonce(Annonce $annonce): self
+    {
+        if ($this->annonces->removeElement($annonce)) {
+            // Si la relation était configurée pour être bidirectionnelle, définissez le côté opposé à null (sauf si déjà changé)
+            if ($annonce->getPosteur() === $this) {
+                $annonce->setPosteur(null);
             }
         }
 

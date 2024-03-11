@@ -28,12 +28,8 @@ class HomePageController extends AbstractController
                 return $this->redirectToRoute('app_sleep_mode');
             }
         }
-        $annonceService = $entityManager->getRepository(AnnonceService::class)->findAll();
-        $entityManager->clear();
-        $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->findAll();
-        // Fusionner les annonces dans un seul tableau
-        $annonces = array_merge($annonceService, $annonceMateriel);
 
+        $annonces = $entityManager->getRepository(Annonce::class)->findAll();
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();

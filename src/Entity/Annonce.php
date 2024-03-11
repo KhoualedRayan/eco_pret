@@ -19,7 +19,7 @@ abstract class Annonce
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'posteur')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
