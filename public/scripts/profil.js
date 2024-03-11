@@ -93,7 +93,6 @@ function submitMotDePasseForm(event) {
 }
 
 function desabonner() {
-	
     var conf = confirm("Voulez vous vraiment vous désabonner ? (Vous ne perdrez pas votre abonnement actuel)");
     if (conf) {
         var xhr = new XMLHttpRequest();
@@ -102,7 +101,6 @@ function desabonner() {
                 location.reload();
             }
         };
-
         xhr.open('POST', '/ajax/desabo_form', true);
         xhr.send();
     }

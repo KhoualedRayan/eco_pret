@@ -17,7 +17,7 @@
     <div style="display: flex;">
         <div class="solde">Solde :&nbsp;<span class="bold">{{ app.user.nbflorains }}</span> <span class="material-icons spe">attach_money</span></div>
         {% if app.user.abonnement is not null %}
-            Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>&nbsp;(fin : {{ app.user.dateAbonnement|date_modify('+1 year')|date('d/m/Y') }})
+            Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>&nbsp;jusqu'au {{ app.user.dateAbonnement|date_modify('+1 year')|date('d-m-Y') }}
         {% else %}
             Pas d'abonnement
         {% endif %}

@@ -22,18 +22,14 @@ class OffreServiceController extends AbstractController
     #[Route('/offre/service', name: 'app_offre_service')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        if($this->getUser()){
-            if($this->getUser()->isBusy()){
-                $this->getUser()->setSleepMode(true);
-                $entityManager->flush();
-            }
-            if ($this->getUser()->isSleepMode()) {
-                return $this->redirectToRoute('app_sleep_mode');
-            }
-        }
         // redirige l'utilisateur vers la page de connexion si non connecté
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
+        }
+        // s'il n'a pas d'abonnement
+        if ($this->getUser()->getAbonnement() == null) {
+            $this->addFlash('notifications', 'Vous devez posséder un abonnement pour pouvoir publier des annonces !');
+            return $this->redirectToRoute('app_profile');
         }
 
         $categories = $entityManager->getRepository(CategorieService::class)->findAll();
