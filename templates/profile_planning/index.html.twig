@@ -8,6 +8,7 @@
 
 {% block contenu %}
 
+{% if app.user.abonnement is not null %}
 <h1 id="month-year"></h1>
 
 <table id="calendar"></table>

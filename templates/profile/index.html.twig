@@ -7,23 +7,25 @@
 <div class="tab">
     <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
     </span>
-    <button class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
+    <div style="margin-bottom: 25px;">
+        <button class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
     <button class="but" onclick="openDialogMDP()" style="float: right;">Changer mon mot de passe</button>
     <button class="but" onclick="activeModeSommeil()" style="float: right;">Activer le mode sommeil</button>
     
     
     <h3>Vos informations personnelles</h3>
+    </div>
     <div>
         <form action="{{ path('handle_infos_form') }}" method="POST">
             <div style="display: flex;">
                 <div>
                     <div class="blockI">
-                        <label>Nom d'utilisateur</label><br>
+                        <label for="username">Nom d'utilisateur</label><br>
                         <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
                         <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
                     </div>
                     <div class="blockI">
-                        <label>Email</label><br>
+                        <label for="email">Email</label><br>
                         <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
                         <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
                     </div>
@@ -35,12 +37,13 @@
                         <label>Nom</label><br>
                         <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
                     </div>
+                    <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
                 </div>
     
                 
                 <div style="margin-left: auto;">
                     {% if app.user.abonnement is null %}S'abonner :
-                    {% elseif app.user.abonnement.niveau == 1 %}Prochain abonnement (ou améliorer l'abonnement actuel) :
+                    {% elseif app.user.abonnement.niveau == 1 %}Prochain abonnement <span style="font-style: italic;">(ou améliorer l'abonnement actuel avec <span style="font-weight: bold;">Premium</span>)</span> :
                     {% else %}Prochain abonnement :{% endif %}<br>
                     <div class="plans">
                         {% for abo in abonnements %}
@@ -55,6 +58,7 @@
                                                 <li>Prêter du matériel</li>
                                                 <li>Offrir des services</li>
                                                 <li>Recevoir des services</li>
+                                                <li>Gérer ses annonces</li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -78,7 +82,6 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
         </form>
     </div>
     <!-- Boîte de dialogue pour le mot de passe -->

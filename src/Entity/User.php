@@ -42,12 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $sleep_mode = null;
 
-    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceMateriel::class, orphanRemoval: true)]
-    // private Collection $annoncesMateriel;
-
-    // #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: AnnonceService::class, orphanRemoval: true)]
-    // private Collection $annoncesService;
-
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Abonnement $abonnement = null;

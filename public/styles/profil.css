@@ -57,12 +57,12 @@
     text-align: center; /* Centrer le texte */
 }
 
-.tab-button:hover:enabled {
+.tab-button:hover {
     text-decoration: underline;
 }
 
 /* Style pour les boutons d'onglet actifs */
-.tab-button.active:enabled {
+.tab-button.active {
     background-color: #ccc;
 }
 
