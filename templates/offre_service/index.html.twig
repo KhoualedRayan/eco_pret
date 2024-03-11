@@ -20,15 +20,11 @@
     <br />
     <label for="recurrence">Récurrence :</label>
     <select name="recurrence" id="recurrence">
-        <option value="">Sélectionnez une récurrence</option>
+        <option value="">Aucune récurrence</option>
         <option value="hebdomadaire">Hebdomadaire</option>
         <option value="quotidienne">Quotidienne</option>
         <option value="mensuelle">Mensuelle</option>
     </select>
-    <br />
-    </div>
-
-    <button type="button" id="addDateButton">Ajouter une autre date</button><br />
     <br />
     
     <div id="periode">
@@ -46,10 +42,10 @@
         <label for="semaine_fin">Semaine de fin (comprise) :</label>
         <input type="week" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
     </div>
-    <br />
+    </div>
 </div>
 
-
+    <button type="button" id="addDateButton">Ajouter une autre date</button><br />
 
     <div id="additionalDates"></div>
 
@@ -141,7 +137,10 @@
             console.log("Date supplémentaire " + (i + 1) + ": " + additionalDates[i].value);
         }
 
-        var additionalDatesDiv = document.getElementById('additionalDates');
+        // Créer un nouvel élément <br>
+        var lineBreak = document.createElement('br');
+
+
         var newInput = document.createElement('input');
         newInput.type = 'datetime-local';
         newInput.name = 'additional_date[]';
@@ -150,19 +149,26 @@
         newInput.required = true;
         var additionalRecurrencesDiv = document.getElementById('additionalDates'); //pour suppr avec le bouton, appartient au recurrence
         var deleteButton = document.createElement('button');
+        var div_gen = document.createElement('div');
         deleteButton.textContent = "Supprimer";
         deleteButton.addEventListener('click', function() {
-            additionalDatesDiv.removeChild(newDiv);
-            additionalRecurrencesDiv.removeChild(newDiv2);
+            additionalRecurrencesDiv.removeChild(div_gen);
+            additionalRecurrencesDiv.removeChild(lineBreak);
         });
         var newDiv = document.createElement('div');
-        newDiv.appendChild(deleteButton);
 
-        newDiv.append('Date supplémentaire : ');
+        // Créer un élément span pour le texte en gras
+        var boldText = document.createElement('span');
+        boldText.style.fontWeight = 'bold'; // Appliquer le style de police en gras
+        boldText.textContent = 'Date supplémentaire : '; // Ajouter le texte
+
+        // Ajouter le span contenant le texte en gras à newDiv2
+        newDiv.appendChild(boldText);
+        newDiv.appendChild(document.createElement('br'));
         newDiv.appendChild(newInput);
         newDiv.appendChild(document.createElement('br'));
         newDiv.appendChild(document.createElement('br'));
-        additionalDatesDiv.appendChild(newDiv);
+        div_gen.appendChild(newDiv);
 
         
 
@@ -171,6 +177,16 @@
         var newSelect = document.createElement('select');
         var newPeriode = document.createElement('div');
         var newDiv2 = document.createElement('div');
+
+        // Créer un élément span pour le texte en gras
+        var boldText2 = document.createElement('span');
+        boldText2.style.fontWeight = 'bold'; // Appliquer le style de police en gras
+        boldText2.textContent = 'Récurrence : '; // Ajouter le texte
+
+        // Ajouter le span contenant le texte en gras à newDiv2
+        newDiv2.appendChild(boldText2);
+ 
+        newDiv2.appendChild(document.createElement('br'));
 
         newSelect.name = 'additional_recurrence[]';
         newPeriode.name = 'additional_periode[]';
@@ -264,9 +280,14 @@
         newDiv2.appendChild(newSelect);
         newDiv2.append(newSelect.value);
         newDiv2.appendChild(newPeriode);
+        newDiv2.appendChild(deleteButton);
         newDiv2.appendChild(document.createElement('br'));
-        additionalRecurrencesDiv.classList.add("special-div");
-        additionalRecurrencesDiv.appendChild(newDiv2);
+
+        div_gen.classList.add("special-div");
+        div_gen.appendChild(newDiv2);
+        additionalRecurrencesDiv.appendChild(div_gen);
+        additionalRecurrencesDiv.appendChild(lineBreak);
+        
     });
 </script>
 

@@ -49,7 +49,7 @@ button {
 }
 
 button[type="button"] {
-    background-color: #ccc;
+    background-color: #00bd55;
 }
 
 button:hover {
