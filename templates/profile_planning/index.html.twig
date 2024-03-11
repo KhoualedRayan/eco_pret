@@ -9,11 +9,11 @@
 {% block contenu %}
 
 {% if app.user.abonnement is not null %}
-<h1 id="month-year"></h1>
+    <h1 id="month-year"></h1>
 
-<table id="calendar"></table>
-</br>
-<div class= "btns" id="btn-container">
+    <table id="calendar"></table>
+    </br>
+    <div class= "btns" id="btn-container">
     <button class="button_calendar" id="prev-month"><span class="material-icons">arrow_back</span></button>
     <button class="button_calendar" id="current-month"><span class="material-icons">calendar_today</span></button>
     <button class="button_calendar" id="next-month"><span class="material-icons">arrow_forward</span></button>
@@ -23,8 +23,15 @@
 </br></br>
 <h4 id="tuto_planning" style="display: none;"> Cliquez sur les jours où vous êtes indisponible</h4>
 
-<script src="{{ asset('scripts/planning.js') }}"></script>
+    <script src="{{ asset('scripts/planning.js') }}"></script>
+{% else %}
+    <div class="no_planning">
+        <p>
+            Vous devez être abonné et avoir posté des annonces pour avoir accès à un planning.
+        </p>
+        
+    </div>
+    
 {% endif %}
-
 
 {% endblock %}

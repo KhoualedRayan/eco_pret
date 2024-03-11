@@ -52,8 +52,8 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         $change = FALSE;
 
         // je le mets là parce que bon le copier coller partout...
-        if($this->getUser()->isBusy()){
-            $this->getUser()->setSleepMode(true);
+        if($user->isBusy()){
+            $user->setSleepMode(true);
             $change = TRUE;
         }
 
@@ -73,7 +73,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             $this->entityManager->flush();
         }
         
-        if ($this->getUser()->isSleepMode()) {
+        if ($user->isSleepMode()) {
             return new RedirectResponse($this->urlGenerator->generate('app_sleep_mode'));
         }
         

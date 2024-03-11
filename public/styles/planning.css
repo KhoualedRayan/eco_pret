@@ -54,4 +54,11 @@ table {
     padding: 6px;
     margin-left: 2%;
   }
+
+  .no_planning {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+  }
   
