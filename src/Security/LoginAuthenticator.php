@@ -49,7 +49,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         if ($user->getAbonnement() != null) {
             $dateAbo = $user->getDateAbonnement();
             $nextAbo = $user->getNextAbonnement();
-            if ($dateAbo->date_modify('+1 year') < date('Y-m-d')) {
+            if ($dateAbo->modify('+1 year') < new \DateTime()) {
                 $user->setAbonnement($nextAbo);
                 $user->setDateAbonnement($nextAbo != null ? $dateAbo->modify('+1 year') : null);
                 $this->entityManager->persist($user);
