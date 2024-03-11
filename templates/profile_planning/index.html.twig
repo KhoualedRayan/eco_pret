@@ -1,0 +1,29 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}Planning{% endblock %}
+
+{% block ss2 %}
+<link rel="stylesheet" href="{{ asset('styles/planning.css') }}">
+{% endblock %}
+
+{% block contenu %}
+
+<h1 id="month-year"></h1>
+
+<table id="calendar"></table>
+</br>
+<div class= "btns" id="btn-container">
+    <button class="button_calendar" id="prev-month"><span class="material-icons">arrow_back</span></button>
+    <button class="button_calendar" id="current-month"><span class="material-icons">calendar_today</span></button>
+    <button class="button_calendar" id="next-month"><span class="material-icons">arrow_forward</span></button>
+</div>
+<button class="button_calendar" id="edit-mode">Mode édition</button>
+<button class="button_calendar" id="validate-edits" style="display: none;">Valider les modifications</button>
+</br></br>
+<h4 id="tuto_planning" style="display: none;"> Cliquez sur les jours où vous êtes indisponible</h4>
+
+<script src="{{ asset('scripts/planning.js') }}"></script>
+
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
+<script src="{{ asset('scripts/profil.js') }}"></script>
+{% block ss2 %}{% endblock %}
+{% endblock %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+
+<div class="intro">
+    <div>
+        Bienvenue <span class="bold">{{ app.user.username }}</span> !
+    </div>
+    <div style="display: flex;">
+        <div class="solde">Solde :&nbsp;<span class="bold">{{ app.user.nbflorains }}</span> <span class="material-icons spe">attach_money</span></div>
+        {% if app.user.abonnement is not null %}
+            Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>&nbsp;(fin : {{ app.user.dateAbonnement|date_modify('+1 year')|date('d/m/Y') }})
+        {% else %}
+            Pas d'abonnement
+        {% endif %}
+    </div>
+</div>
+
+<div class="tab-container">
+    <div class="tab-buttons">
+        <a {% if onglet == 'infos' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile') }}">Informations personnelles</a>
+        <a {% if onglet == 'annonces' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_annonces') }}">Mes Annonces</a>
+        <a {% if onglet == 'transactions' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_transactions') }}">Mes Transactions</a>
+        <a {% if onglet == 'planning' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_planning') }}">Mon Planning</a>
+    </div>
+
+    {% block contenu %}{% endblock %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}
