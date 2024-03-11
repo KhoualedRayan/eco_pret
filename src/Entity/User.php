@@ -206,36 +206,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, AnnonceService>
-    //  */
-    // public function getAnnoncesService(): Collection
-    // {
-    //     return $this->annoncesService;
-    // }
-
-    // public function addAnnonceService(AnnonceService $annonce): static
-    // {
-    //     if (!$this->annoncesService->contains($annonce)) {
-    //         $this->annonces->add($annonce);
-    //         $annonce->setPosteur($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeAnnonceService(AnnonceService $annonce): static
-    // {
-    //     if ($this->annoncesService->removeElement($annonce)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($annonce->getPosteur() === $this) {
-    //             $annonce->setPosteur(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
     public function getAbonnement(): ?Abonnement
     {
         return $this->abonnement;

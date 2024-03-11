@@ -1,23 +1,3 @@
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-
-    // Masquer tous les onglets
-    tabcontent = document.getElementsByClassName("tab");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Désactiver tous les boutons d'onglet
-    tablinks = document.getElementsByClassName("tab-button");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Afficher l'onglet actuel et activer le bouton correspondant
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
 function edit(icone) {
     if (icone.innerHTML == 'cancel')
         location.reload();
@@ -112,28 +92,21 @@ function submitMotDePasseForm(event) {
     xhr.send(data);
 }
 
-function submitDesaboForm(event) {
-    console.log("Édition en cours...");
-
-	event.preventDefault();
-	var xhr = new XMLHttpRequest();
-
-	var data = new FormData();
-    
-    
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            if (xhr.responseText != "OK") {
-                document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
-				setTimeout(function () {
-				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
-				}, 4000);
+function desabonner() {
+	
+    var conf = confirm("Voulez vous vraiment vous désabonner ? (Vous ne perdrez pas votre abonnement actuel)");
+    if (conf) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                location.reload();
             }
-        }
-    };
+        };
 
-    xhr.open('POST', '/ajax/desaboForm', true);
-    xhr.send(data);
+        xhr.open('POST', '/ajax/desabo_form', true);
+        xhr.send();
+    }
+    
 }
 
 

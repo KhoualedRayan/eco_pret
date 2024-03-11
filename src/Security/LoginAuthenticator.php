@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -42,6 +43,19 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // quand l'utilisateur se login, on vérifie la validité de son abonnement actuel
+        // et on met le prochain
+        $user = $token->getUser();
+        if ($user->getAbonnement() != null) {
+            $dateAbo = $user->getDateAbonnement();
+            $nextAbo = $user->getNextAbonnement();
+            if ($dateAbo->date_modify('+1 year') < date('Y-m-d')) {
+                $user->setAbonnement($nextAbo);
+                $user->setDateAbonnement($nextAbo != null ? $dateAbo->modify('+1 year') : null);
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+            }
+        }
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

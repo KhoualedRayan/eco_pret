@@ -1,400 +1,125 @@
-{% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
-<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
-<link rel="stylesheet" href="{{ asset('styles/planning.css') }}">
-<script src="{{ asset('scripts/profil.js') }}"></script>
-{% endblock %}
+{% extends 'profile.html.twig' %}
 
 {% block title %}Profil{% endblock %}
 
-{% block body %}
+{% block contenu %}
 
-{% for flashMessage in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ flashMessage }}
-        </div>
-    {% endfor %}
-
-<div class="intro">
+<div class="tab">
+    <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
+    </span>
+    <button class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
+    <button class="but" onclick="openDialogMDP()" style="float: right;">Changer mon mot de passe</button>
+    <button class="but" onclick="activeModeSommeil()" style="float: right;">Activer le mode sommeil</button>
+    
+    
+    <h3>Vos informations personnelles</h3>
     <div>
-        Bienvenue <span class="bold">{{ app.user.username }}</span> !
-    </div>
-    <div style="display: flex;">
-        <div class="solde">Solde :&nbsp;<span class="bold">{{ app.user.nbflorains }}</span> <span class="material-icons spe">attach_money</span></div>
-        {% if app.user.abonnement is not null %}
-            Abonnement&nbsp;<span class="bold">{{ app.user.abonnement.nom }}</span>&nbsp;(fin : {{ app.user.dateAbonnement|date_modify('+1 year')|date('d/m/Y') }})
-        {% else %}
-            Pas d'abonnement
-        {% endif %}    </div>
-</div>
-
-<div class="tab-container">
-    <div class="tab-buttons">
-        <button class="tab-button" onclick="openTab(event, 'tab1')">Informations personnelles</button>
-        <button class="tab-button" onclick="openTab(event, 'tab2')">Mes Annonces</button>
-        <button class="tab-button" onclick="openTab(event, 'tab3')">Mes Transactions</button>
-        <button class="tab-button" onclick="openTab(event, 'tab4')">Mon Planning</button>
-    </div>
-
-    <div id="tab1" class="tab active">
-        <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
-        </span>
-        <button class="but" onclick="openDialogDesabo()" style="float: right;">Se désabonner</button>
-        <button class="but" onclick="openDialogMDP()" style="float: right;">Changer mon mot de passe</button>
-        <button class="but" onclick="activeModeSommeil()" style="float: right;">Activer le mode sommeil</button>
-
-        
-        <h3>Vos informations personnelles</h3>
-        <div>
-            <form action="{{ path('handle_infos_form') }}" method="POST">
-                <div style="display: flex;">
-                    <div>
-                        <div class="blockI">
-                            <label>Nom d'utilisateur</label><br>
-                            <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
-                            <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
-                        </div>
-                        <div class="blockI">
-                            <label>Email</label><br>
-                            <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
-                            <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
-                        </div>
-                        <div class="blockI">
-                            <label>Prénom</label><br>
-                            <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
-                        </div>
-                        <div class="blockI">
-                            <label>Nom</label><br>
-                            <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
-                        </div>
+        <form action="{{ path('handle_infos_form') }}" method="POST">
+            <div style="display: flex;">
+                <div>
+                    <div class="blockI">
+                        <label>Nom d'utilisateur</label><br>
+                        <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
+                        <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
                     </div>
-
-                    
-                    <div style="margin-left: auto;">
-                        {% if app.user.abonnement is not null %}
-                            Abonnement (après la fin de celui en cours) :<br>
-                            <div class="plans">
-
-                                {% for abo in abonnements %}
-                                    {% if abo.getNiveau() == 1 %}
-                                    <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo.nom == app.user.nextAbonnement.nom %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
-                                    <label for="option1">
-                                        <div class="title">{{ abo.nom }}</div>
-                                        <div class="infos">
-                                            <ul>
-                                                <li>Prix : {{ abo.prix }} €/an</li>
-                                                <li>Fonctionalités :
-                                                    <ul>
-                                                        <li>Prêter du matériel</li>
-                                                        <li>Offrir des services</li>
-                                                        <li>Recevoir des services</li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </label>
-                                    {% else %}
-                                    <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo.nom == app.user.nextAbonnement.nom %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
-                                    <label for="option2">
-                                        <div class="title">{{ abo.nom }}</div>
-                                        <div class="infos">
-                                            <ul>
-                                                <li>Prix : {{ abo.prix }} €/an</li>
-                                                <li>Fonctionalités bonus :
-                                                    <ul>
-                                                        <li>Emprunter du matériel</li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </label>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        {% else %}
-
-                        Choisir un abonnement (activer l'édition des informations personnelles) :<br>
-
-                        <div class="plans">
-
+                    <div class="blockI">
+                        <label>Email</label><br>
+                        <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
+                        <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
+                    </div>
+                    <div class="blockI">
+                        <label>Prénom</label><br>
+                        <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
+                    </div>
+                    <div class="blockI">
+                        <label>Nom</label><br>
+                        <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
+                    </div>
+                </div>
+    
+                
+                <div style="margin-left: auto;">
+                    {% if app.user.abonnement is null %}S'abonner :
+                    {% elseif app.user.abonnement.niveau == 1 %}Prochain abonnement (ou améliorer l'abonnement actuel) :
+                    {% else %}Prochain abonnement :{% endif %}<br>
+                    <div class="plans">
                         {% for abo in abonnements %}
-
                             {% if abo.getNiveau() == 1 %}
-
-                                <input type="radio" id="option1" name="options" value= {{ abo.nom }} {% if not edit_mode %}disabled{% endif %}>
-                                <label for="option1">
-                                    <div class="title">{{ abo.nom  }}</div>
-                                    <div class="infos">
-                                        <ul>
-                                            <li>Prix : {{ abo.prix }} €/an</li>
-                                            <li>Fonctionalités :
-                                                        <ul>
-                                                            <li>Prêter du matériel</li>
-                                                            <li>Offrir des services</li>
-                                                            <li>Recevoir des services</li>
-                                                        </ul>
-                                                    </li>
-                                        </ul>
-                                    </div>
-                                </label>
-
-                            {% elseif abo.getNiveau() == 2 %}
-
-                                <input type="radio" id="option2" name="options" value=  {{ abo.nom }} {% if not edit_mode %}disabled{% endif %}>
-                                <label for="option2">
-                                    <div class="title">{{ abo.nom }}</div>
-                                    <div class="infos">
-                                        <ul>
-                                            <li>Prix : {{ abo.prix }} €/an</li>
-                                            <li>Fonctionalités bonus :
-                                                <ul>
-                                                    <li>Emprunter du matériel</li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </label>
+                            <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                            <label for="option1">
+                                <div class="title">{{ abo.nom }}</div>
+                                <div class="infos">
+                                    <ul><li>Prix : {{ abo.prix }} €/an</li>
+                                        <li>Fonctionalités :
+                                            <ul>
+                                                <li>Prêter du matériel</li>
+                                                <li>Offrir des services</li>
+                                                <li>Recevoir des services</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </label>
+                            {% else %}
+                            <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                            <label for="option2">
+                                <div class="title">{{ abo.nom }}</div>
+                                <div class="infos">
+                                    <ul>
+                                        <li>Prix : {{ abo.prix }} €/an</li>
+                                        <li>Fonctionalités bonus :
+                                            <ul><li>Emprunter du matériel</li></ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </label>
                             {% endif %}
-
-                            {% endfor %}
-
-                            </div>
-
-                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
-                <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
-            </form>
-        </div>
-        <!-- Boîte de dialogue pour le mot de passe -->
-        <dialog id='mdpDialog'>
-            <h2 id='test'>Changement du mot de passe</h2>
-            <form onsubmit='submitMotDePasseForm(event)'>
-                <div>
-                    <label for="motDePasseActuel">Mot de passe actuel</label>
-                    <div class='blocMDP'>
-                        <input type="password" id="motDePasseActuel" class='mdp' name="motDePasseActuel" required>
-                        <span class="material-icons visibilite" onclick="toggleVisiblite('motDePasseActuel', this)">visibility</span>
-                    </div>
-                    <span class="errone cache" id="motDePasseActuelErreur">Le mot de passe ne correspond pas</span>
-                </div>
-
-                <div>
-                    <label for="nouveauMotDePasse">Nouveau Mot de passe</label>
-                    <span class="errone cache" id="nouveauMotDePasseErreur">Le mot de passe ne respecte pas les conditions</span>
-                    <div class="blocMDP">
-                        <input type="password" id="nouveauMotDePasse" class='mdp' name="nouveauMotDePasse" required>
-                        <span class="material-icons visibilite" onclick="toggleVisiblite('nouveauMotDePasse', this)">visibility</span>
-                    </div>
-                    <span class='condMotDePasse'>Le mot de passe doit avoir au moins 6 caractères</span>
-                </div>
-
-                <div>
-                    <label for="confirmNouveauMDP">Confirmer le nouveau mot de passe</label>
-                    <div class="blocMDP">
-                        <input type="password" id="confirmNouveauMDP" class='mdp' name="confirmNouveauMDP" required>
-                        <span class="material-icons visibilite" onclick="toggleVisiblite('confirmNouveauMDP', this)">visibility</span>
-                    </div>
-                    <span class="errone cache" id="confirmNouveauMDPErreur" >Mots de passe différents</span>
-                </div>
-
-                <div class="boutonsDialog">
-                    <button type="submit" class='but boutonDialog'>Valider</button>
-                    <button type="button" class='but boutonDialog' onclick="closeDialogMDP()">Annuler</button>
-                </div>
-                <span class='succes cache' id='messageSucces'>Changement réussi !</span>
-            </form>
-        </dialog>
-
-        <dialog id='desaboDialog'>
-            <h2 id='test'>Se désabonner</h2>
-            <form onsubmit='submitDesaboForm(event)'>
-                <div>
-                    <label for="avertDesabo">Avertissement : votre abonnement prendra fin et vous ne pourrez plus bénéficier des exclusivités abonné.</label>
-                    <label for="confirmDesabo">Confirmer le désabonnement : </label>
-                </div>
-
-
-                <div class="boutonsDialog">
-                    <button type="submit" class='but boutonDialog'>Valider</button>
-                    <button type="button" class='but boutonDialog' onclick="closeDialogDesabo()">Annuler</button>
-                </div>
-                <span class='succes cache' id='messageSucces'>Désabonnement réussi !</span>
-            </form>
-        </dialog>
+            </div>
+            <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
+        </form>
     </div>
-
-    <div id="tab2" class="tab">
-        <h3>Mes Annonces</h3>
-        <div class="tout">
-            {% for annonce in annonces %}
-                <div class="blocAnnonce">
-                    <div>
-                        <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                        <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
-                    </div>
-                    <div class="type">{{ annonce.getType() }}</div>
-                    <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                    {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-                    <h3>{{ annonce.getTitre() }}</h3>
-                    <div class="description">{{ annonce.getDescription() }}</div>
-                    {% if annonce.getType() == "Materiel" %}
-                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}','{{ annonce.getDuree() }}',null)">Modifier</button>
-                    {% endif %}
-                    {% if annonce.getType() == "Service" %}
-                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,null)">Modifier</button>
-                    {% endif %}
-                    <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
+    <!-- Boîte de dialogue pour le mot de passe -->
+    <dialog id='mdpDialog'>
+        <h2 id='test'>Changement du mot de passe</h2>
+        <form onsubmit='submitMotDePasseForm(event)'>
+            <div>
+                <label for="motDePasseActuel">Mot de passe actuel</label>
+                <div class='blocMDP'>
+                    <input type="password" id="motDePasseActuel" class='mdp' name="motDePasseActuel" required>
+                    <span class="material-icons visibilite" onclick="toggleVisiblite('motDePasseActuel', this)">visibility</span>
                 </div>
-            {% endfor %}
-        </div>
-
-        {#Edition d'une annonce#}
-        <dialog id="editAnnonceDialog">
-            <h2>Modifier l'annonce</h2>
-            <form onsubmit="submitAnnonceForm(event)">
-                <div>
-                    <label for="editTitre">Titre :</label>
-                    <input type="text" id="editTitre" name="titre" required>
+                <span class="errone cache" id="motDePasseActuelErreur">Le mot de passe ne correspond pas</span>
+            </div>
+    
+            <div>
+                <label for="nouveauMotDePasse">Nouveau Mot de passe</label>
+                <span class="errone cache" id="nouveauMotDePasseErreur">Le mot de passe ne respecte pas les conditions</span>
+                <div class="blocMDP">
+                    <input type="password" id="nouveauMotDePasse" class='mdp' name="nouveauMotDePasse" required>
+                    <span class="material-icons visibilite" onclick="toggleVisiblite('nouveauMotDePasse', this)">visibility</span>
                 </div>
-                <div>
-                    <label for="editPrix">Prix :</label>
-                    <input type="text" class="input_small" id="editPrix" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10, 50)" required />$<br />
+                <span class='condMotDePasse'>Le mot de passe doit avoir au moins 6 caractères</span>
+            </div>
+    
+            <div>
+                <label for="confirmNouveauMDP">Confirmer le nouveau mot de passe</label>
+                <div class="blocMDP">
+                    <input type="password" id="confirmNouveauMDP" class='mdp' name="confirmNouveauMDP" required>
+                    <span class="material-icons visibilite" onclick="toggleVisiblite('confirmNouveauMDP', this)">visibility</span>
                 </div>
-
-                {#Bloc de modification pour les matériels#}
-                <div id="blocMateriel">
-                    <div>
-                        <label for="editCategorieMat">Matériel : </label>
-                        <select name="editCategorieMat" id="editCategorieMat" required>
-                            <option value="">Sélectionnez un tag pour votre matériel</option>
-                            {% for mats in catMat %}
-                                <option value="{{ mats.getNom() }}">{{ mats.getNom() }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="duree_pret">Durée : </label>
-                        <input type="text" class="input_small" id="editDureeNombre" name="duree_pret_valeur" pattern="[0-9]+" title="Entrez une durée valide (par exemple : 12 heures)" required />
-                        <select name="duree_pret" id="editDureePeriode" >
-                            <option value="heures">heures</option>
-                            <option value="jours">jours</option>
-                        </select>
-                    </div>
-                </div>
-
-                {#Bloc de modification pour les services#}
-                <div id="blocService">
-                    <div>
-                        <label for="editCategorieService">Service : </label>
-                        <select name="editCategorieService" id="editCategorieService" required>
-                            <option value="">Sélectionnez un tag pour votre Service</option>
-                            {% for serv in catService %}
-                                <option value="{{ serv.getNom() }}">{{ serv.getNom() }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="date_pret">Date et heure du service :</label>
-                        <input type="datetime-local" id="editDatePret" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
-                    </div>
-                </div>
-
-
-                <div>
-                    <label for="editDescription">Description :</label>
-                    <br />
-                    <textarea id="editDescription" class="editDescription" name="description"></textarea>
-                </div>
-
-                {#Boutons#}
-                <div class="boutonsDialog">
-                    <button type="submit" class="but boutonDialog">Valider</button>
-                    <button type="button" class="but boutonDialog" onclick="closeAnnonceDialog()">Annuler</button>
-                </div>
-            </form>
-        </dialog>
-    </div>
-
-    <div id="tab3" class="tab">
-        <h3>Mes transactions</h3>
-        <div class="tout">
-            <h4>Client</h4>
-            {# Transactions ou l'utilisateur est un client #}
-            {% for transaction in transactionsClient %}
-                <div class="blocAnnonce">
-                    <div>
-                        <span class="prix" >{{ transaction.getAnnonce().getPrix() }}<span class="material-icons">attach_money</span></span>
-                        <span class="username">{{ transaction.getAnnonce().getPosteur().getUsername() }}</span>
-                    </div>
-                    <div class="type">{{ transaction.getAnnonce().getType() }}</div>
-                    <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                    {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
-                    <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
-                    <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-                    <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
-                </div>
-            {% endfor %}
-            <h4>Posteur:</h4>
-            {# Transactions ou l'utilisateur est un posteur #}
-            {% for transaction in transactionsPosteur %}
-                <div class="blocAnnonce">
-                    <div>
-                        <span class="prix" >{{ transaction.getAnnonce().getPrix() }}<span class="material-icons">attach_money</span></span>
-                        <span class="username">Client : {{ transaction.getClient().getUsername() }}</span>
-                    </div>
-                    <div class="type">{{ transaction.getAnnonce().getType() }}</div>
-                    <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                    {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
-                    <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
-                    <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-                    <button class="modifier">Valider à faire</button>
-                    <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
-                </div>
-            {% endfor %}
-            <h4>En Attente:</h4>
-            {# Annonces ou l'utilisateur est en attente #}
-            {% for annonce in annoncesEnAttente %}
-                <div class="blocAnnonce">
-                    <div>
-                        <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                        <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
-                    </div>
-                    <div class="type">{{ annonce.getType() }}</div>
-                    <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                    {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-                    <h3>{{ annonce.getTitre() }}</h3>
-                    <div class="description">{{ annonce.getDescription() }}</div>
-                    <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
-                    <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Quitter la file</button>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div id="tab4" class="tab">
-        <h1 id="month-year"></h1>
-
-        <table id="calendar"></table>
-        </br>
-        <div class= "btns" id="btn-container">
-            <button class="button_calendar" id="prev-month"><span class="material-icons">arrow_back</span></button>
-            <button class="button_calendar" id="current-month"><span class="material-icons">calendar_today</span></button>
-            <button class="button_calendar" id="next-month"><span class="material-icons">arrow_forward</span></button>
-        </div>
-        <button class="button_calendar" id="edit-mode">Mode édition</button>
-        <button class="button_calendar" id="validate-edits" style="display: none;">Valider les modifications</button>
-        </br></br>
-        <h4 id="tuto_planning" style="display: none;"> Cliquez sur les jours où vous êtes indisponible</h4>
-
-
-        <script src="{{ asset('scripts/planning.js') }}"></script>
-    </div>
+                <span class="errone cache" id="confirmNouveauMDPErreur" >Mots de passe différents</span>
+            </div>
+    
+            <div class="boutonsDialog">
+                <button type="submit" class='but boutonDialog'>Valider</button>
+                <button type="button" class='but boutonDialog' onclick="closeDialogMDP()">Annuler</button>
+            </div>
+            <span class='succes cache' id='messageSucces'>Changement réussi !</span>
+        </form>
+    </dialog>
 </div>
-
-</body>
-</html>
 
 {% endblock %}

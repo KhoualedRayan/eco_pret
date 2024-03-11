@@ -36,16 +36,6 @@
     color: var(--couleurFancy)
 }
 
-/* Style de base pour les onglets */
-.tab {
-    display: none;
-}
-
-/* Style pour les onglets actifs */
-.tab.active {
-    display: block;
-}
-
 /* Style pour le conteneur des boutons d'onglet */
 .tab-buttons {
     display: flex; /* Utilisation d'un affichage flex */
@@ -56,6 +46,7 @@
 .tab-button {
     background-color: #f4f4f4;
     border: none;
+    text-decoration: none;
     font-size: 16px;
     font-weight: bold;
     color: var(--couleurTexte);
@@ -66,12 +57,12 @@
     text-align: center; /* Centrer le texte */
 }
 
-.tab-button:hover {
+.tab-button:hover:enabled {
     text-decoration: underline;
 }
 
 /* Style pour les boutons d'onglet actifs */
-.tab-button.active {
+.tab-button.active:enabled {
     background-color: #ccc;
 }
 
@@ -149,6 +140,7 @@ dialog {
     color: var(--couleurTexte);
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+    border: 1.5px solid var(--couleurTexte);
 }
 
 .container .horsForm {
@@ -182,11 +174,6 @@ dialog {
     display: flex;
     margin: 15px 0;
 }
-
-/* Le message d'erreur n'apparait pas si je décommente
-input[type="radio"] {
-    visibility: hidden;
-} */
 
 .plans label {
     background-color: var(--couleurFond);
@@ -226,6 +213,11 @@ input[type="radio"]:checked + label {
     margin: 5px 0;
 }
 
+.but:disabled {
+    background-color: gray;
+    cursor: default;
+}
+
 .but {
     align-items: center;
     background-clip: padding-box;
@@ -242,12 +234,12 @@ input[type="radio"]:checked + label {
     margin-left: 2%;
 }
 
-.but:hover {
+.but:hover:enabled {
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
     transform: translateY(-1px);
 }
 
-.but:active {
+.but:active:enabled {
   background-color: #136e13;
   box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
   transform: translateY(0);

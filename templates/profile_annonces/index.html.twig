@@ -1,0 +1,100 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}Mes Annonces{% endblock %}
+
+{% block ss2 %}
+<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+{% endblock %}
+
+{% block contenu %}
+
+<h3>Mes Annonces</h3>
+<div class="tout">
+    {% for annonce in annonces %}
+        <div class="blocAnnonce">
+            <div>
+                <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+            </div>
+            <div class="type">{{ annonce.getType() }}</div>
+            <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+            {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+            <h3>{{ annonce.getTitre() }}</h3>
+            <div class="description">{{ annonce.getDescription() }}</div>
+            {% if annonce.getType() == "Materiel" %}
+                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}','{{ annonce.getDuree() }}',null)">Modifier</button>
+            {% endif %}
+            {% if annonce.getType() == "Service" %}
+                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,null)">Modifier</button>
+            {% endif %}
+            <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
+        </div>
+    {% endfor %}
+</div>
+
+{#Edition d'une annonce#}
+<dialog id="editAnnonceDialog">
+    <h2>Modifier l'annonce</h2>
+    <form onsubmit="submitAnnonceForm(event)">
+        <div>
+            <label for="editTitre">Titre :</label>
+            <input type="text" id="editTitre" name="titre" required>
+        </div>
+        <div>
+            <label for="editPrix">Prix :</label>
+            <input type="text" class="input_small" id="editPrix" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10, 50)" required />$<br />
+        </div>
+
+        {#Bloc de modification pour les matériels#}
+        <div id="blocMateriel">
+            <div>
+                <label for="editCategorieMat">Matériel : </label>
+                <select name="editCategorieMat" id="editCategorieMat" required>
+                    <option value="">Sélectionnez un tag pour votre matériel</option>
+                    {% for mats in catMat %}
+                        <option value="{{ mats.getNom() }}">{{ mats.getNom() }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="duree_pret">Durée : </label>
+                <input type="text" class="input_small" id="editDureeNombre" name="duree_pret_valeur" pattern="[0-9]+" title="Entrez une durée valide (par exemple : 12 heures)" required />
+                <select name="duree_pret" id="editDureePeriode" >
+                    <option value="heures">heures</option>
+                    <option value="jours">jours</option>
+                </select>
+            </div>
+        </div>
+
+        {#Bloc de modification pour les services#}
+        <div id="blocService">
+            <div>
+                <label for="editCategorieService">Service : </label>
+                <select name="editCategorieService" id="editCategorieService" required>
+                    <option value="">Sélectionnez un tag pour votre Service</option>
+                    {% for serv in catService %}
+                        <option value="{{ serv.getNom() }}">{{ serv.getNom() }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="date_pret">Date et heure du service :</label>
+                <input type="datetime-local" id="editDatePret" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
+            </div>
+        </div>
+
+
+        <div>
+            <label for="editDescription">Description :</label>
+            <br />
+            <textarea id="editDescription" class="editDescription" name="description"></textarea>
+        </div>
+
+        {#Boutons#}
+        <div class="boutonsDialog">
+            <button type="submit" class="but boutonDialog">Valider</button>
+            <button type="button" class="but boutonDialog" onclick="closeAnnonceDialog()">Annuler</button>
+        </div>
+    </form>
+</dialog>
+{% endblock %}
