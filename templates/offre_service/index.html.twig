@@ -7,18 +7,18 @@
 {% block body %}
 <h2>Nouvelle Annonce</h2>
 <form class = "form_serv" action="{{ path('handle_form_service') }}" method="post">
-    <label for="titre">Titre de l'annonce :</label>
+    <label for="titre">Titre de l'annonce *</label>
     <input type="text" name="titre" required /><br />
     
     <br />
     <div class="special-div">
-    <label for="date_pret">Date et heure du service :</label>
+    <label for="date_pret">Date et heure du service * </label>
     <input type="datetime-local" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
 
 
     <br />
     <br />
-    <label for="recurrence">Récurrence :</label>
+    <label for="recurrence">Récurrence </label>
     <select name="recurrence" id="recurrence">
         <option value="">Aucune récurrence</option>
         <option value="hebdomadaire">Hebdomadaire</option>
@@ -29,17 +29,17 @@
     
     <div id="periode">
     <div id="jours" style="display:none;">
-        <label for="jour_fin">Jour de fin (compris):</label>
+        <label for="jour_fin">Jour de fin (compris) *</label>
         <input type="date" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m-d") }}"><br>
     </div>
 
     <div id="mois" style="display:none;">
-        <label for="mois_fin">Mois de fin (compris) :</label>
+        <label for="mois_fin">Mois de fin (compris) *</label>
         <input type="month" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m") }}" ><br>
     </div>
 
     <div id="semaine" style="display:none;">
-        <label for="semaine_fin">Semaine de fin (comprise) :</label>
+        <label for="semaine_fin">Semaine de fin (comprise) *</label>
         <input type="week" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
     </div>
     </div>
@@ -50,7 +50,7 @@
     <div id="additionalDates"></div>
 
     <br />
-    <label for="service">Service : </label>
+    <label for="service">Service *</label>
     <select name="service" required>
         <option value="">Sélectionnez un tag pour votre Service</option>
         {% for serv in categories %}
@@ -60,13 +60,15 @@
 
     
     <br />
-    <label for="prix">Prix :</label>
+    <label for="prix">Prix *</label>
     <input type="text" class="input_small" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10)" required /><br />
 
     <br />
     <label for="description">Description</label><br />
     <textarea name="description" ></textarea><br />
-
+    </br>
+    <label for="prix">* Champs obligatoires</label>
+    </br>
     <button>Valider</button>
     <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>
 </form>
@@ -160,7 +162,7 @@
         // Créer un élément span pour le texte en gras
         var boldText = document.createElement('span');
         boldText.style.fontWeight = 'bold'; // Appliquer le style de police en gras
-        boldText.textContent = 'Date supplémentaire : '; // Ajouter le texte
+        boldText.textContent = 'Date supplémentaire *'; // Ajouter le texte
 
         // Ajouter le span contenant le texte en gras à newDiv2
         newDiv.appendChild(boldText);
@@ -181,7 +183,7 @@
         // Créer un élément span pour le texte en gras
         var boldText2 = document.createElement('span');
         boldText2.style.fontWeight = 'bold'; // Appliquer le style de police en gras
-        boldText2.textContent = 'Récurrence : '; // Ajouter le texte
+        boldText2.textContent = 'Récurrence '; // Ajouter le texte
 
         // Ajouter le span contenant le texte en gras à newDiv2
         newDiv2.appendChild(boldText2);

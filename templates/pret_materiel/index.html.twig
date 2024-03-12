@@ -9,12 +9,12 @@
 {% block body %}
 <h2>Nouvelle Annonce</h2>
 <form action="{{ path('handle_form_submission') }}" method="post">
-    <label for="titre">Titre de l'annonce :</label>
+    <label for="titre">Titre de l'annonce *</label>
     <input type="text" name="titre" required /><br />
     
     
     <br />
-    <label for="materiel">Matériel : </label>
+    <label for="materiel">Matériel * </label>
     <select name="materiel" required>
         <option value="">Sélectionnez un tag pour votre matériel</option>
         {% for mats in categories %}
@@ -23,7 +23,7 @@
     </select><br />
     
     <br />
-    <label for="duree_pret">Durée : </label>
+    <label for="duree_pret">Durée * </label>
     <input type="text" class="input_small" name="duree_pret_valeur" pattern="[0-9]+([\.][0-9]{1,2})?" title="Entrez une durée valide (par exemple : 12 heures)" required />
     <select name="duree_pret"  >
         <option value="heures">heures</option>
@@ -31,7 +31,7 @@
     </select><br />
     
     <br />
-    <label for="prix">Prix :</label>
+    <label for="prix">Prix *</label>
     <input type="text" class="input_small" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10, 50)" required /><br />
 
 
@@ -39,6 +39,10 @@
     <label for="description">Description</label><br />
     <textarea name="description" ></textarea><br />
     <br />
+
+    </br>
+    <label for="prix">* Champs obligatoires</label>
+    </br>
 
     <button>Valider</button>
     <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>

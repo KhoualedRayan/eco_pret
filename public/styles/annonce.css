@@ -106,8 +106,7 @@ input[type="month"] {
     box-sizing: border-box;
 }
 
-/* Style pour une div spéciale avec bordure */
-/* Style pour une div spéciale avec bordure */
+/* Carré vert */
 .special-div {
     border: 2px solid #8bc34a; /* Couleur de la bordure verte claire */
     border-radius: 10px; /* Coins arrondis */
