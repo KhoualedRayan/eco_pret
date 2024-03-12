@@ -88,8 +88,7 @@ function nouveauMessage(expediteur, text) {
 function ajusterTaille() {
     var textarea = document.getElementById('input');
     textarea.style.height = 'auto'; // Réinitialiser la hauteur
-    alert(textarea.rows);
-    textarea.style.height = (textarea.rows <= 1 ? textarea.scrollHeight/2 : textarea.scrollHeight) + 'px'; // Ajuster la hauteur en fonction de la hauteur du contenu
+    textarea.style.height = textarea.scrollHeight + 'px'; // Ajuster la hauteur en fonction de la hauteur du contenu
 }
 
 
