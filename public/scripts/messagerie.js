@@ -72,22 +72,22 @@ function nouveauMessage(expediteur, text) {
 }
 
 // refresh automatique de la page tt les 5secs
-// function refresh() {
-//     //console.log("refresh");
-//     fetch('/messagerie_refresh')
-//         .then(response => response.json())
-//         .then(data => {
-//             document.querySelector('.colonne-gauche').innerHTML = data.html;
-//             if (idDeLaTransaction) {
-//                 const destinataire = document.getElementById(idDeLaTransaction);
-//                 destinataire.classList.add('selectionne');
-//                 refreshMessages();
-//             }
+function refresh() {
+    //console.log("refresh");
+    fetch('/messagerie_refresh')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.colonne-gauche').innerHTML = data.html;
+            if (idDeLaTransaction) {
+                const destinataire = document.getElementById(idDeLaTransaction);
+                destinataire.classList.add('selectionne');
+                refreshMessages();
+            }
             
-//         })
-//         .catch(error => console.error('Erreur:', error));
-// }
-// const intervalId = setInterval(refresh, 2000);
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+const intervalId = setInterval(refresh, 2000);
 
 function ajusterTaille() {
     var textarea = document.getElementById('input');
@@ -98,14 +98,9 @@ function ajusterTaille() {
 
 function send(expediteur) {
     var text = document.getElementById('input').value.trim();
-<<<<<<< HEAD
-    //alert(text);
-    if (text.length > 0) {
-=======
     if (text.length > 0 ) {
         document.getElementById('input').value = '';
         ajusterTaille();
->>>>>>> 48cadad (reglage input message)
         nouveauMessage(expediteur, text);
     }
 }
