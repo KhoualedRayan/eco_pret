@@ -26,7 +26,10 @@ class ProfileTransactionsController extends AbstractController
         }
 
         $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
-        $transactionsPosteur = $entityManager->getRepository(Transaction::class)->findBy(['posteur' => $this->getUser()]);
+        $transactionsPosteur = $this->getUser()->getAnnonces()
+                                ->filter(function($a) {
+                                    return $a->getTransaction() != null;
+                                })->map(function($a) { return $a->getTransaction(); })->toArray();
         $filesDattentes = $this->getUser()->getAnnoncesOuJattends();
         $annoncesEnAttente = []; // Pour stocker les annonces où l'utilisateur n'est pas premier
 
@@ -180,7 +183,6 @@ class ProfileTransactionsController extends AbstractController
         $transaction->setStatutTransaction("En cours");
         $transaction->setAnnonce($annonce);
         $transaction->setClient($user);
-        $transaction->setPosteur($annonce->getPosteur());
         $transaction->setDateTransaction($date);
         $entityManagerInterface->persist($transaction);
         $entityManagerInterface->flush();

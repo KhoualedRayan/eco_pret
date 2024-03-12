@@ -87,7 +87,6 @@ class HomePageController extends AbstractController
         $transaction->setStatutTransaction("En cours");
         $transaction->setAnnonce($annonce);
         $transaction->setClient($this->getUser());
-        $transaction->setPosteur($annonce->getPosteur());
         $transaction->setDateTransaction($date);
         $entityManagerInterface->persist($transaction);
         $entityManagerInterface->flush();

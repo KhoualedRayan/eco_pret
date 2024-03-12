@@ -67,23 +67,23 @@ function nouveauMessage(expediteur, text) {
     xhr.send(data);
 }
 
-//refresh automatique de la page tt les 5secs
-// function refresh() {
-//     //console.log("refresh");
-//     fetch('/messagerie_refresh')
-//         .then(response => response.json())
-//         .then(data => {
-//             document.querySelector('.colonne-gauche').innerHTML = data.html;
-//             if (idDeLaTransaction) {
-//                 const destinataire = document.getElementById(idDeLaTransaction);
-//                 destinataire.classList.add('selectionne');
-//                 refreshMessages();
-//             }
+// refresh automatique de la page tt les 5secs
+function refresh() {
+    //console.log("refresh");
+    fetch('/messagerie_refresh')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.colonne-gauche').innerHTML = data.html;
+            if (idDeLaTransaction) {
+                const destinataire = document.getElementById(idDeLaTransaction);
+                destinataire.classList.add('selectionne');
+                refreshMessages();
+            }
             
-//         })
-//         .catch(error => console.error('Erreur:', error));
-// }
-// const intervalId = setInterval(refresh, 2000);
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+const intervalId = setInterval(refresh, 2000);
 
 function ajusterTaille() {
     var textarea = document.getElementById('input');
@@ -94,6 +94,7 @@ function ajusterTaille() {
 
 function send(expediteur) {
     var text = document.getElementById('input').value.trim();
+    alert(text);
     if (text.length > 0) {
         nouveauMessage(expediteur, text);
     }

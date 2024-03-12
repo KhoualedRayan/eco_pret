@@ -19,7 +19,7 @@ abstract class Annonce
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posteur')]
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $posteur = null;
 
@@ -169,7 +169,7 @@ abstract class Annonce
     public function contientUserDansFiles(User $user): bool{
         foreach ($this->attentes as $fileAttente) {
             if ($fileAttente->getUser()->getId() == $user->getId()) {
-                return true; // L'utilisateur est trouvé dans l'une des files, donc on retourne vrai immédiatement
+                return true; // L'utilisateur est trouvï¿½ dans l'une des files, donc on retourne vrai immï¿½diatement
             }
         }
         return false;
