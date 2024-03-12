@@ -20,7 +20,8 @@ class MessagerieController extends AbstractController
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
-        } else if ($this->getUser( ) && $this->getUser()->isSleepMode()) {
+        }
+        if ($this->getUser()->isSleepMode()) {
             return $this->redirectToRoute('app_sleep_mode');
         }
         $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($this->getUser());
@@ -38,11 +39,13 @@ class MessagerieController extends AbstractController
             'transactions' => $transactions,
         ]);
     }
+
     #[Route('/messagerie_refresh', name: 'massgerie_refresh')]
     public function refreshMessages(EntityManagerInterface $entityManager): Response{
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
-        } else if ($this->getUser() && $this->getUser()->isSleepMode()) {
+        } 
+        if ($this->getUser()->isSleepMode()) {
             return $this->redirectToRoute('app_sleep_mode');
         }
         $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($this->getUser());
@@ -86,8 +89,8 @@ class MessagerieController extends AbstractController
             }
         }
         
-        $messages = array_reverse($messages);
-        // Générer le HTML pour les messages
+        $messages =$messages;
+        // Gï¿½nï¿½rer le HTML pour les messages
         $html = $this->renderView('messagerie/messages.html.twig', [
             'messages' => $messages,
         ]);
@@ -104,16 +107,11 @@ class MessagerieController extends AbstractController
 
         $data = $request->request;
         $transactionId = $data->get('transactionId');
-        $destinataire = $data->get('destinataire');
+        $expediteur = $data->get('expediteur');
         $message = $data->get('message');
-        $user= null;
         $transaction = $entityManager->getRepository(Transaction::class)->find($transactionId);
         if($transaction){
-            if($transaction->getClient()->getUsername() == $destinataire){
-                $user = $transaction->getPosteur();
-            }else if($transaction->getPosteur()->getUsername() == $destinataire) {
-                $user = $transaction->getClient();
-            }
+            $user = $entityManager->getRepository(User::class)->findOneByUsername($expediteur);
             if($user){
                 $this->envoieMessage($entityManager, $transaction, $message, $user);
                 return new Response('OK');

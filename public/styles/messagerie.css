@@ -4,6 +4,8 @@
     border-radius: 10px;
     background-color: var(--couleurFondMain);
     border: 1px var(--couleurFilet) solid;
+    display: flex;
+    overflow: hidden;
 }
 body, html {
     margin: 0;
@@ -11,19 +13,19 @@ body, html {
     font-family: Arial, sans-serif;
     width: 100%;
     height: 100%;
+    display: flex;
 }
 
 .container {
     display: flex;
     margin: 0 10%;
-    height: 100vh;
+    flex: 1;
 }
 
 .colonne-gauche {
     width: 30%;
     background-color: #f0f0f0;
-    height: 100vh;
-    overflow-y: auto; /* Permet le défilement si la liste est longue */
+    overflow-y: auto; /* Permet le dï¿½filement si la liste est longue */
     padding: 10px;
     box-sizing: border-box;
 }
@@ -36,9 +38,9 @@ body, html {
     display: flex;
     align-items: center; 
     justify-content: center; 
-    padding: 10px 0; 
-    box-sizing: border-box; /* S'assure que le padding est inclus dans la hauteur calculée */
-    border-bottom: 2px solid #0056b3; /* Ajoute une bordure en bas pour la démarcation */
+    padding: 15px 0; 
+    box-sizing: border-box; /* S'assure que le padding est inclus dans la hauteur calculï¿½e */
+    border-bottom: 2px solid #0056b3; /* Ajoute une bordure en bas pour la dï¿½marcation */
     margin-bottom:1%;
 }
 .destinataire {
@@ -64,19 +66,21 @@ body, html {
     }
 
     .destinataire .preview-message {
-        font-size: 0.9em; /* Légèrement plus petit que le texte par défaut */
+        font-size: 0.9em; /* Lï¿½gï¿½rement plus petit que le texte par dï¿½faut */
         color: black; 
     }
 
     .destinataire .date {
         font-size: 0.8em; /* Encore plus petit pour la date */
-        margin-top: 5px; 
+        margin-top: 5px;
+        float: right;
     }
 
 
 .colonne-droite {
-    width: 58%; /* 100% - 30% - 2% d'espace = 68%, puis répartir l'espace restant */
+    width: 60%; /* 100% - 30% - 2% d'espace = 68%, puis rï¿½partir l'espace restant */
     margin-left: 2%;
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
@@ -84,16 +88,17 @@ body, html {
 .section-haut {
     display: flex;
     align-items: center; 
-    justify-content: space-between; /* Positionne le nom à gauche et le bouton à droite */
+    justify-content: space-between; /* Positionne le nom ï¿½ gauche et le bouton ï¿½ droite */
     background-color: #dcdcdc;
     height: 8%;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
 }
 
+
     .section-haut h2 {
         margin: 0;
-        flex-grow: 1; /* Permet au titre de prendre l'espace nécessaire */
+        flex-grow: 1; /* Permet au titre de prendre l'espace nï¿½cessaire */
     }
 
     .section-haut button {
@@ -110,30 +115,33 @@ body, html {
         cursor: pointer; 
     }
 
-        .section-haut button .material-icons {
-            font-size: 20px;
-        }
+    .section-haut button .material-icons {
+        font-size: 20px;
+    }
 
 .section-bas {
+    display: flex;
+    flex-direction: column;
     background-color: #eaeaea; 
-    flex-grow: 1; /* Prend tout l'espace restant */
+    flex: 1; /* Prend tout l'espace restant */
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto; /* Permet le défilement si le contenu dépasse */
+    overflow-y: auto; /* Permet le dï¿½filement si le contenu dï¿½passe */
 }
 .section-messages {
-    flex-grow: 1; /* Prend tout l'espace restant après la section-haut */
+    flex-grow: 1; /* Prend tout l'espace restant aprï¿½s la section-haut */
     background-color: white; 
-    overflow-y: auto; /* Permet le défilement si la liste de messages est longue */
+    overflow-y: auto; /* Permet le dï¿½filement si la liste de messages est longue */
     padding: 10px;
     box-sizing: border-box;
 }
 
 .message {
     background-color: #f9f9f9; 
-    margin-bottom: 10px; /* Petit espace entre chaque message */
-    padding: 10px; /* Espacement intérieur pour chaque message */
-    border-radius: 5px; 
+    padding: 8px; /* Espacement intï¿½rieur pour chaque message */
+    border-radius: 0.75rem;
+    max-width: 80%;
+    width: fit-content;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
@@ -142,82 +150,63 @@ body, html {
         margin-bottom: 5px; 
     }
 
-    .message .date {
-        color: #666; /* Couleur gris foncé pour la date */
-        font-size: 0.9em; /* La date un peu plus petite que le texte normal */
+    .section-bas .date {
+        color: #666; /* Couleur gris foncï¿½ pour la date */
+        font-size: 0.8em; /* La date un peu plus petite que le texte normal */
         margin-bottom: 10px; /* Espace entre la date et le message */
+    }
+    
+    .date.utilisateur {
+        margin-left: auto;
     }
 
     .message .texte-message {
-        line-height: 1.4; /* Espacement des lignes pour une meilleure lisibilité */
+        line-height: 1.4; /* Espacement des lignes pour une meilleure lisibilitï¿½ */
     }
+
 .message-utilisateur {
-    background-color: #007bff; /* Couleur de fond différente pour les messages de l'utilisateur */
+    background-color: #007bff; /* Couleur de fond diffï¿½rente pour les messages de l'utilisateur */
     color: white; /* Texte blanc pour un meilleur contraste */
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-align: right; /* Aligner le texte à droite */
+    margin-left: auto; /* Aligner le texte ï¿½ droite */
 }
 
-    .message-utilisateur .nom,
-    .message-utilisateur .date,
     .message-utilisateur .texte-message {
-        color: white; /* Assurez-vous que le texte reste lisible sur le fond plus foncé */
+        color: white; /* Assurez-vous que le texte reste lisible sur le fond plus foncï¿½ */
     }
 
-/* Utiliser flexbox sur le conteneur des messages pour aligner les messages de l'utilisateur à droite */
-.message-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Aligner les enfants (messages de l'utilisateur) à droite */
-}
 button {
-    padding: 10px 20px;
-    margin-top: 20px;
+    padding: 5px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-.section-haut .cache{
+
+.section-actions {
+    background-color: #dcdcdc;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.cache{
     display:none;
 }
 
-/*CSS POUR LE DIALOG*/
-dialog {
-    background-color: var(--couleurFondMain);
-    color: var(--couleurTexte);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
-    width:40%;
+.material-icons.send {
+    color: #007bff;;
+    font-weight: bold;
+    cursor: pointer;
 }
-.nouveauMessage {
-    border-radius: 0.5em;
-    width: 90%;
-    height: 10vh;
-    padding: 1em;
-    border: 1px solid var(--couleurFilet);
+
+.messInput {
+    flex: 1;
+    height: auto;
+    border: none;
+    background-color: #dcdcdc;
+    overflow: hidden;
+    outline: none;
     resize: none;
-}
-.boutonsDialog {
-    display: flex;
-    justify-content: space-around;
-}
-
-dialog div {
-    margin-bottom: 20px;
-}
-
-.nvMsgIcon {
-    font-size: 16px;
-    color: #8f949b;
-}
-.destinataireMessage .text {
-    width: 92%;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    padding: 1%;
+    vertical-align: center;
 }

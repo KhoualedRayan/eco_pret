@@ -1,83 +1,63 @@
-var nomDuDestinataire = '';
 var idDeLaTransaction = null;
-function appliquerEcouteurs() {
-    const destinataires = document.querySelectorAll('.colonne-gauche .destinataire');
-    const bouton = document.querySelector('.section-haut button');
-    const titreH2 = document.querySelector('.section-haut h2');
-    var form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', nouveauMessage);
+// au lieu de faire un addEventListener, on peut tout simplement crÃ©er une fonction
+// qui prend en paramÃ¨tre le nom de l'interlocuteur au lieu de la fouiller dans le html
+function updateDiscussion(dest, interlocuteur) {
+    // Trouver l'ï¿½lï¿½ment actuellement sï¿½lectionnï¿½ et le dï¿½sï¿½lectionner
+    const selectionne = document.querySelector('.colonne-gauche .destinataire.selectionne');
+    const titreH2 = document.querySelector('.section-haut h3');
+    if (selectionne) {
+        selectionne.classList.remove('selectionne');
     }
-    destinataires.forEach(function (destinataire) {
-        destinataire.addEventListener('click', function () {
-            // Trouver l'élément actuellement sélectionné et le désélectionner
-            const selectionne = document.querySelector('.colonne-gauche .destinataire.selectionne');
-            if (selectionne) {
-                selectionne.classList.remove('selectionne');
-            }
-            // Ajouter la classe 'selectionne' à l'élément cliqué
-            destinataire.classList.add('selectionne');
-            const transactionId = destinataire.id;
-            idDeLaTransaction = transactionId;
-            //console.log("ID de la transaction sélectionnée :", transactionId);
+    // Ajouter la classe 'selectionne' ï¿½ l'ï¿½lï¿½ment cliquï¿½
+    dest.classList.add('selectionne');
+    const transactionId = dest.id;
+    idDeLaTransaction = transactionId;
+    //console.log("ID de la transaction sï¿½lectionnï¿½e :", transactionId);
+    
+    const sectionHautH2 = document.querySelector('.colonne-droite .section-haut h3');
+    if (sectionHautH2) {
+        sectionHautH2.textContent = interlocuteur;
+    }
+    titreH2.classList.remove('cache');
+    document.getElementById('actions').classList.remove('cache');
 
-            // Mettre à jour le contenu de la section haut
-            const nomDestinataire = destinataire.querySelector('.nom').textContent;
-            nomDuDestinataire = nomDestinataire;
-            const sectionHautH2 = document.querySelector('.colonne-droite .section-haut h2');
-            if (sectionHautH2) {
-                sectionHautH2.textContent = nomDestinataire;
-            }
-            bouton.classList.remove('cache');
-            titreH2.classList.remove('cache');
-
-            // Mettre à jour le contenu de la section bas
-            refreshMessages();
-        });
-    });
+    // Mettre ï¿½ jour le contenu de la section bas
+    refreshMessages();
 }
+
 function refreshMessages() {
-    // Mettre à jour le contenu de la section bas
+    // Mettre ï¿½ jour le contenu de la section bas
     fetch(`/charger-messages/${idDeLaTransaction}`)
         .then(response => response.json())
         .then(data => {
             document.querySelector('.section-bas').innerHTML = data.html;
+            var zoneScroll = document.querySelector(".section-bas");
+            zoneScroll.scrollTop = zoneScroll.scrollHeight; // DÃ©filement vers le bas dÃ¨s le dÃ©but
+            ajusterTaille();
         })
         .catch(error => console.error('Erreur:', error));
 }
-document.addEventListener('DOMContentLoaded', function () {
-    appliquerEcouteurs();
-});
-function openNouveauMessageDialog() {
-    document.getElementById('destinataire').value = nomDuDestinataire;
 
-    document.getElementById('nouveauMessageDialog').showModal();
-}
+function nouveauMessage(expediteur, text) {
 
-function closeNouveauMessageDialog() {
-    document.getElementById('nouveauMessageDialog').close();
-}
-function nouveauMessage(event) {
-    event.preventDefault();
-    //console.log("Envoie de nouveau message en cours...");
+    if (idDeLaTransaction == null) {
+        return;
+    }
 
     var xhr = new XMLHttpRequest();
 
     var data = new FormData();
-    data.append('destinataire', document.getElementById('destinataire').value);
-    data.append('message', document.getElementById('nouveauMessage').value);
+    data.append('expediteur', expediteur);
+    data.append('message', text);
     data.append('transactionId', idDeLaTransaction);
-    //console.log("Destinataire : " + document.getElementById('destinataire').value);
-    //console.log("Message : " + document.getElementById('nouveauMessage').value);
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText != "OK") {
                 console.log(xhr.responseText)
             }
             else {
-                //console.log('message envoyé');
-                document.getElementById('nouveauMessage').value = '';
-                document.getElementById('nouveauMessageDialog').close();
+                document.getElementById('input').value = '';
                 refreshMessages();
             }
         }
@@ -86,6 +66,7 @@ function nouveauMessage(event) {
     xhr.open('POST', '/ajax/nouveau_message', true);
     xhr.send(data);
 }
+
 //refresh automatique de la page tt les 5secs
 function refresh() {
     //console.log("refresh");
@@ -93,7 +74,6 @@ function refresh() {
         .then(response => response.json())
         .then(data => {
             document.querySelector('.colonne-gauche').innerHTML = data.html;
-            appliquerEcouteurs();
             if (idDeLaTransaction) {
                 const destinataire = document.getElementById(idDeLaTransaction);
                 destinataire.classList.add('selectionne');
@@ -103,4 +83,24 @@ function refresh() {
         })
         .catch(error => console.error('Erreur:', error));
 }
-const intervalId = setInterval(refresh, 5000);
+const intervalId = setInterval(refresh, 2000);
+
+function ajusterTaille() {
+    var textarea = document.getElementById('input');
+    textarea.style.height = 'auto'; // RÃ©initialiser la hauteur
+    textarea.style.height = textarea.scrollHeight/2 + 'px'; // Ajuster la hauteur en fonction de la hauteur du contenu
+}
+
+
+function send(expediteur) {
+    var text = document.getElementById('input').value.trim();
+    if (text.length > 0) {
+        nouveauMessage(expediteur, text);
+    }
+}
+
+function entree(event, expediteur) {
+    if (event.keyCode === 13 && !event.shiftKey) {
+        send(expediteur);
+    }
+}

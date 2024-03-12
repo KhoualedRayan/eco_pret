@@ -1,19 +1,19 @@
 <div class="titre-messages">
-    <h2>Messages</h2>
+    <h2>Discussions</h2>
 </div>
 {% for transaction in transactions %}
-    <div class="destinataire" id="{{transaction.id}}" >
-        {% if transaction.client == app.user %}
-            <p class="nom">{{transaction.posteur.username}}</p>
-        {%else%}
-            <p class="nom">{{transaction.client.username}}</p>
-        {%endif%}
-        {% if transaction.messages is not empty %}
-            {% set dernierMessage = transaction.messages|last %}
-            <p class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</p>
-            <p class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</p>
-        {%else%}
-            <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
-        {% endif %}
+    {% set interlocuteur = (transaction.annonce.posteur == app.user) ? transaction.client : transaction.annonce.posteur %}
+    <div class="destinataire" id="{{transaction.id}}" onclick="updateDiscussion(this, '{{interlocuteur.username}}')">
+        {% if transaction.annonce.posteur == app.user %}Votre a{% else %}A{% endif %}nnonce '<span style="font-weight: bold;">{{ transaction.annonce.titre }}</span>'{% if transaction.client == app.user %} par <span class="nom">{{transaction.annonce.posteur.username}}{% endif %}</span>
+        <br><br>
+        <div>
+            {% if transaction.messages is not empty %}
+                {% set dernierMessage = transaction.messages|last %}
+                <span class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</span>
+                {% if dernierMessage.expediteur != app.user %}{{dernierMessage.expediteur.username}}: {% endif %}<span class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</span>
+            {% else %}
+                <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
+            {% endif %}
+        </div>
     </div>
 {% endfor %}

@@ -12,62 +12,22 @@
 {% block body %}
     <div class="container">
         <div class="colonne-gauche">
-            <div class="titre-messages">
-                <h2>Messages</h2>
-            </div>
-            {% for transaction in transactions %}
-                <div class="destinataire" id="{{transaction.id}}" >
-                    {% if transaction.client == app.user %}
-                        <p class="nom">{{transaction.posteur.username}}</p>
-                    {%else%}
-                        <p class="nom">{{transaction.client.username}}</p>
-                    {%endif%}
-                    {% if transaction.messages is not empty %}
-                        {% set dernierMessage = transaction.messages|last %}
-                        <p class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</p>
-                        <p class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</p>
-                    {%else%}
-                        <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            {% include 'messagerie/messagesRefresh.html.twig' %}
         </div>
         <div class="colonne-droite">
             <div class="section-haut">
-                <h2 class="cache"></h2>
-                <button class="cache" onclick="openNouveauMessageDialog()"><span class="material-icons">reply</span></button>
+                <h3 class="cache"></h3>
             </div>
             <div class="section-bas">
                 <p>Sélectionnez une transaction pour voir les messages.</p>
                 <!-- Messages ici dans messages.html.twig -->
             </div>
+            <div class="section-actions cache" id="actions">
+                <button>Valider</button>
+                <textarea class="messInput" id="input" maxlength="500" placeholder="Envoyer un message" oninput="ajusterTaille()" onkeypress="entree(event, '{{app.user.username}}')"></textarea>
+                <span class="material-icons send" onclick="send('{{app.user.username}}')">send</span>
+            </div>
         </div>
-        <!-- Boîte de dialogue pour un nouveau message -->
-        <dialog id='nouveauMessageDialog'>
-            <form>
-                <div class="nvMsgIcon">
-                    <span class="material-icons">edit</span>
-                    <span>Nouveau message</span>
-                </div>
-                <div>
-                    <label for="destinataire"><b>Destinataire</b></label>
-                    <div class='destinataireMessage'>
-                        <input type="text" id="destinataire" class='text' name="destinataire" disabled required>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="nouveauMessage"><b>Message</b></label>
-                    <br />
-                    <textarea id="nouveauMessage" class="nouveauMessage" name="message"></textarea>
-                </div>
-
-                <div class="boutonsDialog">
-                    <button type="submit" class='but boutonDialog'>Valider</button>
-                    <button type="button" class='but boutonDialog' onclick="closeNouveauMessageDialog()">Annuler</button>
-                </div>
-            </form>
-        </dialog>
     </div>
 
 

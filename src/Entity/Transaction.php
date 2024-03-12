@@ -39,15 +39,17 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?User $client = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $posteur = null;
-
     #[ORM\OneToMany(mappedBy: 'transaction', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
     #[ORM\OneToOne(mappedBy: 'transaction')]
     private ?Annonce $annonce = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $prix_final = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $duree_final = null;
 
     public function __construct()
     {
@@ -143,18 +145,6 @@ class Transaction
         return $this;
     }
 
-    public function getPosteur(): ?User
-    {
-        return $this->posteur;
-    }
-
-    public function setPosteur(?User $posteur): static
-    {
-        $this->posteur = $posteur;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Message>
      */
@@ -212,6 +202,30 @@ class Transaction
         }
 
         $this->annonce = $annonce;
+
+        return $this;
+    }
+
+    public function getPrixFinal(): ?int
+    {
+        return $this->prix_final;
+    }
+
+    public function setPrixFinal(?int $prix_final): static
+    {
+        $this->prix_final = $prix_final;
+
+        return $this;
+    }
+
+    public function getDureeFinal(): ?string
+    {
+        return $this->duree_final;
+    }
+
+    public function setDureeFinal(?string $duree_final): static
+    {
+        $this->duree_final = $duree_final;
 
         return $this;
     }

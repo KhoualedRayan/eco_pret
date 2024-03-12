@@ -23,8 +23,9 @@ class TransactionRepository extends ServiceEntityRepository
     public function findByClientOrPosteur(UserInterface $user)
     {
         return $this->createQueryBuilder('t')
+            ->leftJoin('t.annonce', 'a')
             ->where('t.client = :user')
-            ->orWhere('t.posteur = :user')
+            ->orWhere('a.posteur = :user')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
