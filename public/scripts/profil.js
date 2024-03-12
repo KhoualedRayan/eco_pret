@@ -137,7 +137,7 @@ function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle,id,type,
         document.getElementById("blocMateriel").style.display = "block";
         document.getElementById("blocService").style.display = "none";
         document.getElementById("editCategorieService").required = false;
-        document.getElementById("editDatePret").required = false;
+        document.getElementById("date_pret").required = false;
         
     } else if (type == "Service") {
         document.getElementById('editCategorieService').value = categorie;
@@ -175,6 +175,33 @@ function submitAnnonceForm(event) {
         console.log(document.getElementById('editCategorieMat').value);
     } else if (annonceType == "Service") {
         data.append('nouvelleCategorie', document.getElementById('editCategorieService').value);
+        /*
+        $additionalDates = $request->request->all()['additional_date'] ?? null;
+        $additionalRecu = $request->request->all()['additional_recurrence'] ?? null;
+        $additionalEnds = $request->request->all()['additional_ends'] ?? null;
+
+        $init_date = $request->request->get('date_pret');
+        $init_reccu = $request->request->get('recurrence');
+
+        */
+        let additionalDatesValues = [];
+
+        let additionalDates = document.getElementsByName('additional_date[]');
+        for (let i = 0; i < additionalDates.length; i++) {
+            data.append(`additional_date[${i}]`, additionalDates[i].value);
+        }
+
+        let additionalRecurrences = document.getElementsByName('additional_recurrence[]');
+        for (let i = 0; i < additionalRecurrences.length; i++) {
+            data.append(`additional_recurrence[${i}]`, additionalRecurrences[i].value);
+        }
+        let additionalEnds = document.getElementsByName('additional_ends[]');
+        for (let i = 0; i < additionalEnds.length; i++) {
+            data.append(`additional_ends[${i}]`, additionalEnds[i].value);
+        }
+
+        data.append('date_pret', document.getElementById('date_pret').value);
+        data.append('recurrence', document.getElementById('recurrence').value);
     }
 
     xhr.onreadystatechange = function () {

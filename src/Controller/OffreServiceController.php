@@ -63,7 +63,6 @@ class OffreServiceController extends AbstractController
 
         $init_date = $request->request->get('date_pret');
         $init_reccu = $request->request->get('recurrence');
-
         #FIRST DATE
         if($init_reccu == ""){#DATE PONCTUELLE
             $first_date = new DatePonctuelleService() ;
@@ -82,8 +81,6 @@ class OffreServiceController extends AbstractController
         }
 
         
-        dump($request->request->all());
-
         $index = 0;
         $index_ends = 3;
         if(is_array($additionalDates)) {

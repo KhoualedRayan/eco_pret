@@ -4,6 +4,7 @@
 
 {% block ss2 %}
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
 {% endblock %}
 
 {% block contenu %}
@@ -35,7 +36,7 @@
 {#Edition d'une annonce#}
 <dialog id="editAnnonceDialog">
     <h2>Modifier l'annonce</h2>
-    <form onsubmit="submitAnnonceForm(event)">
+    <form onsubmit="submitAnnonceForm(event)" >
         <div>
             <label for="editTitre">Titre :</label>
             <input type="text" id="editTitre" name="titre" required>
@@ -77,10 +78,39 @@
                     {% endfor %}
                 </select>
             </div>
-            <div>
-                <label for="date_pret">Date et heure du service :</label>
-                <input type="datetime-local" id="editDatePret" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
+            <div class="special-div">
+                <label for="date_pret">Date et heure du service * </label>
+                <input type="datetime-local" id="date_pret" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
+                <label for="recurrence">Récurrence </label>
+                <select name="recurrence" id="recurrence">
+                    <option value="">Aucune récurrence</option>
+                    <option value="hebdomadaire">Hebdomadaire</option>
+                    <option value="quotidienne">Quotidienne</option>
+                    <option value="mensuelle">Mensuelle</option>
+                </select>
+                <br />
+    
+                <div id="periode">
+                <div id="jours" style="display:none;">
+                    <label for="jour_fin">Jour de fin (compris) *</label>
+                    <input type="date" id="additional_ends[]" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m-d") }}"><br>
+                </div>
+
+                <div id="mois" style="display:none;">
+                    <label for="mois_fin">Mois de fin (compris) *</label>
+                    <input type="month" id="additional_ends[]" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y-m") }}" ><br>
+                </div>
+
+                <div id="semaine" style="display:none;">
+                    <label for="semaine_fin">Semaine de fin (comprise) *</label>
+                    <input type="week" id="additional_ends[]" name="additional_ends[]" class="additional-end" min="{{ "now"|date("Y") }}-W{{ "now"|date("W") }}" ><br>
+                </div>
+                </div>
             </div>
+
+                <br /><button type="button" id="addDateButton">Ajouter une autre date</button><br /><br />
+
+                <div id="additionalDates"></div>
         </div>
 
 
@@ -97,4 +127,5 @@
         </div>
     </form>
 </dialog>
+<script src="{{ asset('scripts/service.js') }}"></script>
 {% endblock %}

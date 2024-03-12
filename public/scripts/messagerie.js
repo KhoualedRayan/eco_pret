@@ -94,7 +94,7 @@ function ajusterTaille() {
 
 function send(expediteur) {
     var text = document.getElementById('input').value.trim();
-    alert(text);
+    //alert(text);
     if (text.length > 0) {
         nouveauMessage(expediteur, text);
     }
