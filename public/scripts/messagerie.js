@@ -68,27 +68,28 @@ function nouveauMessage(expediteur, text) {
 }
 
 //refresh automatique de la page tt les 5secs
-function refresh() {
-    //console.log("refresh");
-    fetch('/messagerie_refresh')
-        .then(response => response.json())
-        .then(data => {
-            document.querySelector('.colonne-gauche').innerHTML = data.html;
-            if (idDeLaTransaction) {
-                const destinataire = document.getElementById(idDeLaTransaction);
-                destinataire.classList.add('selectionne');
-                refreshMessages();
-            }
+// function refresh() {
+//     //console.log("refresh");
+//     fetch('/messagerie_refresh')
+//         .then(response => response.json())
+//         .then(data => {
+//             document.querySelector('.colonne-gauche').innerHTML = data.html;
+//             if (idDeLaTransaction) {
+//                 const destinataire = document.getElementById(idDeLaTransaction);
+//                 destinataire.classList.add('selectionne');
+//                 refreshMessages();
+//             }
             
-        })
-        .catch(error => console.error('Erreur:', error));
-}
-const intervalId = setInterval(refresh, 2000);
+//         })
+//         .catch(error => console.error('Erreur:', error));
+// }
+// const intervalId = setInterval(refresh, 2000);
 
 function ajusterTaille() {
     var textarea = document.getElementById('input');
     textarea.style.height = 'auto'; // Réinitialiser la hauteur
-    textarea.style.height = textarea.scrollHeight/2 + 'px'; // Ajuster la hauteur en fonction de la hauteur du contenu
+    alert(textarea.rows);
+    textarea.style.height = (textarea.rows <= 1 ? textarea.scrollHeight/2 : textarea.scrollHeight) + 'px'; // Ajuster la hauteur en fonction de la hauteur du contenu
 }
 
 
