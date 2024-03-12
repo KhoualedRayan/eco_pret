@@ -21,8 +21,16 @@ function updateDiscussion(dest, interlocuteur) {
     titreH2.classList.remove('cache');
     document.getElementById('actions').classList.remove('cache');
 
-    // Mettre � jour le contenu de la section bas
-    refreshMessages();
+    // Mettre à jour le contenu de la section bas
+    // + la barre de scroll, à ne pas assimiler avec refreshMessages car cela reseterait la barre de scroll toutes les 2 secondes
+    fetch(`/charger-messages/${idDeLaTransaction}`)
+        .then(response => response.json())
+        .then(data => {
+            var zoneScroll = document.querySelector(".section-bas");
+            zoneScroll.innerHTML = data.html;
+            zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
+        })
+        .catch(error => console.error('Erreur:', error));
 }
 
 function refreshMessages() {
@@ -31,9 +39,6 @@ function refreshMessages() {
         .then(response => response.json())
         .then(data => {
             document.querySelector('.section-bas').innerHTML = data.html;
-            var zoneScroll = document.querySelector(".section-bas");
-            zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
-            ajusterTaille();
         })
         .catch(error => console.error('Erreur:', error));
 }
@@ -57,7 +62,6 @@ function nouveauMessage(expediteur, text) {
                 console.log(xhr.responseText)
             }
             else {
-                document.getElementById('input').value = '';
                 refreshMessages();
             }
         }
@@ -68,22 +72,22 @@ function nouveauMessage(expediteur, text) {
 }
 
 // refresh automatique de la page tt les 5secs
-function refresh() {
-    //console.log("refresh");
-    fetch('/messagerie_refresh')
-        .then(response => response.json())
-        .then(data => {
-            document.querySelector('.colonne-gauche').innerHTML = data.html;
-            if (idDeLaTransaction) {
-                const destinataire = document.getElementById(idDeLaTransaction);
-                destinataire.classList.add('selectionne');
-                refreshMessages();
-            }
+// function refresh() {
+//     //console.log("refresh");
+//     fetch('/messagerie_refresh')
+//         .then(response => response.json())
+//         .then(data => {
+//             document.querySelector('.colonne-gauche').innerHTML = data.html;
+//             if (idDeLaTransaction) {
+//                 const destinataire = document.getElementById(idDeLaTransaction);
+//                 destinataire.classList.add('selectionne');
+//                 refreshMessages();
+//             }
             
-        })
-        .catch(error => console.error('Erreur:', error));
-}
-const intervalId = setInterval(refresh, 2000);
+//         })
+//         .catch(error => console.error('Erreur:', error));
+// }
+// const intervalId = setInterval(refresh, 2000);
 
 function ajusterTaille() {
     var textarea = document.getElementById('input');
@@ -94,14 +98,21 @@ function ajusterTaille() {
 
 function send(expediteur) {
     var text = document.getElementById('input').value.trim();
+<<<<<<< HEAD
     //alert(text);
     if (text.length > 0) {
+=======
+    if (text.length > 0 ) {
+        document.getElementById('input').value = '';
+        ajusterTaille();
+>>>>>>> 48cadad (reglage input message)
         nouveauMessage(expediteur, text);
     }
 }
 
 function entree(event, expediteur) {
     if (event.keyCode === 13 && !event.shiftKey) {
-        send(expediteur);
+        event.preventDefault();
+        send(expediteur);        
     }
 }
