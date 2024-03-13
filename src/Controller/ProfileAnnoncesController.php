@@ -32,7 +32,8 @@ class ProfileAnnoncesController extends AbstractController
             }
         }
 
-        $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser()]);
+        $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser(), 'statut' => 'Disponible']);
+        $annonceFinis = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser(), 'statut' => 'Indisponible']);
 
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
@@ -45,6 +46,7 @@ class ProfileAnnoncesController extends AbstractController
         return $this->render('profile_annonces/index.html.twig', [
             'controller_name' => 'ProfileAnnoncesController',
             'annonces' => $annonces,
+            'annoncesFinis' => $annonceFinis,
             'catMat' => $categoriesMateriel,
             'catService' => $categoriesService,
             'onglet' => "annonces",

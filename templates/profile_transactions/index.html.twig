@@ -72,18 +72,18 @@
     </div>
     <div id="transactionsTermines" class="typeSection" style="display: none;">
         {# Annonces ou l'utilisateur est en attente #}
-        {% for annonce in transactionsTermines %}
+        {% for transaction in transactionsTermines %}
             <div class="blocAnnonce">
                 <div>
-                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                    <span class="username">Prestataire : {{ annonce.getPosteur().getUsername() }}</span>
+                    <span class="prix" >{{ transaction.annonce.prix }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">Prestataire : {{ transaction.annonce.posteur.getUsername() }}</span>
+                    <span class="username">Client : {{ transaction.getClient().getUsername() }}</span>
                 </div>
-                <div class="type">{{ annonce.getType() }}</div>
-                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-                <h3>{{ annonce.getTitre() }}</h3>
-                <div class="description">{{ annonce.getDescription() }}</div>
-                <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
+                <div class="type">{{ transaction.getAnnonce().getType() }}</div>
+                <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
+                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
+                <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
             </div>
         {% endfor %}
     </div>

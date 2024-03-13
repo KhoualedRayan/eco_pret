@@ -3,83 +3,108 @@
 {% block title %}Mes Annonces{% endblock %}
 
 {% block ss2 %}
-<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
-<link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/transaction.css') }}">
 {% endblock %}
 
 {% block contenu %}
 
 <h3>Mes Annonces</h3>
+<div>
+    <b>Statut de l'annonce :</b>
+    <select id="typeTransactionSelect">
+        <option value="disponible">Disponible</option>
+        <option value="indisponible">Terminé</option>
+    </select>
+</div>
 <div class="tout">
-    {% for annonce in annonces %}
-        <div class="blocAnnonce">
-            <div>
-                <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+    <div id="annoncesDisponible" class="typeSection">
+        {% for annonce in annonces %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+                {% if annonce.getType() == "Materiel" %}
+                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}','{{ annonce.getDuree() }}',null,null,null,null)">Modifier</button>
+                {% endif %}
+                {% if annonce.getType() == "Service" %}
+                    {%if annonce.getDatePoncts().get(0) != null%}
+                        {% set datePoncts = [] %}
+                        {%for dateP in annonce.getDatePoncts()%}
+                            {% set datePoncts = datePoncts|merge([dateP.date|date('Y-m-d H:i')]) %}
+                        {%endfor%}
+                        {% set datePonctsString = datePoncts|json_encode|escape('js') %}
+                        {% if annonce.getRecurrence().get(0)!=null  %}
+                            {% set dateReccu_Debut = [] %}
+                            {% set dateReccu_Fin   = [] %}
+                            {% set dateReccu_Type  = [] %}
+                            {%for dateR in annonce.getRecurrence()%}
+                                {% if dateR.typeRecurrence == 'quotidienne' %}
+                                    {% set formatFin = 'Y-m-d' %}
+                                {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
+                                    {% set formatFin = 'Y-!W'%}
+                                {% elseif dateR.typeRecurrence == 'mensuelle' %}
+                                    {% set formatFin = 'Y-m' %}
+                                {% endif %}
+                                {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
+                                {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
+                                {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
+                            {%endfor%}
+                            {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
+                            {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
+                            {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
+                            <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}','{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
+                        {% else %}
+                            <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}',null,null,null)">Modifier</button>
+                        {% endif %}
+                    {%else%}
+                            {% set dateReccu_Debut = [] %}
+                            {% set dateReccu_Fin   = [] %}
+                            {% set dateReccu_Type  = [] %}
+                            {%for dateR in annonce.getRecurrence()%}
+                                {% if dateR.typeRecurrence == 'quotidienne' %}
+                                    {% set formatFin = 'Y-m-d' %}
+                                {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
+                                    {% set formatFin = 'Y-!W'%}
+                                {% elseif dateR.typeRecurrence == 'mensuelle' %}
+                                    {% set formatFin = 'Y-m' %}
+                                {% endif %}
+                                {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
+                                {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
+                                {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
+                            {%endfor%}
+                            {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
+                            {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
+                            {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
+                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,null,'{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
+                    {%endif%}
+                {% endif %}
+                <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
             </div>
-            <div class="type">{{ annonce.getType() }}</div>
-            <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-            {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-            <h3>{{ annonce.getTitre() }}</h3>
-            <div class="description">{{ annonce.getDescription() }}</div>
-            {% if annonce.getType() == "Materiel" %}
-                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}','{{ annonce.getDuree() }}',null,null,null,null)">Modifier</button>
-            {% endif %}
-            {% if annonce.getType() == "Service" %}
-                {%if annonce.getDatePoncts().get(0) != null%}
-                    {% set datePoncts = [] %}
-                    {%for dateP in annonce.getDatePoncts()%}
-                        {% set datePoncts = datePoncts|merge([dateP.date|date('Y-m-d H:i')]) %}
-                    {%endfor%}
-                    {% set datePonctsString = datePoncts|json_encode|escape('js') %}
-                    {% if annonce.getRecurrence().get(0)!=null  %}
-                        {% set dateReccu_Debut = [] %}
-                        {% set dateReccu_Fin   = [] %}
-                        {% set dateReccu_Type  = [] %}
-                        {%for dateR in annonce.getRecurrence()%}
-                            {% if dateR.typeRecurrence == 'quotidienne' %}
-                                {% set formatFin = 'Y-m-d' %}
-                            {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
-                                {% set formatFin = 'Y-!W'%}
-                            {% elseif dateR.typeRecurrence == 'mensuelle' %}
-                                {% set formatFin = 'Y-m' %}
-                            {% endif %}
-                            {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
-                            {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
-                        {%endfor%}
-                        {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
-                        {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
-                        {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
-                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}','{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
-                    {% else %}
-                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}',null,null,null)">Modifier</button>
-                    {% endif %}
-                {%else%}
-                        {% set dateReccu_Debut = [] %}
-                        {% set dateReccu_Fin   = [] %}
-                        {% set dateReccu_Type  = [] %}
-                        {%for dateR in annonce.getRecurrence()%}
-                            {% if dateR.typeRecurrence == 'quotidienne' %}
-                                {% set formatFin = 'Y-m-d' %}
-                            {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
-                                {% set formatFin = 'Y-!W'%}
-                            {% elseif dateR.typeRecurrence == 'mensuelle' %}
-                                {% set formatFin = 'Y-m' %}
-                            {% endif %}
-                            {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
-                            {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
-                        {%endfor%}
-                        {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
-                        {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
-                        {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
-                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,null,'{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
-                {%endif%}
-            {% endif %}
-            <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+    <div id="annoncesIndisponible" class="typeSection" style="display: none;">
+        {% for annonce in annoncesFinis %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 {#Edition d'une annonce#}
@@ -178,4 +203,20 @@
     </form>
 </dialog>
 <script src="{{ asset('scripts/service.js') }}"></script>
+<script>
+    document.getElementById('typeTransactionSelect').addEventListener('change', function() {
+        var valeur = this.value;
+        document.querySelectorAll('.typeSection').forEach(function(section) {
+            section.style.display = 'none'; // Masquer toutes les sections
+        });
+        if (valeur === 'disponible') {
+            document.getElementById('annoncesDisponible').style.display = 'contents';
+        } else if (valeur === 'indisponible') {
+            document.getElementById('annoncesIndisponible').style.display = 'contents';
+        } 
+    });
+
+    // Pour s'assurer que par défaut, "Client" est affiché
+    document.getElementById('annoncesDisponible').style.display = 'contents';
+</script>
 {% endblock %}
