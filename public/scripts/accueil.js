@@ -16,7 +16,7 @@ function confirmerEmprunt(event, id, type) {
                 else {
                     //Transaction réussi
                     console.log(xhr.responseText);
-                    window.location.href = '/profile';
+                    window.location.href = '/profile/transactions';
                 }
             }
         };

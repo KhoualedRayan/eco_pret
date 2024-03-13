@@ -80,7 +80,7 @@ class OffreServiceController extends AbstractController
             $annonce->addRecurrence($first_reccu);
         }
 
-        
+
         $index = 0;
         $index_ends = 3;
         if(is_array($additionalDates)) {
@@ -102,13 +102,13 @@ class OffreServiceController extends AbstractController
                     $index_ends++;
                 }
                 $index++;
-                
+
             }
         }
         $entityManager->persist($annonce);
         $entityManager->flush();
 
         $this->addFlash('notifications', 'Félicitations, votre annonce a été publiée !');
-        return $this->redirectToRoute('app_home_page');
+        return $this->redirectToRoute('app_profile_annonces');
     }
 }
