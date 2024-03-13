@@ -42,10 +42,10 @@ Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
 <div>
     {% set userRoleValide = transaction.getStatutTransaction()|split('-')[1] %}
     {% if userRole != userRoleValide %}
-    <button type="submit" class='but boutonDialog'>Accepter</button>
-    <button type="submit" class='but boutonDialog'>Refuser</button>
+    <button onclick="accepter()">Accepter</button>
+    <button onclick="refuser()">Refuser</button>
     {% endif %}
-    <button type="button" class='but boutonDialog' onclick="closeValidDialog()">Annuler</button>
+    <button type="button" onclick="closeValidDialog()">Annuler</button>
 
 </div>
 {% endif %}

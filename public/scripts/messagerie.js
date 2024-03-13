@@ -147,3 +147,45 @@ function valider() {
 function closeValidDialog() {
     document.getElementById("valider").close();
 }
+
+function accepter() {
+    if (idDeLaTransaction == null) {
+        alert("Something went wrong.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "ERROR") {
+                document.getElementById("valider").close();
+                document.getElementById('validerBouton').innerHTML = "done_all";
+                document.getElementById('validerBouton').classList.add("material-icons");
+            } else {
+                alert("erreur");
+            } 
+        }
+    };
+    xhr.open('POST', '/ajax/accepter/'+idDeLaTransaction, true);
+    xhr.send();
+}
+
+function refuser() {
+    if (idDeLaTransaction == null) {
+        alert("Something went wrong.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "ERROR") {
+                document.getElementById("valider").close();
+            } else {
+                alert("erreur");
+            } 
+        }
+    };
+    xhr.open('POST', '/ajax/refuser/'+idDeLaTransaction, true);
+    xhr.send();
+}

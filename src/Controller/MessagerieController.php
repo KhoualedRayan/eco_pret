@@ -12,9 +12,17 @@ use App\Entity\User;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
 use DateTime;
+use App\Service\Outils;
 
 class MessagerieController extends AbstractController
 {
+    private $outils;
+
+    public function __construct(Outils $outils)
+    {
+        $this->outils = $outils;
+    }
+
     #[Route('/messagerie', name: 'app_messagerie')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -76,7 +84,7 @@ class MessagerieController extends AbstractController
                         $entityManager->flush();
                     }
                 }
-                $contenuDecrypte = $this->decrypterMessage($msg->getContenu());
+                $contenuDecrypte = $this->outils->decrypterMessage($msg->getContenu());
                 $messages[] = [
                     'id' => $msg->getId(),
                     'contenu' => $contenuDecrypte,
@@ -131,21 +139,6 @@ class MessagerieController extends AbstractController
         $entityManager->persist($message);
         $entityManager->flush();
     }
-    function crypterMessage($message)
-    {
-        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $cleSecrete, 0, $iv);
-        return base64_encode($iv . $messageCrypte);
-    }
-    function decrypterMessage($messageCrypte)
-    {
-        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
-        $messageCrypte = base64_decode($messageCrypte);
-        $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
-        $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
-        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
-    }
 
     #[Route('/ajax/validation/{id}', name: 'validation')]
     public function openValider(int $id, TransactionRepository $tr): Response
@@ -154,7 +147,7 @@ class MessagerieController extends AbstractController
             return new Response("ERROR");
         }
         $transaction = $tr->find($id);
-        if ($transaction && $transaction->getStatutTransaction() != "Valide") {
+        if ($transaction && $transaction->getStatutTransaction() != "Terminer") {
             return new Response($this->renderView('messagerie/validerDialog.html.twig', [
                                         'transaction' => $transaction,
                                         'statut' => $transaction->getStatutTransaction(), 'userRole' => $transaction->getRole($this->getUser())
@@ -196,5 +189,67 @@ class MessagerieController extends AbstractController
                 return $this->redirectToRoute('app_messagerie');
             }
         }
+    }
+
+    #[Route('/ajax/accepter/{id}', name: 'validation')]
+    public function accepterT(int $id, TransactionRepository $tr, EntityManagerInterface $em): Response
+    {
+        if (!$this->getUser()) {
+            return new Response("ERROR");
+        }
+        $transaction = $tr->find($id);
+        if (!$transaction) return new Response("ERROR");
+
+        $cout =  $transaction->getPrixFinal();
+        $client = $transaction->getClient();
+        if ($client->getNbFlorains() < $cout) {
+            $this->addFlash('notifications', "Le client (".$transaction->getClient()->getUsername().") n'a pas assez de florains. Transaction impossible !");
+        } else {
+            // on calcule les nouveaux nombres de florains
+            $client->setNbFlorains($client->getNbFlorains()-$cout);
+            $posteur = $transaction->getAnnonce()->getPosteur();
+            $posteur->setNbFlorains($posteur->getNbFlorains()+$cout);
+            $transaction->setStatutTransaction("Terminer");
+            $transaction->getAnnonce()->setStatut("Indisponible");
+            $notif = "Transaction '".$transaction->getAnnonce()->getTitre()."' réalisée ! Vous pouvez continuer à échanger jusqu'à la fin de votre prêt/service.";
+            $notification = new Notification();
+            $notification->setContenu($this->outils->crypterMessage($notif));
+            $notification->setAEteLu(false);
+            $notification->setDateEnvoi(new DateTime());
+            // on envoie l'information que la transaction est réalisée en notifications à celui qui n'a pas validé en dernier
+            $notification->setUser($client == $this->getUser() ? $posteur : $client);
+            $em->merge($client);
+            $em->merge($posteur);
+            $em->merge($transaction);
+            $em->merge($transaction->getAnnonce());
+            $em->persist($notification);
+            $em->flush();
+            $this->addFlash('notifications', $notif);
+        }
+        return new Response();
+    }
+
+    #[Route('/ajax/refuser/{id}', name: 'refus')]
+    public function refuserT(int $id, TransactionRepository $tr, EntityManagerInterface $em): Response
+    {
+        if (!$this->getUser()) {
+            return new Response("ERROR");
+        }
+        $transaction = $tr->find($id);
+        if (!$transaction) return new Response("ERROR");
+
+        $transaction->setStatutTransaction("En cours");
+        $notif = "Processus de validation annulé pour la transaction  '".$transaction->getAnnonce()->getTitre()."'.";
+        $notification = new Notification();
+        $notification->setContenu($this->outils->crypterMessage($notif));
+        $notification->setAEteLu(false);
+        $notification->setDateEnvoi(new DateTime());
+        // on envoie l'information que la transaction a été annulé en notifications à celui qui n'a pas validé en dernier
+        $notification->setUser($client == $this->getUser() ? $posteur : $client);
+        $em->merge($transaction);
+        $em->persist($notification);
+        $em->flush();
+        $this->addFlash('notifications', $notif);
+        return new Response();
     }
 }
