@@ -8,7 +8,7 @@
     <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
     </span>
     <div style="margin-bottom: 25px;">
-        <button class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
+        <button id="seDesabonnerBtn" class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
     <button class="but" onclick="openDialogMDP()" style="float: right;">Changer mon mot de passe</button>
     <button class="but" onclick="activeModeSommeil()" style="float: right;">Activer le mode sommeil</button>
     

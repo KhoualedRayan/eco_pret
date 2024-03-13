@@ -108,10 +108,18 @@ input[type="month"] {
 
 /* Carré vert */
 .special-div {
+    height: fit-content;
     border: 2px solid #8bc34a; /* Couleur de la bordure verte claire */
     border-radius: 10px; /* Coins arrondis */
     padding: 10px; /* Rembourrage pour l'espace entre la bordure et le contenu */
     margin-bottom: 20px; /* Marge inférieure pour espacement */
     display: inline-block; /* Permet à la div de s'adapter à la taille du contenu */
+    margin-right: 20px;
 }
 
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Permet le passage à la ligne des éléments */
+    /*justify-content: space-between; /* Alignement horizontal des éléments */
+    align-items: center; /* Alignement vertical des éléments */
+}
