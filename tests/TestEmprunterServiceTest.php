@@ -37,5 +37,6 @@ class TestEmprunterServiceTest extends WebTestCase
 
         $client->executeScript("document.querySelector('#emprunter').click();");
 
+
     }
 }
