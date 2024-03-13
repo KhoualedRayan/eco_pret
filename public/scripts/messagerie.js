@@ -21,8 +21,28 @@ function updateDiscussion(dest, interlocuteur) {
     titreH2.classList.remove('cache');
     document.getElementById('actions').classList.remove('cache');
 
-    // Mettre � jour le contenu de la section bas
-    refreshMessages();
+    // change le bouton de validation selon le statut
+
+    // Mettre à jour le contenu de la section bas
+    // + la barre de scroll, à ne pas assimiler avec refreshMessages car cela reseterait la barre de scroll toutes les 2 secondes
+    fetch(`/charger-messages/${idDeLaTransaction}`)
+        .then(response => response.json())
+        .then(data => {
+            var zoneScroll = document.querySelector(".section-bas");
+            zoneScroll.innerHTML = data.html;
+            zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
+            if (data.statut.includes('-')) {
+                var statut = data.statut.split("-")[1];
+                if (statut == data.userRole) {
+                    document.getElementById('validerBouton').innerHTML = "<span class='material-icons'>done</span> (1/2)";
+                }
+            } else if (data.statut == "Valide") {
+                document.getElementById('validerBouton').innerHTML = "done_all";
+                document.getElementById('validerBouton').classList.add("material-icons");
+            }
+            
+        })
+        .catch(error => console.error('Erreur:', error));
 }
 
 function refreshMessages() {
@@ -31,9 +51,6 @@ function refreshMessages() {
         .then(response => response.json())
         .then(data => {
             document.querySelector('.section-bas').innerHTML = data.html;
-            var zoneScroll = document.querySelector(".section-bas");
-            zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
-            ajusterTaille();
         })
         .catch(error => console.error('Erreur:', error));
 }
@@ -57,7 +74,6 @@ function nouveauMessage(expediteur, text) {
                 console.log(xhr.responseText)
             }
             else {
-                document.getElementById('input').value = '';
                 refreshMessages();
             }
         }
@@ -94,14 +110,40 @@ function ajusterTaille() {
 
 function send(expediteur) {
     var text = document.getElementById('input').value.trim();
-    alert(text);
-    if (text.length > 0) {
+    if (text.length > 0 ) {
+        document.getElementById('input').value = '';
+        ajusterTaille();
         nouveauMessage(expediteur, text);
     }
 }
 
 function entree(event, expediteur) {
     if (event.keyCode === 13 && !event.shiftKey) {
-        send(expediteur);
+        event.preventDefault();
+        send(expediteur);        
     }
+}
+
+function valider() {
+    if (idDeLaTransaction == null) {
+        alert("Something went wrong.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "ERROR") {
+                document.getElementById("valider").innerHTML = xhr.responseText;
+                document.getElementById("valider").showModal();
+            }
+                
+        }
+    };
+    xhr.open('POST', '/ajax/validation/'+idDeLaTransaction, true);
+    xhr.send();
+}
+
+function closeValidDialog() {
+    document.getElementById("valider").close();
 }

@@ -9,7 +9,17 @@
         <div>
             {% if transaction.messages is not empty %}
                 {% set dernierMessage = transaction.messages|last %}
-                <span class="date">{{ dernierMessage.dateEnvoi|date('d/m/Y H:i') }}</span>
+                {% set maintenant = "now"|date("Y-m-d") %}
+                {% set date_message = dernierMessage.dateEnvoi|date("Y-m-d") %}
+                <span class="date">
+                {% if maintenant == date_message %}
+                    {{ "auj."|capitalize }} {{ dernierMessage.dateEnvoi|date("H:i") }}
+                {% elseif maintenant|date_modify("-1 day")|date("Y-m-d") == date_message %}
+                    {{ "hier"|capitalize }} {{ dernierMessage.dateEnvoi|date("H:i") }}
+                {% else %}
+                    {{ dernierMessage.dateEnvoi|date("d/m/Y H:i") }}
+                {% endif %}
+                </span>
                 {% if dernierMessage.expediteur != app.user %}{{dernierMessage.expediteur.username}}: {% endif %}<span class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</span>
             {% else %}
                 <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>

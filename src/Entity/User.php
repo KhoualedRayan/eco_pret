@@ -512,4 +512,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
+    // public function getTransactionsWherePosteur() {
+    //     return $this->getUser()->getAnnonces()
+    //                 ->filter(function($a) {
+    //                             return $a->getTransaction() != null;
+    //                         })
+    //                 ->map(function($a) { return $a->getTransaction(); });
+    // }
+
+    // public function getTransactions() {
+    //     return new ArrayCollection((array)getTransactionsWherePosteur()+$demandes);
+    // }
+
 }

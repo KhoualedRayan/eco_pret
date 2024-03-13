@@ -60,6 +60,6 @@ class PretMaterielController extends AbstractController
         $entityManager->persist($annonce);
         $entityManager->flush();
         $this->addFlash('notifications', 'Félicitations, votre annonce à été publiée !');
-        return $this->redirectToRoute('app_home_page');
+        return $this->redirectToRoute('app_profile_annonces');
     }
 }

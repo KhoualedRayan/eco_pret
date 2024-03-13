@@ -124,7 +124,7 @@ body, html {
     flex-direction: column;
     background-color: #eaeaea; 
     flex: 1; /* Prend tout l'espace restant */
-    padding: 20px;
+    padding: 10px 15px;
     box-sizing: border-box;
     overflow-y: auto; /* Permet le d�filement si le contenu d�passe */
 }
@@ -164,15 +164,15 @@ body, html {
         line-height: 1.4; /* Espacement des lignes pour une meilleure lisibilit� */
     }
 
-.message-utilisateur {
+.message.utilisateur {
     background-color: #007bff; /* Couleur de fond diff�rente pour les messages de l'utilisateur */
     color: white; /* Texte blanc pour un meilleur contraste */
     margin-left: auto; /* Aligner le texte � droite */
 }
 
-    .message-utilisateur .texte-message {
-        color: white; /* Assurez-vous que le texte reste lisible sur le fond plus fonc� */
-    }
+.message.utilisateur .texte-message {
+    color: white; /* Assurez-vous que le texte reste lisible sur le fond plus fonc� */
+}
 
 button {
     padding: 5px;
@@ -202,11 +202,11 @@ button {
 
 .messInput {
     flex: 1;
-    height: auto;
     border: none;
     background-color: #dcdcdc;
     overflow: hidden;
     outline: none;
     resize: none;
     vertical-align: center;
+    height: fit-content;
 }

@@ -63,7 +63,6 @@ class OffreServiceController extends AbstractController
 
         $init_date = $request->request->get('date_pret');
         $init_reccu = $request->request->get('recurrence');
-
         #FIRST DATE
         if($init_reccu == ""){#DATE PONCTUELLE
             $first_date = new DatePonctuelleService() ;
@@ -81,8 +80,6 @@ class OffreServiceController extends AbstractController
             $annonce->addRecurrence($first_reccu);
         }
 
-        
-        dump($request->request->all());
 
         $index = 0;
         $index_ends = 3;
@@ -105,13 +102,13 @@ class OffreServiceController extends AbstractController
                     $index_ends++;
                 }
                 $index++;
-                
+
             }
         }
         $entityManager->persist($annonce);
         $entityManager->flush();
 
         $this->addFlash('notifications', 'Félicitations, votre annonce a été publiée !');
-        return $this->redirectToRoute('app_home_page');
+        return $this->redirectToRoute('app_profile_annonces');
     }
 }

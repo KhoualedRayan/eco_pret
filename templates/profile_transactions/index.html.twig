@@ -7,57 +7,86 @@
 {% block contenu %}
 
 <h3>Mes transactions</h3>
+<div>
+    <b>Votre statut dans la transaction :</b>
+    <select id="typeTransactionSelect">
+        <option value="client">Client</option>
+        <option value="posteur">Posteur</option>
+        <option value="enAttente">En Attente</option>
+    </select>
+</div><br />
 <div class="tout">
-    <h4>Client</h4>
-    {# Transactions ou l'utilisateur est un client #}
-    {% for transaction in transactionsClient %}
-        <div class="blocAnnonce">
-            <div>
-                <span class="prix" >{{ transaction.annonce.prix }}<span class="material-icons">attach_money</span></span>
-                <span class="username">{{ transaction.annonce.posteur.getUsername() }}</span>
+    <div id="transactionsClient" class="typeSection">
+        {# Transactions ou l'utilisateur est un client #}
+        {% for transaction in transactionsClient %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ transaction.annonce.prix }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">Prestataire : {{ transaction.annonce.posteur.getUsername() }}</span>
+                </div>
+                <div class="type">{{ transaction.getAnnonce().getType() }}</div>
+                <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
+                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
+                <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
+                <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
             </div>
-            <div class="type">{{ transaction.getAnnonce().getType() }}</div>
-            <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-            {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
-            <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
-            <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-            <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
-        </div>
-    {% endfor %}
-    <h4>Posteur:</h4>
-    {# Transactions ou l'utilisateur est un posteur #}
-    {% for transaction in transactionsPosteur %}
-        <div class="blocAnnonce">
-            <div>
-                <span class="prix" >{{ transaction.getAnnonce().getPrix() }}<span class="material-icons">attach_money</span></span>
-                <span class="username">Client : {{ transaction.getClient().getUsername() }}</span>
+        {% endfor %}
+    </div>
+    <div id="transactionsPosteur" class="typeSection"  style="display: none;">
+        {# Transactions ou l'utilisateur est un posteur #}
+        {% for transaction in transactionsPosteur %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ transaction.getAnnonce().getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">Client : {{ transaction.getClient().getUsername() }}</span>
+                </div>
+                <div class="type">{{ transaction.getAnnonce().getType() }}</div>
+                <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
+                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
+                <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
+                <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
             </div>
-            <div class="type">{{ transaction.getAnnonce().getType() }}</div>
-            <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-            {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
-            <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
-            <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-            <button class="modifier">Valider à faire</button>
-            <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
-        </div>
-    {% endfor %}
-    <h4>En Attente:</h4>
-    {# Annonces ou l'utilisateur est en attente #}
-    {% for annonce in annoncesEnAttente %}
-        <div class="blocAnnonce">
-            <div>
-                <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+        {% endfor %}
+    </div>
+    <div id="transactionsEnAttente" class="typeSection" style="display: none;">
+        {# Annonces ou l'utilisateur est en attente #}
+        {% for annonce in annoncesEnAttente %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">Prestataire : {{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+                <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
+                <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Quitter la file</button>
             </div>
-            <div class="type">{{ annonce.getType() }}</div>
-            <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-            {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
-            <h3>{{ annonce.getTitre() }}</h3>
-            <div class="description">{{ annonce.getDescription() }}</div>
-            <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
-            <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Quitter la file</button>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
+
+<script>
+    document.getElementById('typeTransactionSelect').addEventListener('change', function() {
+        var valeur = this.value;
+        document.querySelectorAll('.typeSection').forEach(function(section) {
+            section.style.display = 'none'; // Masquer toutes les sections
+        });
+        if (valeur === 'client') {
+            document.getElementById('transactionsClient').style.display = 'contents';
+        } else if (valeur === 'posteur') {
+            document.getElementById('transactionsPosteur').style.display = 'contents';
+        } else if (valeur === 'enAttente') {
+            document.getElementById('transactionsEnAttente').style.display = 'contents';
+        }
+    });
+
+    // Pour s'assurer que par défaut, "Client" est affiché
+    document.getElementById('transactionsClient').style.display = 'contents';
+</script>
 
 {% endblock %}
