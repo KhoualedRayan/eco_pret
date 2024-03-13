@@ -131,20 +131,30 @@ class ProfileAnnoncesController extends AbstractController
         #FIRST DATE
         if($init_reccu == ""){
             #DATE PONCTUELLE
-            $first_date = new DatePonctuelleService() ;
+            $exist = $entityManager->getRepository(DatePonctuelleService::class)->findOneBy(['date'=> new DateTime($init_date)]);
+            $first_date = new DatePonctuelleService();
             $first_date->setDate(new DateTime($init_date));
-            $entityManager->persist($first_date);
-            $annonce->addDatePonct($first_date);
+            if($exist){
+                $annonce->addDatePonct($exist);
+            }else{
+                $entityManager->persist($first_date);
+                $annonce->addDatePonct($first_date);
+            }
         }else{
             #RECCURENCE
+            $exist = $entityManager->getRepository(Recurrence::class)->findOneBy(['date_debut' => new DateTime($init_date), 'date_fin' => new DateTime($additionalEnds[2]), 'typeRecurrence' => $init_reccu]);
             $first_reccu = new Recurrence();
             $first_date_debut = new DateTime($init_date);
             $first_reccu->setDateDebut($first_date_debut);
             $first_date_fin = new DateTime($additionalEnds[2]);
             $first_reccu->setDateFin($first_date_fin);
             $first_reccu->setTypeRecurrence($init_reccu);
-            $entityManager->persist($first_reccu);
-            $annonce->addRecurrence($first_reccu);
+            if ($exist) {
+                $annonce->addRecurrence($exist);
+            } else {
+                $entityManager->persist($first_reccu);
+                $annonce->addRecurrence($first_reccu);
+            }
         }
 
 
@@ -154,19 +164,29 @@ class ProfileAnnoncesController extends AbstractController
         if(is_array($additionalDates)) {
             foreach ($additionalDates as $date) {
                 if($additionalRecu[$index]==""){
+                    $exist = $entityManager->getRepository(DatePonctuelleService::class)->findOneBy(['date' => new DateTime($date)]);
                     $dateponct = new DatePonctuelleService();
                     $dateponct->setDate(new DateTime($date));
-                    $entityManager->persist($dateponct);
-                    $annonce->addDatePonct($dateponct);
+                    if($exist){
+                        $annonce->addDatePonct($exist);
+                    }else{
+                        $entityManager->persist($dateponct);
+                        $annonce->addDatePonct($dateponct);
+                    }
                 }else{
+                    $exist = $entityManager->getRepository(Recurrence::class)->findOneBy(['date_debut' =>  new DateTime($date), 'date_fin' => new DateTime($additionalEnds[$index_ends]), 'typeRecurrence' => $additionalRecu[$index]]);
                     $reccu = new Recurrence();
                     $date_debut = new DateTime($date);
                     $reccu->setDateDebut($date_debut);
                     $date_fin = new DateTime($additionalEnds[$index_ends]);
                     $reccu->setDateFin($date_fin);
                     $reccu->setTypeRecurrence($additionalRecu[$index]);
-                    $entityManager->persist($reccu);
-                    $annonce->addRecurrence($reccu);
+                    if($exist){
+                        $annonce->addRecurrence($exist);
+                    }else{
+                        $entityManager->persist($reccu);
+                        $annonce->addRecurrence($reccu);
+                    }
                     $index_ends++;
                 }
                 $index++;

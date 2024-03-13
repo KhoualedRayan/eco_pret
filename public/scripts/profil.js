@@ -147,33 +147,6 @@ function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle, id, typ
         var inputs = document.getElementsByName('additional_date[]');
         var inputs_reccu = document.getElementsByName('additional_recurrence[]');
         var inputs_ends = document.getElementsByName('additional_ends[]');
-
-        // Ajout des dates optionnelss pour les date ponctuelles
-        if (datePoncService != null) {
-            for (var i = 1; i < datePoncts.length; i++) {
-                document.getElementById('addDateButton').click();
-                inputs[i - 1].value = datePoncts[i]; // Assigner chaque date à l'entrée correspondante
-                console.log(datePoncts[i]);
-            }
-        }
-        // Ajout des dates optionnels pour les date reccurente
-        if (dateReccu_Debut != null) {
-            for (var i = 1; i < dateR_deb.length; i++) {
-                //Rajoute une date
-                document.getElementById('addDateButton').click();
-                //Date début
-                inputs[i - 1].value = dateR_deb[i]; 
-                //Permet de mettre le bon type
-                inputs_reccu[i - 1].value = dateR_type[i];
-                var event = new Event('change', { bubbles: true, cancelable: true });
-                inputs_reccu[i - 1].dispatchEvent(event);
-                //Date fin
-                inputs_ends[i +2].value = dateR_fin[i]; 
-                console.log('Date début : ' + dateR_deb[i] + ', Date fin : ' + dateR_fin[i] + ',type : ' + dateR_type[i]);
-
-            }
-        }
-        
         document.getElementById('editCategorieService').value = categorie;
         if (datePoncService != null) {
             document.getElementById('date_pret').value = datePoncts[0];
@@ -182,8 +155,38 @@ function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle, id, typ
             document.getElementById('recurrence').value = dateR_type[0];
             var event = new Event('change', { bubbles: true, cancelable: true });
             document.getElementById('recurrence').dispatchEvent(event);
-            inputs_ends[2].value = dateR_fin[0]; 
+            inputs_ends[2].value = dateR_fin[0].replace(/\!/g, 'W');
         }
+
+        // Ajout des dates optionnelss pour les date ponctuelles
+        var size = 1;
+
+        // Ajout des dates optionnels pour les date reccurente
+        if (dateReccu_Debut != null) {
+            for (var i = 1; i < dateR_deb.length; i++) {
+                //Rajoute une date
+                document.getElementById('addDateButton').click();
+                //Date début
+                inputs[i-1].value = dateR_deb[i]; 
+                //Permet de mettre le bon type
+                inputs_reccu[i -1].value = dateR_type[i];
+                var event = new Event('change', { bubbles: true, cancelable: true });
+                inputs_reccu[i -1].dispatchEvent(event);
+                //Date fin
+                inputs_ends[i + 2].value = dateR_fin[i].replace(/\!/g, 'W');
+                console.log("Taille : " + inputs.length);
+                size++;
+
+            }
+        }
+        if (datePoncService != null) {
+            for (var i = 1; i < datePoncts.length; i++) {
+                document.getElementById('addDateButton').click();
+                inputs[size-1].value = datePoncts[i]; // Assigner chaque date à l'entrée correspondante
+                size++;
+            }
+        }
+        
         // l'inverse
         document.getElementById("blocMateriel").style.display = "none";
         document.getElementById("blocService").style.display = "block";
@@ -195,6 +198,10 @@ function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle, id, typ
 
 function closeAnnonceDialog() {
     document.getElementById('editAnnonceDialog').close();
+    // Supprime tous les champs 'additional_date[]'
+    var inputs = document.getElementsByName('additional_date[]');
+    var aa = document.getElementById("additionalDates");
+    aa.innerHTML = '';
 }
 
 function submitAnnonceForm(event) {

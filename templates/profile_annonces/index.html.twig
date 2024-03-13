@@ -37,8 +37,15 @@
                         {% set dateReccu_Fin   = [] %}
                         {% set dateReccu_Type  = [] %}
                         {%for dateR in annonce.getRecurrence()%}
+                            {% if dateR.typeRecurrence == 'quotidienne' %}
+                                {% set formatFin = 'Y-m-d' %}
+                            {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
+                                {% set formatFin = 'Y-!W'%}
+                            {% elseif dateR.typeRecurrence == 'mensuelle' %}
+                                {% set formatFin = 'Y-m' %}
+                            {% endif %}
                             {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date('Y-m-d')]) %}
+                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
                             {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
                         {%endfor%}
                         {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
@@ -53,8 +60,15 @@
                         {% set dateReccu_Fin   = [] %}
                         {% set dateReccu_Type  = [] %}
                         {%for dateR in annonce.getRecurrence()%}
+                            {% if dateR.typeRecurrence == 'quotidienne' %}
+                                {% set formatFin = 'Y-m-d' %}
+                            {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
+                                {% set formatFin = 'Y-!W'%}
+                            {% elseif dateR.typeRecurrence == 'mensuelle' %}
+                                {% set formatFin = 'Y-m' %}
+                            {% endif %}
                             {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date('Y-m-d')]) %}
+                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
                             {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
                         {%endfor%}
                         {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}

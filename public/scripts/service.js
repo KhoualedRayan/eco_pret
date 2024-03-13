@@ -77,6 +77,7 @@ document.getElementById('addDateButton').addEventListener('click', function () {
     var deleteButton = document.createElement('button');
     var div_gen = document.createElement('div');
     deleteButton.textContent = "Supprimer";
+    deleteButton.id.replace(deleteButton.id, "suppp");
     deleteButton.addEventListener('click', function () {
         additionalRecurrencesDiv.removeChild(div_gen);
         additionalRecurrencesDiv.removeChild(lineBreak);
