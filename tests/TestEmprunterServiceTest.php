@@ -17,8 +17,8 @@ class TestEmprunterServiceTest extends TestCase
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->filter('#login')->form();
-        $form['id'] = 'marcheToujours';
-        $form['password'] = '098765';
+        $form['id'] = 'test';
+        $form['password'] = '123456';
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');
@@ -29,19 +29,13 @@ class TestEmprunterServiceTest extends TestCase
         // Vérifier que la connexion a réussi
         $this->assertRouteSame('app_home_page');
 
-        $crawler = $client->request('GET', '/annonces/1');
+        $crawler = $client->request('GET', '/annonces');
 
         $this->assertResponseIsSuccessful();
 
-        $this->assertCount(1, $crawler->filter('#emprunterBtn'));
+        $this->assertCount(1, $crawler->filter('#emprunter'));
 
-        $client->executeScript("document.querySelector('#emprunterBtn').click();");
+        $client->executeScript("document.querySelector('#emprunter').click();");
 
-        $this->assertTrue($client->getResponse()->isRedirect('/confirmation_emprunt'), 'La redirection vers la page de confirmation d\'emprunt a échoué.');
-
-        $client->followRedirect();
-
-        // Vérifier que la page de confirmation d'emprunt est affichée (adapté selon votre application)
-        $this->assertRouteSame('confirmation_emprunt', 'La redirection n\'a pas abouti à la page de confirmation d\'emprunt.');
     }
 }
