@@ -19,6 +19,12 @@ class SleepModeController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()==false) {
+                return $this->redirectToRoute('app_home_page');
+            }
+        }
+    
         return $this->render('sleep_mode/index.html.twig', [
             'controller_name' => 'SleepModeController',
         ]);

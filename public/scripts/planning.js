@@ -39,6 +39,7 @@ function generateCalendar(year, month) {
         }
         if (new Date(year, month - 1, dateCounter) < new Date() && (year < new Date().getFullYear() || (year === new Date().getFullYear() && month <= new Date().getMonth() + 1)) && !(dateCounter === new Date().getDate() && year === new Date().getFullYear() && month === new Date().getMonth() + 1)) {
           cell.classList.add("previous-day");
+          cell.classList.remove("edited-day");
         }
 
         const editedDatesDays = editedDates.map(date => date.getDate());
@@ -235,8 +236,9 @@ function init_planning() {
               return date !== null; 
             });
           });
-
+          
           editedDays = editedDaysAsDate;
+          //generateCalendar(currentYear, currentMonth);
           resolve(); // Indique que l'initialisation est terminée
         } else {
           reject(xhr.statusText); // Rejette la promesse en cas d'erreur

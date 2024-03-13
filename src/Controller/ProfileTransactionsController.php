@@ -24,6 +24,11 @@ class ProfileTransactionsController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
+        }
 
         $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
         $transactionsPosteur = $this->getUser()->getAnnonces()

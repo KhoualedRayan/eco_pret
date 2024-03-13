@@ -26,13 +26,10 @@ class ProfileAnnoncesController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // ?????
-        if($this->getUser()->isBusy()){
-            $this->getUser()->setSleepMode(true);
-            $entityManager->flush();
-        }
-        if ($this->getUser()->isSleepMode()) {
-            return $this->redirectToRoute('app_sleep_mode');
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
         }
 
         $annonces = $entityManager->getRepository(Annonce::class)->findBy(['posteur' => $this->getUser()]);

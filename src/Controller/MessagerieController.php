@@ -21,9 +21,7 @@ class MessagerieController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        if ($this->getUser()->isSleepMode()) {
-            return $this->redirectToRoute('app_sleep_mode');
-        }
+        
         $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($this->getUser());
         usort($transactions, function ($a, $b) {
             if (!$b->getMessages()->isEmpty() && !$a->getMessages()->isEmpty()) {

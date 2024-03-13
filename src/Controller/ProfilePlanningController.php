@@ -19,6 +19,12 @@ class ProfilePlanningController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
+        }
+
         return $this->render('profile_planning/index.html.twig', [
             'controller_name' => 'ProfilePlanningController',
             'onglet' => "planning",

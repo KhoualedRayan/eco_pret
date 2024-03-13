@@ -19,7 +19,7 @@
 
 <div class="tout">
     {% for annonce in annonces %}
-        {% if annonce.getPosteur().isSleepMode() == false or annonce.getPosteur().isBusy() == false %}
+        {% if annonce.getPosteur().isSleepMode() == false and annonce.getPosteur().isBusy() == false %}
             <div class="blocAnnonce">
                 <div>
                     <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>

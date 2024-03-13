@@ -22,6 +22,11 @@ class PretMaterielController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        if($this->getUser()){
+            if ($this->getUser()->isSleepMode()) {
+                return $this->redirectToRoute('app_sleep_mode');
+            }
+        }
         // s'il n'a pas d'abonnement
         if ($this->getUser()->getAbonnement() == null) {
             $this->addFlash('notifications', 'Vous devez posséder un abonnement pour pouvoir publier des annonces !');
