@@ -40,7 +40,7 @@ Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
     Durée d'origine : <span>{{transaction.annonce.duree}}</span><br>
     Nouvelle durée : <span>{{transaction.dureeFinal}}</span><br>
 
-    Date de l'échange (= début du prêt) : <span>{{transaction.dateDebutPret|format('d-m-Y')}}/span><br>
+    Date de l'échange (= début du prêt) : <span>{{transaction.dateDebutPret|date('d-m-Y')}}</span><br>
 {% endif %}
 
 <div>
