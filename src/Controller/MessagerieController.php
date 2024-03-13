@@ -180,7 +180,7 @@ class MessagerieController extends AbstractController
                     $duree = $data->get('duree');
                     $modalite = $data->get('duree_pret');
                     $transaction->setDureeFinal($duree." ".$modalite);
-                    $transaction->setDateDebutPret($data->get('dateDebut'));
+                    $transaction->setDateDebutPret(new DateTime($data->get('dateDebut')));
                 }
                 
                 $transaction->setPrixFinal($prix);
