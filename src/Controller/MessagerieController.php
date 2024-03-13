@@ -13,6 +13,7 @@ use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
 use DateTime;
 use App\Service\Outils;
+use App\Entity\Notification;
 
 class MessagerieController extends AbstractController
 {
@@ -191,7 +192,7 @@ class MessagerieController extends AbstractController
         }
     }
 
-    #[Route('/ajax/accepter/{id}', name: 'validation')]
+    #[Route('/ajax/accepter/{id}', name: 'accepteT')]
     public function accepterT(int $id, TransactionRepository $tr, EntityManagerInterface $em): Response
     {
         if (!$this->getUser()) {

@@ -7,8 +7,9 @@
 </p>
 <br>
 
+{% set statut = transaction.getStatutTransaction() == 'En cours' %}
 {# personne n'a encore validé #}
-{% if transaction.getStatutTransaction() == 'En cours' %}
+{% if statut == 'En cours' %}
     <form action="{{ path('validation1') }}" method="POST">
         <input type="hidden" name="id" value="{{transaction.id}}"> 
         <div>
@@ -29,7 +30,7 @@
             <button type="button" class='but boutonDialog' onclick="closeValidDialog()">Annuler</button>
         </div>
     </form>
-{% else %}
+{% else if statut != 'Terminer' %}
 {# quelqu'un a déjà validé, on montre les informations (et si c'est la personne qui n'a pas validé qui clique, on lui demande de faire un choix #}
 Prix d'origine : <span>{{transaction.annonce.prix}}</span><br>
 Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
@@ -48,5 +49,18 @@ Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
     <button type="button" onclick="closeValidDialog()">Annuler</button>
 
 </div>
+{% else %}
+Transaction terminée !
+
+Prix d'origine : <span>{{transaction.annonce.prix}}</span><br>
+Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
+
+{% if transaction.annonce.getType() == "Materiel" %}
+    Durée d'origine : <span>{{transaction.annonce.duree}}</span><br>
+    Nouvelle durée : <span>{{transaction.dureeFinal}}</span><br>
+{% endif %}
+
+<button type="button" onclick="closeValidDialog()">Fermer</button>
+
 {% endif %}
 

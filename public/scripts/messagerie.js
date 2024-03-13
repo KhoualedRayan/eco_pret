@@ -35,10 +35,18 @@ function updateDiscussion(dest, interlocuteur) {
                 var statut = data.statut.split("-")[1];
                 if (statut == data.userRole) {
                     document.getElementById('validerBouton').innerHTML = "<span class='material-icons'>done</span> (1/2)";
+                } else {
+                    document.getElementById('validerBouton').innerHTML = "Valider (1/2)";
                 }
-            } else if (data.statut == "Valide") {
+            } else if (data.statut == "Terminer") {
                 document.getElementById('validerBouton').innerHTML = "done_all";
                 document.getElementById('validerBouton').classList.add("material-icons");
+                document.getElementById('validerBouton').disabled = true;
+                // à mettre dans un css et ajouter à la liste des classes
+                document.getElementById('validerBouton').style.backgroundColor = "gray";
+                document.getElementById('validerBouton').style.cursor = "default";
+            } else {
+                document.getElementById('validerBouton').innerHTML = "Valider (0/2)";
             }
             
         })
