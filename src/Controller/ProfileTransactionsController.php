@@ -30,11 +30,17 @@ class ProfileTransactionsController extends AbstractController
             }
         }
 
-        $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
+        $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser() ]);
+        $transactionsClientEnCours = array_filter($transactionsClient, function ($transaction) {
+            return $transaction->getStatutTransaction() === "En cours";
+        });
         $transactionsPosteur = $this->getUser()->getAnnonces()
                                 ->filter(function($a) {
                                     return $a->getTransaction() != null;
                                 })->map(function($a) { return $a->getTransaction(); })->toArray();
+        $transactionsPosteurEnCours = array_filter($transactionsPosteur, function ($transaction) {
+            return $transaction->getStatutTransaction() === "En cours";
+        });
         $filesDattentes = $this->getUser()->getAnnoncesOuJattends();
         $annoncesEnAttente = []; // Pour stocker les annonces où l'utilisateur n'est pas premier
 
@@ -46,11 +52,24 @@ class ProfileTransactionsController extends AbstractController
                  $annoncesEnAttente[] = $annonce;
             }
         }
+        // Filtration des transactions du client terminées
+        $transactionsClientTerminees = array_filter($transactionsClient, function ($transaction) {
+            return $transaction->getStatutTransaction() === "Terminer";
+        });
+
+        // Filtration des transactions posteur terminées
+        $transactionsPosteurTerminees = array_filter($transactionsPosteur, function ($transaction) {
+            return $transaction->getStatutTransaction() === "Terminer";
+        });
+
+        // Fusion des transactions terminées en une seule variable
+        $toutesTransactionsTerminees = array_merge($transactionsClientTerminees, $transactionsPosteurTerminees);
 
         return $this->render('profile_transactions/index.html.twig', [
             'controller_name' => 'ProfileTransactionsController',
-            'transactionsClient' => $transactionsClient,
-            'transactionsPosteur' => $transactionsPosteur,
+            'transactionsClient' => $transactionsClientEnCours,
+            'transactionsPosteur' => $transactionsPosteurEnCours,
+            'transactionsTermines' => $toutesTransactionsTerminees,
             'annoncesEnAttente' => $annoncesEnAttente,
             'onglet' => "transactions",
         ]);

@@ -14,6 +14,7 @@
         <option value="client">Client</option>
         <option value="posteur">Posteur</option>
         <option value="enAttente">En Attente</option>
+        <option value="terminer">Terminé</option>
     </select>
 </div>
 <div class="tout">
@@ -69,6 +70,23 @@
             </div>
         {% endfor %}
     </div>
+    <div id="transactionsTermines" class="typeSection" style="display: none;">
+        {# Annonces ou l'utilisateur est en attente #}
+        {% for annonce in transactionsTermines %}
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">Prestataire : {{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+                <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
@@ -83,6 +101,8 @@
             document.getElementById('transactionsPosteur').style.display = 'contents';
         } else if (valeur === 'enAttente') {
             document.getElementById('transactionsEnAttente').style.display = 'contents';
+        } else if (valeur === 'terminer') {
+            document.getElementById('transactionsTermines').style.display = 'contents';
         }
     });
 
