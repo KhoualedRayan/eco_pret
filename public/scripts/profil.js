@@ -67,7 +67,6 @@ function activeModeSommeil(){
 }
 
 function submitMotDePasseForm(event) {
-    console.log("Édition en cours...");
 
 	event.preventDefault();
 	var xhr = new XMLHttpRequest();

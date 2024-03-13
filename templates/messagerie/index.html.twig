@@ -23,12 +23,13 @@
                 <!-- Messages ici dans messages.html.twig -->
             </div>
             <div class="section-actions cache" id="actions">
-                <button>Valider</button>
+                <button onclick="valider()" id="validerBouton">Valider</button>
                 <textarea class="messInput" id="input" rows="1" maxlength="500" placeholder="Envoyer un message" oninput="ajusterTaille()" onkeypress="entree(event, '{{app.user.username}}')"></textarea>
                 <span class="material-icons send" onclick="send('{{app.user.username}}')">send</span>
             </div>
         </div>
     </div>
+    <dialog id="valider"></dialog>
 
 
 {% endblock %}

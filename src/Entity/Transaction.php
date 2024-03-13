@@ -229,4 +229,10 @@ class Transaction
 
         return $this;
     }
+
+    public function getRole(?User $user): string
+    {
+        if ($this->getClient() != $user) return "Offrant";
+        else return "Client";
+    }
 }

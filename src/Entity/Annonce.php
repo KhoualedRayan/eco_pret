@@ -166,6 +166,8 @@ abstract class Annonce
 
         return $this;
     }
+    public abstract function getType(): String;
+
     public function contientUserDansFiles(User $user): bool{
         foreach ($this->attentes as $fileAttente) {
             if ($fileAttente->getUser()->getId() == $user->getId()) {

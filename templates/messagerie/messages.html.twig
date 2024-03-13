@@ -1,7 +1,12 @@
 {% for msg in messages %}
     {% set isUser = msg.expediteur == app.user ? "utilisateur" : "" %}
     <div class="message {{isUser}}">
-        <span class="texte-message">{{ msg.contenu }}</span><br>
+        {% set parties = msg.contenu|split('\n') %}
+        <span class="texte-message">
+        {% for partie in parties %}
+            {{ partie }}<br>
+        {% endfor %}
+        </span>
     </div>
     {% set maintenant = "now"|date("Y-m-d") %}
     {% set date_message = msg.dateEnvoi|date("Y-m-d") %}

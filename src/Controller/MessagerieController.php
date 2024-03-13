@@ -95,7 +95,7 @@ class MessagerieController extends AbstractController
             'messages' => $messages,
         ]);
 
-        return $this->json(['html' => $html]);
+        return $this->json(['html' => $html, 'statut' => $transaction->getStatutTransaction(), 'userRole' => $transaction->getRole($this->getUser())]);
     }
 
     #[Route('/ajax/nouveau_message', name: 'nouveau_message')]
@@ -147,5 +147,56 @@ class MessagerieController extends AbstractController
         $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
         $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
         return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
+    }
+
+    #[Route('/ajax/validation/{id}', name: 'validation')]
+    public function openValider(int $id, TransactionRepository $tr): Response
+    {
+        if (!$this->getUser()) {
+            return new Response("ERROR");
+        }
+        $transaction = $tr->find($id);
+        if ($transaction && $transaction->getStatutTransaction() != "Valide") {
+            return new Response($this->renderView('messagerie/validerDialog.html.twig', [
+                                        'transaction' => $transaction,
+                                        'statut' => $transaction->getStatutTransaction(), 'userRole' => $transaction->getRole($this->getUser())
+                                    ]));
+        } else if ($transaction) {
+            return new Response("");
+        }
+       return new Response("ERROR");
+    }
+
+    #[Route('/validation1_form', name: 'validation1')]
+    public function validation1(Request $request, TransactionRepository $tr, EntityManagerInterface $em) : Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $data = $request->request;
+        $id = $data->get('id');
+
+        $transaction = $tr->find(intval($id));
+        if ($transaction) {
+            // quelqu'un d'autre a modifié avant vous
+            if ($transaction->getStatutTransaction() != "En cours") {
+                $this->addFlash('notifications', "Erreur lors de la validation. Veuillez réessayer.");
+            } else {
+                $prix = $data->get('prix');
+                if ($transaction->getAnnonce()->getType() == "Materiel") {
+                    $duree = $data->get('duree');
+                    $modalite = $data->get('duree_pret');
+                    $transaction->setDureeFinal($duree." ".$modalite);
+                }
+                
+                $transaction->setPrixFinal($prix);
+                $transaction->setStatutTransaction("Valide-".$transaction->getRole($this->getUser()));
+                $em->persist($transaction);
+                $em->flush();
+                $this->addFlash('notifications', "Vous avez bien validé la transaction ! En attente de l'autre utilisateur.");
+                return $this->redirectToRoute('app_messagerie');
+            }
+        }
     }
 }
