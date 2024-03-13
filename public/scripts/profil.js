@@ -147,45 +147,52 @@ function openAnnonceDialog(prixActuel, titreActuel, descriptionActuelle, id, typ
         var inputs = document.getElementsByName('additional_date[]');
         var inputs_reccu = document.getElementsByName('additional_recurrence[]');
         var inputs_ends = document.getElementsByName('additional_ends[]');
+
+        var skip_first_index_poncts = 0;
+        var skip_first_index_recu = 0;
+
         document.getElementById('editCategorieService').value = categorie;
         if (datePoncService != null) {
             document.getElementById('date_pret').value = datePoncts[0];
+            skip_first_index_poncts++;
+
         } else {
             document.getElementById('date_pret').value = dateR_deb[0];
             document.getElementById('recurrence').value = dateR_type[0];
             var event = new Event('change', { bubbles: true, cancelable: true });
             document.getElementById('recurrence').dispatchEvent(event);
             inputs_ends[2].value = dateR_fin[0].replace(/\!/g, 'W');
+            skip_first_index_recu++;
         }
 
         // Ajout des dates optionnelss pour les date ponctuelles
         var size = 1;
-
-        // Ajout des dates optionnels pour les date reccurente
-        if (dateReccu_Debut != null) {
-            for (var i = 1; i < dateR_deb.length; i++) {
-                //Rajoute une date
-                document.getElementById('addDateButton').click();
-                //Date début
-                inputs[i-1].value = dateR_deb[i]; 
-                //Permet de mettre le bon type
-                inputs_reccu[i -1].value = dateR_type[i];
-                var event = new Event('change', { bubbles: true, cancelable: true });
-                inputs_reccu[i -1].dispatchEvent(event);
-                //Date fin
-                inputs_ends[i + 2].value = dateR_fin[i].replace(/\!/g, 'W');
-                console.log("Taille : " + inputs.length);
-                size++;
-
-            }
-        }
         if (datePoncService != null) {
-            for (var i = 1; i < datePoncts.length; i++) {
+            for (var i = skip_first_index_poncts; i < datePoncts.length; i++) {
                 document.getElementById('addDateButton').click();
                 inputs[size-1].value = datePoncts[i]; // Assigner chaque date à l'entrée correspondante
                 size++;
             }
         }
+        // Ajout des dates optionnels pour les date reccurente
+        if (dateReccu_Debut != null) {
+            for (var i = skip_first_index_recu; i < dateR_deb.length; i++) {
+                //Rajoute une date
+                document.getElementById('addDateButton').click();
+                //Date début
+                inputs[i-skip_first_index_recu].value = dateR_deb[i]; 
+                //Permet de mettre le bon type
+                inputs_reccu[i-skip_first_index_recu].value = dateR_type[i];
+                var event = new Event('change', { bubbles: true, cancelable: true });
+                inputs_reccu[i-skip_first_index_recu].dispatchEvent(event);
+                //Date fin
+                inputs_ends[i + 3 - skip_first_index_recu].value = dateR_fin[i].replace(/\!/g, 'W');
+                console.log("Taille : " + inputs.length);
+                size++;
+
+            }
+        }
+        
         
         // l'inverse
         document.getElementById("blocMateriel").style.display = "none";
