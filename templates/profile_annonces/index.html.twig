@@ -23,10 +23,45 @@
             <h3>{{ annonce.getTitre() }}</h3>
             <div class="description">{{ annonce.getDescription() }}</div>
             {% if annonce.getType() == "Materiel" %}
-                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}','{{ annonce.getDuree() }}',null)">Modifier</button>
+                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}','{{ annonce.getDuree() }}',null,null,null,null)">Modifier</button>
             {% endif %}
             {% if annonce.getType() == "Service" %}
-                <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,null)">Modifier</button>
+                {%if annonce.getDatePoncts().get(0) != null%}
+                    {% set datePoncts = [] %}
+                    {%for dateP in annonce.getDatePoncts()%}
+                        {% set datePoncts = datePoncts|merge([dateP.date|date('Y-m-d H:i')]) %}
+                    {%endfor%}
+                    {% set datePonctsString = datePoncts|json_encode|escape('js') %}
+                    {% if annonce.getRecurrence().get(0)!=null  %}
+                        {% set dateReccu_Debut = [] %}
+                        {% set dateReccu_Fin   = [] %}
+                        {% set dateReccu_Type  = [] %}
+                        {%for dateR in annonce.getRecurrence()%}
+                            {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
+                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date('Y-m-d')]) %}
+                            {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
+                        {%endfor%}
+                        {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
+                        {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
+                        {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
+                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,'{{ datePonctsString }}','{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
+                    {% else %}
+                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,'{{ datePonctsString }}',null,null,null)">Modifier</button>
+                    {% endif %}
+                {%else%}
+                        {% set dateReccu_Debut = [] %}
+                        {% set dateReccu_Fin   = [] %}
+                        {% set dateReccu_Type  = [] %}
+                        {%for dateR in annonce.getRecurrence()%}
+                            {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
+                            {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date('Y-m-d')]) %}
+                            {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
+                        {%endfor%}
+                        {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
+                        {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
+                        {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
+                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom() }}',null,null,'{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
+                {%endif%}
             {% endif %}
             <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
         </div>
@@ -78,6 +113,7 @@
                     {% endfor %}
                 </select>
             </div>
+
             <div class="special-div">
                 <label for="date_pret">Date et heure du service * </label>
                 <input type="datetime-local" id="date_pret" name="date_pret" min="{{ "now"|date("Y-m-d") }}T00:00" title="Date et heure du prêt optionnel, doit être supérieur à maintenant" required />
