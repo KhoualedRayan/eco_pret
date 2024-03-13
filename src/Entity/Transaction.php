@@ -51,6 +51,9 @@ class Transaction
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $duree_final = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateDebutPret = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -234,5 +237,17 @@ class Transaction
     {
         if ($this->getClient() != $user) return "Offrant";
         else return "Client";
+    }
+
+    public function getDateDebutPret(): ?\DateTimeInterface
+    {
+        return $this->dateDebutPret;
+    }
+
+    public function setDateDebutPret(?\DateTimeInterface $dateDebutPret): static
+    {
+        $this->dateDebutPret = $dateDebutPret;
+
+        return $this;
     }
 }

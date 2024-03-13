@@ -15,9 +15,17 @@ use App\Entity\Annonce;
 use App\Entity\User;
 use App\Entity\Notification;
 use DateTime;
+use App\Service\Outils;
 
 class ProfileTransactionsController extends AbstractController
 {
+    private $outils;
+
+    public function __construct(Outils $outils)
+    {
+        $this->outils = $outils;
+    }
+
     #[Route('/profile/transactions', name: 'app_profile_transactions')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -30,11 +38,17 @@ class ProfileTransactionsController extends AbstractController
             }
         }
 
-        $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser()]);
+        $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser() ]);
+        $transactionsClientEnCours = array_filter($transactionsClient, function ($transaction) {
+            return $transaction->getStatutTransaction() === "En cours";
+        });
         $transactionsPosteur = $this->getUser()->getAnnonces()
                                 ->filter(function($a) {
                                     return $a->getTransaction() != null;
                                 })->map(function($a) { return $a->getTransaction(); })->toArray();
+        $transactionsPosteurEnCours = array_filter($transactionsPosteur, function ($transaction) {
+            return $transaction->getStatutTransaction() === "En cours";
+        });
         $filesDattentes = $this->getUser()->getAnnoncesOuJattends();
         $annoncesEnAttente = []; // Pour stocker les annonces où l'utilisateur n'est pas premier
 
@@ -46,11 +60,24 @@ class ProfileTransactionsController extends AbstractController
                  $annoncesEnAttente[] = $annonce;
             }
         }
+        // Filtration des transactions du client terminées
+        $transactionsClientTerminees = array_filter($transactionsClient, function ($transaction) {
+            return $transaction->getStatutTransaction() === "Terminer";
+        });
+
+        // Filtration des transactions posteur terminées
+        $transactionsPosteurTerminees = array_filter($transactionsPosteur, function ($transaction) {
+            return $transaction->getStatutTransaction() === "Terminer";
+        });
+
+        // Fusion des transactions terminées en une seule variable
+        $toutesTransactionsTerminees = array_merge($transactionsClientTerminees, $transactionsPosteurTerminees);
 
         return $this->render('profile_transactions/index.html.twig', [
             'controller_name' => 'ProfileTransactionsController',
-            'transactionsClient' => $transactionsClient,
-            'transactionsPosteur' => $transactionsPosteur,
+            'transactionsClient' => $transactionsClientEnCours,
+            'transactionsPosteur' => $transactionsPosteurEnCours,
+            'transactionsTermines' => $toutesTransactionsTerminees,
             'annoncesEnAttente' => $annoncesEnAttente,
             'onglet' => "transactions",
         ]);
@@ -197,27 +224,12 @@ class ProfileTransactionsController extends AbstractController
     {
         $notif = new Notification();
         $date = new DateTime();
-        $messageCrypter = $this->crypterMessage($contenu);
+        $messageCrypter = $this->outils->crypterMessage($contenu);
         $notif->setAEteLu(false);
         $notif->setContenu($messageCrypter);
         $notif->setDateEnvoi($date);
         $notif->setUser($user);
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
-    }
-    function crypterMessage($message)
-    {
-        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $messageCrypte = openssl_encrypt($message, 'aes-256-cbc', $cleSecrete, 0, $iv);
-        return base64_encode($iv . $messageCrypte);
-    }
-    function decrypterMessage($messageCrypte)
-    {
-        $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
-        $messageCrypte = base64_decode($messageCrypte);
-        $iv = substr($messageCrypte, 0, openssl_cipher_iv_length('aes-256-cbc'));
-        $messageCrypte = substr($messageCrypte, openssl_cipher_iv_length('aes-256-cbc'));
-        return openssl_decrypt($messageCrypte, 'aes-256-cbc', $cleSecrete, 0, $iv);
     }
 }

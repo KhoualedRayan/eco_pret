@@ -75,14 +75,17 @@ function submitMotDePasseForm(event) {
     data.append('motDePasseActuel', document.getElementById('motDePasseActuel').value);
     data.append('nouveauMotDePasse', document.getElementById('nouveauMotDePasse').value);
     data.append('confirmNouveauMDP', document.getElementById('confirmNouveauMDP').value);
-    
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
+
+            location.reload();
+
             if (xhr.responseText != "OK") {
                 document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
-				setTimeout(function () {
-				    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
-				}, 4000);
+                setTimeout(function () {
+                    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
+                }, 4000);
             }
         }
     };

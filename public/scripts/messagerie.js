@@ -35,10 +35,18 @@ function updateDiscussion(dest, interlocuteur) {
                 var statut = data.statut.split("-")[1];
                 if (statut == data.userRole) {
                     document.getElementById('validerBouton').innerHTML = "<span class='material-icons'>done</span> (1/2)";
+                } else {
+                    document.getElementById('validerBouton').innerHTML = "Valider (1/2)";
                 }
-            } else if (data.statut == "Valide") {
+            } else if (data.statut == "Terminer") {
                 document.getElementById('validerBouton').innerHTML = "done_all";
                 document.getElementById('validerBouton').classList.add("material-icons");
+                document.getElementById('validerBouton').disabled = true;
+                // à mettre dans un css et ajouter à la liste des classes
+                document.getElementById('validerBouton').style.backgroundColor = "gray";
+                document.getElementById('validerBouton').style.cursor = "default";
+            } else {
+                document.getElementById('validerBouton').innerHTML = "Valider (0/2)";
             }
             
         })
@@ -146,4 +154,46 @@ function valider() {
 
 function closeValidDialog() {
     document.getElementById("valider").close();
+}
+
+function accepter() {
+    if (idDeLaTransaction == null) {
+        alert("Something went wrong.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "ERROR") {
+                document.getElementById("valider").close();
+                document.getElementById('validerBouton').innerHTML = "done_all";
+                document.getElementById('validerBouton').classList.add("material-icons");
+            } else {
+                alert("erreur");
+            } 
+        }
+    };
+    xhr.open('POST', '/ajax/accepter/'+idDeLaTransaction, true);
+    xhr.send();
+}
+
+function refuser() {
+    if (idDeLaTransaction == null) {
+        alert("Something went wrong.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText != "ERROR") {
+                document.getElementById("valider").close();
+            } else {
+                alert("erreur");
+            } 
+        }
+    };
+    xhr.open('POST', '/ajax/refuser/'+idDeLaTransaction, true);
+    xhr.send();
 }
