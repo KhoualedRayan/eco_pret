@@ -15,8 +15,8 @@ class TestGererProfilTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $form = $crawler->filter('#login')->form();
-        $form['id'] = 'test2';
-        $form['password'] = '123456';
+        $form['id'] = 'marcheToujours';
+        $form['password'] = '098765';
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertRouteSame('app_home_page');

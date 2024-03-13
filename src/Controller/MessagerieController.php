@@ -131,7 +131,7 @@ class MessagerieController extends AbstractController
     function envoieMessage(EntityManagerInterface $entityManager,Transaction $transaction, string $contenu,User $user){
         $message = new Message();
         $date = new DateTime();
-        $contenu = $this->crypterMessage($contenu);
+        $contenu = $this->outils->crypterMessage($contenu);
         $message->setContenu($contenu);
         $message->setDateEnvoi($date);
         $message->setTransaction($transaction);
@@ -180,6 +180,7 @@ class MessagerieController extends AbstractController
                     $duree = $data->get('duree');
                     $modalite = $data->get('duree_pret');
                     $transaction->setDureeFinal($duree." ".$modalite);
+                    $transaction->setDateDebutPret($data->get('dateDebut'));
                 }
                 
                 $transaction->setPrixFinal($prix);

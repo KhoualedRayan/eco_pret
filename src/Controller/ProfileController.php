@@ -40,14 +40,7 @@ class ProfileController extends AbstractController
             }
         }
 
-        $session = new Session();
-        $edit_mode = $session->has('errors');
-        if ($edit_mode) {
-            $errors = $session->get('errors');
-            $session->remove('errors');
-        } else {
-            $errors = [];
-        }
+        $edit_mode = false;
 
         $abonnements = $entityManager->getRepository(Abonnement::class)->findAll();
         foreach ($abonnements as $key => $abonnement) {
@@ -57,7 +50,6 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
-            'errors' => $errors,
             'edit_mode' => $edit_mode,
             'abonnements' => $abonnements,
             'onglet' => "infos",

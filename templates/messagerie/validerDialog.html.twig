@@ -13,7 +13,7 @@
     <form action="{{ path('validation1') }}" method="POST">
         <input type="hidden" name="id" value="{{transaction.id}}"> 
         <div>
-        Prix Final : <input type="number" name="prix" value="{{transaction.annonce.prix}}" required> 
+        Prix Final : <input type="number" name="prix" value="{{transaction.annonce.prix}}" required> florains
         </div>
         <br>
 
@@ -24,13 +24,14 @@
                 <option value="heures" {% if d[1] == "heures" %}selected{% endif %}>heures</option>
                 <option value="jours" {% if d[1] == "jours" %}selected{% endif %}>jours</option>
             </select><br />
+            Quand se passera l'échange ? : <input type="datetime-local" name="dateDebut" required><br><br>
         {% endif %}
         <div>
             <button type="submit" class='but boutonDialog'>Valider</button>
             <button type="button" class='but boutonDialog' onclick="closeValidDialog()">Annuler</button>
         </div>
     </form>
-{% else if statut != 'Terminer' %}
+{% elseif statut != 'Terminer' %}
 {# quelqu'un a déjà validé, on montre les informations (et si c'est la personne qui n'a pas validé qui clique, on lui demande de faire un choix #}
 Prix d'origine : <span>{{transaction.annonce.prix}}</span><br>
 Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
@@ -38,6 +39,8 @@ Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
 {% if transaction.annonce.getType() == "Materiel" %}
     Durée d'origine : <span>{{transaction.annonce.duree}}</span><br>
     Nouvelle durée : <span>{{transaction.dureeFinal}}</span><br>
+
+    Date de l'échange (= début du prêt) : <span>{{transaction.dateDebutPret|format('d-m-Y')}}/span><br>
 {% endif %}
 
 <div>

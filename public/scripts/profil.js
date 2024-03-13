@@ -68,8 +68,6 @@ function activeModeSommeil(){
 
 function submitMotDePasseForm(event) {
 
-    var conf = confirm("Voulez vous vraiment changer de mot de passe ?");
-
 	event.preventDefault();
 	var xhr = new XMLHttpRequest();
 
@@ -78,26 +76,22 @@ function submitMotDePasseForm(event) {
     data.append('nouveauMotDePasse', document.getElementById('nouveauMotDePasse').value);
     data.append('confirmNouveauMDP', document.getElementById('confirmNouveauMDP').value);
 
-    if(conf){
-    
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
 
-                location.reload();
+            location.reload();
 
-                if (xhr.responseText != "OK") {
-                    document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
-                    setTimeout(function () {
-                        document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
-                    }, 4000);
-                }
+            if (xhr.responseText != "OK") {
+                document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
+                setTimeout(function () {
+                    document.getElementById(xhr.responseText + "Erreur").style.display = 'none';
+                }, 4000);
             }
-        };
+        }
+    };
 
-        xhr.open('POST', '/ajax/mdpForm', true);
-        xhr.send(data);
-
-    }
+    xhr.open('POST', '/ajax/mdpForm', true);
+    xhr.send(data);
 }
 
 function desabonner() {
