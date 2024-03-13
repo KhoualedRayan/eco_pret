@@ -23,7 +23,7 @@ class TestsConnexionTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $form = $crawler->filter('#login')->form();
-        $form['id'] = 'test2';
+        $form['id'] = 'test';
         $form['password'] = '123456';
         $client->submit($form);
         $crawler = $client->followRedirect();
