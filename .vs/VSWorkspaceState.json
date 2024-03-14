@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
-    "\\public\\scripts",
     "\\src",
-    "\\src\\Controller",
-    "\\src\\Entity",
+    "\\src\\Security",
     "\\templates",
-    "\\templates\\messagerie",
-    "\\templates\\notification",
-    "\\templates\\pret_materiel",
-    "\\templates\\profile"
+    "\\templates\\home_page",
+    "\\templates\\profile_annonces",
+    "\\templates\\profile_planning",
+    "\\templates\\profile_transactions",
+    "\\templates\\vue_annonce",
+    "\\tests"
   ],
+  "SelectedNode": "\\src\\Security\\LoginAuthenticator.php",
   "PreviewInSolutionExplorer": false
 }

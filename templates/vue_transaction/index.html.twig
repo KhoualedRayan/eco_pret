@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/vueTransactions.css') }}">
+    
+
+{% endblock %}
+{% block title %}Transaction - {{transaction.annonce.titre}}{% endblock %}
+
+{% block body %}
+    
+    <div>
+        <h2 class="centrer">{{transaction.annonce.titre}}</h2>
+        <a href="{{ path('app_messagerie') }}" >Messagerie</a> <br />
+
+        Posté par&nbsp;<b>{{ transaction.annonce.posteur.username }}</b>&nbsp; <br />
+        Client &nbsp;<b>{{ transaction.client.username }}</b>&nbsp;
+
+        <br>
+        <span class="bold">Prix</span> : {{ transaction.getPrixFinal()}}<span class="material-icons">attach_money</span>
+        <br>
+        <div class="type">{{ transaction.annonce.getType() }}</div>
+        <div class="categorie">{{ transaction.annonce.getCategorie().getNom() }}
+    </div>
+    <br><br>
+    {% if transaction.annonce.getType() == "Materiel" %}<div class="duree"><span class="bold">Durée du prêt </span> : {{ transaction.getDureeFinal() }}</div>
+    {% else %}
+    <span class="bold">Horaires</span> :
+    {% if not (transaction.annonce.datePoncts is empty) %}Le(s){% endif %}
+    {% for x in transaction.annonce.datePoncts %}
+        {{x.date|date('d M Y')}},
+    {% endfor %}
+    <br>
+    {% for x in transaction.annonce.recurrence %}
+        {% if x.typeRecurrence == 'quotidienne' %}
+            Tous les jours 
+        {% elseif x.typeRecurrence == 'hebdomadaire' %}
+            Toutes les semaines 
+        {% elseif x.typeRecurrence == 'mensuelle' %}
+            Tous les mois 
+        {% endif %}
+        du {{x.dateDebut|date('d M Y')}} au {{x.dateFin|date('d M Y')}},<br>
+    {% endfor %}
+    {% endif %}
+    <br>
+    <span class="bold">Description</span> :
+    <p class="rrrr">{{ transaction.annonce.description }}</p><br>
+    </div>
+    <div class="evaluation">
+        <div>
+            <b>Note</b>
+            <div class="stars">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9734;</span>
+            </div>
+            <div class="avis">
+                <label for="commentaire"><b>Commentaire</b></label><br />
+                <textarea name="commentaire" ></textarea><br />
+            </div>
+        </div>
+    </div>
+
+<script src="{{ asset('scripts/vueTransaction.js') }}"></script>
+{% endblock %}

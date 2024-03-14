@@ -1,0 +1,48 @@
+.content {
+	flex: 0;
+	padding: 10px 3em;
+	display: inline-block;
+	width: fit-content;
+	height: fit-content;
+	margin: auto;
+	text-align:center;
+	background-color: var(--couleurFondMain);
+	border: 1px var(--couleurFilet) solid;
+	border-radius: .5rem;
+}
+.stars {
+	display: inline-block;
+	cursor:pointer;
+}
+
+.star {
+	color: gold;
+	font-size: 36px;
+}
+
+/* Style pour les étoiles non sélectionnées, si nécessaire */
+.star-grise {
+	color: #ccc;
+}
+textarea {
+	width: 30em; /* Largeur ajustée à un quart de l'écran */
+	height:7em;
+	padding: 8px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+
+.centrer{
+	text-align:center;
+}
+.rrrr {
+	background-color: #ddd;
+	border-radius: 0.5rem;
+	padding: 5px;
+	width: fit-content;
+	margin: auto; /* Centrer le bloc horizontalement */
+	display: block; /* Assure que le bloc peut être centré avec margin auto */
+	text-align: center; /* Centrer le texte à l'intérieur du bloc si nécessaire */
+}
