@@ -14,13 +14,13 @@
     <form action="{{ path('validation1') }}" method="POST">
         <input type="hidden" name="id" value="{{transaction.id}}"> 
         <div>
-        Prix Final : <input type="number" name="prix" pattern="[0-9]*" style="width: 60px;" value="{{transaction.annonce.prix}}" required><span class="material-icons">attach_money</span>
+        Prix Final : <input type="text" name="prix" pattern="^[0-9]*$" style="width: 60px;" value="{{transaction.annonce.prix}}" required><span class="material-icons">attach_money</span>
         </div>
         <br>
 
         {% if transaction.annonce.getType() == "Materiel" %}
             {% set d = transaction.annonce.duree|split(' ') %}
-            Durée fin : <input type="number" style="width: 60px;" pattern="[0-9]*" name="duree" value="{{d[0]}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
+            Durée fin : <input type="text" style="width: 60px;" pattern="^[0-9]*$" name="duree" value="{{d[0]}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
             <select name="duree_pret"  >
                 <option value="heures" {% if d[1] == "heures" %}selected{% endif %}>heures</option>
                 <option value="jours" {% if d[1] == "jours" %}selected{% endif %}>jours</option>

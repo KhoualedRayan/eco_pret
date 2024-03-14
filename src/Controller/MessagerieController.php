@@ -236,7 +236,7 @@ class MessagerieController extends AbstractController
             $notification->setAEteLu(false);
             $notification->setDateEnvoi(new DateTime());
             // on envoie l'information que la transaction est réalisée en notifications à celui qui n'a pas validé en dernier
-            $notification->setUser($client == $this->getUser() ? $posteur : $client);
+            $notification->setUser($transaction->getClient() == $this->getUser() ? $transaction->getAnnonce()->getPosteur() : $transaction->getClient());
             $em->merge($client);
             $em->merge($posteur);
             $em->merge($transaction);
@@ -267,7 +267,7 @@ class MessagerieController extends AbstractController
         $notification->setAEteLu(false);
         $notification->setDateEnvoi(new DateTime());
         // on envoie l'information que la transaction a été annulé en notifications à celui qui n'a pas validé en dernier
-        $notification->setUser($client == $this->getUser() ? $posteur : $client);
+        $notification->setUser($transaction->getClient() == $this->getUser() ? $transaction->getAnnonce()->getPosteur() : $transaction->getClient());
         $em->merge($transaction);
         $em->persist($notification);
         $em->flush();
