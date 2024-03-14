@@ -14,6 +14,7 @@ class VueAnnonceController extends AbstractController
     #[Route('/vue/annonce/{id}', name: 'app_vue_annonce')]
     public function index($id, EntityManagerInterface $em): Response
     {
+        
         $annonce = $em->getRepository(Annonce::class)->find(intval($id));
         if (!$annonce) {
             return $this->redirectToRoute('app_home_page');

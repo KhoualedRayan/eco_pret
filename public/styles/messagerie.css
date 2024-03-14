@@ -208,6 +208,18 @@ button {
     background-color: var(--couleurFancy);
 }
 
+.bold {
+    font-weight: bold;
+}
+
+dialog {
+    background-color: var(--couleurFondMain);
+    color: var(--couleurTexte);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+    border: 1.5px solid var(--couleurTexte);
+}
+
 .mi-v {
     color: white;
     padding: 2px;

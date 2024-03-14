@@ -2,7 +2,8 @@
 <h2>
     Annonce : {{ transaction.annonce.titre }}
 </h2>
-<p>Une fois que vous vous êtes mis d'accord sur votre transaction, vous devez tous les 2 valider l'échange.<br>
+<p>Une fois que vous vous êtes mis d'accord sur votre transaction, <br>
+    vous devez tous les 2 valider l'échange.<br>
     Vous pouvez aussi si besoin modifier le prix {% if transaction.annonce.getType() == "Materiel" %} et/ou la durée du prêt {% endif %} selon votre accord.
 </p>
 <br>
@@ -13,37 +14,36 @@
     <form action="{{ path('validation1') }}" method="POST">
         <input type="hidden" name="id" value="{{transaction.id}}"> 
         <div>
-        Prix Final : <input type="number" name="prix" value="{{transaction.annonce.prix}}" required> florains
+        Prix Final : <input type="number" name="prix" pattern="[0-9]*" style="width: 60px;" value="{{transaction.annonce.prix}}" required><span class="material-icons">attach_money</span>
         </div>
         <br>
 
         {% if transaction.annonce.getType() == "Materiel" %}
             {% set d = transaction.annonce.duree|split(' ') %}
-            Durée fin : <input type="number" name="duree" value="{{d[0]}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
+            Durée fin : <input type="number" style="width: 60px;" pattern="[0-9]*" name="duree" value="{{d[0]}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
             <select name="duree_pret"  >
                 <option value="heures" {% if d[1] == "heures" %}selected{% endif %}>heures</option>
                 <option value="jours" {% if d[1] == "jours" %}selected{% endif %}>jours</option>
-            </select><br />
+            </select><br /><br>
             Quand se passera l'échange ? : <input type="date" name="dateDebut"  min="{{ "now"|date("Y-m-d") }}" required><br><br>
         {% endif %}
-        <div>
+        <br>
+        <div style="display: flex; justify-content: space-around;">
             <button type="submit" class='but boutonDialog'>Valider</button>
             <button type="button" class='but boutonDialog' onclick="closeValidDialog()">Annuler</button>
         </div>
     </form>
 {% elseif statut != 'Terminer' %}
 {# quelqu'un a déjà validé, on montre les informations (et si c'est la personne qui n'a pas validé qui clique, on lui demande de faire un choix #}
-Prix d'origine : <span>{{transaction.annonce.prix}}</span><br>
-Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
-
+Prix d'origine : <span class="bold">{{transaction.annonce.prix}}<span class="material-icons">attach_money</span></span>   ------->   Nouveau Prix : <span class="bold">{{transaction.prixFinal}}<span class="material-icons">attach_money</span></span><br>
+<br>
 {% if transaction.annonce.getType() == "Materiel" %}
-    Durée d'origine : <span>{{transaction.annonce.duree}}</span><br>
-    Nouvelle durée : <span>{{transaction.dureeFinal}}</span><br>
+    Durée d'origine : <span class="bold">{{transaction.annonce.duree}}</span>   ------->   Nouvelle durée : <span class="bold">{{transaction.dureeFinal}}</span><br><br>
 
-    Date de l'échange (= début du prêt) : <span>{{transaction.dateDebutPret|date('d-m-Y')}}</span><br>
+    Date de l'échange (soit le début du prêt) : <span class="bold">{{transaction.dateDebutPret|date('d M Y')}}</span><br>
 {% endif %}
-
-<div>
+<br>
+<div style="display: flex; justify-content: space-around;">
     {% set userRoleValide = transaction.getStatutTransaction()|split('-')[1] %}
     {% set interlocuteur = app.user == transaction.client ? transaction.annonce.posteur : transaction.client %}
     {% if userRole != userRoleValide %}

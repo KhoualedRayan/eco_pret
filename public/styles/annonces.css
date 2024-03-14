@@ -12,6 +12,12 @@
 .lienAnnonce {
     color: inherit;
     text-decoration: none;
+    transition: transform 0.2s; /* Animation de transition */
+}
+
+/* Effet agrandi au survol */
+.lienAnnonce:hover {
+    transform: scale(1.05); /* Augmentation de l'échelle de 10% */
 }
 
 

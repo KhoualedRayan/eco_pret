@@ -51,12 +51,6 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
         $change = FALSE;
 
-        // je le mets là parce que bon le copier coller partout...
-        if($user->isBusy()){
-            $user->setSleepMode(true);
-            $change = TRUE;
-        }
-
         if ($user->getAbonnement() != null) {
             $nextDateAbo = $user->getDateAbonnement();
             echo $nextDateAbo->format("Y-m-d");
