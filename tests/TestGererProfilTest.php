@@ -49,4 +49,8 @@ class TestGererProfilTest extends WebTestCase
         $this->assertTrue($client->getCrawler()->filter('html:contains("nouveau_nom_utilisateur")')->count() > 0);
 
     }
+    public function echot(): void 
+    {
+        echo "wouah";
+    }
 }
