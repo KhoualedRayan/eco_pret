@@ -54,9 +54,11 @@
         </thead>
         <tbody>
             {% for b in listeClients %}
-            <tr>
-                <td>{{ b.username }}</td>
-            </tr>
+                {% if b != annonce.transaction.client %}
+                    <tr>
+                        <td>{{ b.username }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
