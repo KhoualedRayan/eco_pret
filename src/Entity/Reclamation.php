@@ -29,6 +29,10 @@ class Reclamation
     #[ORM\ManyToOne(inversedBy: 'reclamations_traitees')]
     private ?User $administrateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reclamations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategorieReclamation $tag_reclamation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +94,18 @@ class Reclamation
     public function setAdministrateur(?User $administrateur): static
     {
         $this->administrateur = $administrateur;
+
+        return $this;
+    }
+
+    public function getTagReclamation(): ?CategorieReclamation
+    {
+        return $this->tag_reclamation;
+    }
+
+    public function setTagReclamation(?CategorieReclamation $tag_reclamation): static
+    {
+        $this->tag_reclamation = $tag_reclamation;
 
         return $this;
     }

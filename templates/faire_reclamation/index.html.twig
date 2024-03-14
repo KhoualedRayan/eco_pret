@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
+{% endblock %}
+
+{% block title %}Hello FaireReclamationController!{% endblock %}
+
+{% block body %}
+
+<div>
+<form action="{{ path('handle_form') }}" method="post">
+    <label for="titre">Objet de la réclamation *</label>
+    <input type="text" name="objet" required /><br />
+
+    <br />
+    <label for="description">Description *</label><br />
+    <textarea name="description" required></textarea><br />
+    <br />
+
+    </br>
+    <label for="prix">* Champs obligatoires</label>
+    </br>
+
+    <button>Valider</button>
+    <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>
+</form>
+</div>
+{% endblock %}
