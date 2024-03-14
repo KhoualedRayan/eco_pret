@@ -1,0 +1,64 @@
+/* Style de base pour le tableau */
+table {
+    border-collapse: collapse;
+}
+
+/* Style des cellules d'en-tête */
+th {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Style des cellules de données */
+td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+/* Style des lignes paires */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Style des cellules de données centrées */
+td.center {
+    text-align: center;
+}
+
+/* Style des cellules de données alignées à droite */
+td.right {
+    text-align: right;
+}
+
+.content {
+    margin: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    font-size: 1.05em;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.categorie {
+    margin-top: 10px;
+    border-radius: 1rem;
+    padding: 5px 10px;
+    background-color: #f87122;
+    color: white;
+    font-weight: bold;
+    display: inline-flex;
+}
+
+.desc {
+    background-color: #ddd;
+    border-radius: 0.5rem;
+    width: fit-content;
+    padding: 5px;
+}
+

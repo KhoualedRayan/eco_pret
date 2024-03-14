@@ -39,7 +39,7 @@
                     {%endif%}
                     
                     {%if app.user.contientUneNotifNonLu() %}
-                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications_active</span></a></div>
+                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons" style="color: red;">notifications_active</span></a></div>
                     {%else%}
                         <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications</span></a></div>
                     {%endif%}

@@ -146,6 +146,7 @@ abstract class Annonce
     {
         return $this->attentes;
     }
+
     public function addAttente(FileAttente $attente): static
     {
         if (!$this->attentes->contains($attente)) {

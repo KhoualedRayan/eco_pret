@@ -19,11 +19,11 @@
 
 <div class="tout">
     {% for annonce in annonces %}
-        {% if annonce.getPosteur().isSleepMode() == false and annonce.getPosteur().isBusy() == false and annonce.getStatut() == "Disponible" %}
-            <div class="blocAnnonce">
+        {% if annonce.getPosteur().isSleepMode() == false and annonce.getStatut() == "Disponible" %}
+            <a href="{{ path('app_vue_annonce', {'id': annonce.id}) }}" class="lienAnnonce"><div class="blocAnnonce">
                 <div>
                     <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                    <div style="display: flex; align-items: center;"><div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div><span class="username">{{ annonce.getPosteur().getUsername() }}</span></div>
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
@@ -35,7 +35,7 @@
                     {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
                         {% if annonce.attentes is empty %}
                             <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
-                        {% elseif annonce.transaction %}
+                        {% elseif annonce.contientUserDansFiles(app.user) == false %}
                             <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
                         {% endif %}
                     {% endif %}
@@ -44,7 +44,7 @@
                     {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
                         {% if annonce.attentes is empty and annonce.getType() == "Service" %}
                             <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
-                        {% elseif annonce.transaction and annonce.getType() == "Service" %}
+                        {% elseif annonce.contientUserDansFiles(app.user) == false and annonce.getType() == "Service" %}
                             <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
                         {% endif %}
                     {% endif %}

@@ -3,6 +3,7 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('styles/messagerie.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
     <script src="{{ asset('scripts/messagerie.js') }}"></script>
 {% endblock %}
 
@@ -16,7 +17,7 @@
         </div>
         <div class="colonne-droite">
             <div class="section-haut">
-                <h3 class="cache"></h3>
+                <div style="display: flex; align-items: center;"><div id="statut" class="cercle"></div><h3 class="cache"></h3></div>
             </div>
             <div class="section-bas">
                 <p>Sélectionnez une transaction pour voir les messages.</p>

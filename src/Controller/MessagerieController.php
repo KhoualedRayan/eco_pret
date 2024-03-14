@@ -108,8 +108,11 @@ class MessagerieController extends AbstractController
             'statut' => $transaction->getStatutTransaction(), 
             'userRole' => $transaction->getRole($this->getUser())
         ]);
+        $interlocuteur = $this->getUser() == $transaction->getClient() ? $transaction->getAnnonce()->getPosteur() : $transaction->getClient() ;
 
-        return $this->json(['html' => $html, 'boutonHtml' => $boutonHtml]);
+        return $this->json(['html' => $html, 
+                            'boutonHtml' => $boutonHtml, 
+                            'statut' => $interlocuteur->isBusy() ? "indisponible" : "dispo"]);
     }
 
     #[Route('/ajax/nouveau_message', name: 'nouveau_message')]

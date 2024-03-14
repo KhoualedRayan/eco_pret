@@ -31,7 +31,8 @@ function updateDiscussion(dest, interlocuteur) {
             var zoneScroll = document.querySelector(".section-bas");
             zoneScroll.innerHTML = data.html;
             zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
-            document.getElementById('valideBoutonDiv').innerHTML = data.boutonHtml;  
+            document.getElementById('valideBoutonDiv').innerHTML = data.boutonHtml;
+            document.getElementById('statut').classList.add(data.statut == "indisponible" ? "rouge" : "vert");
         })
         .catch(error => console.error('Erreur:', error));
 }

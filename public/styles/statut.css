@@ -1,0 +1,15 @@
+.cercle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%; /* Pour créer un cercle */
+    display: inline-flex;
+    margin-right: 5px;
+}
+
+.vert {
+    background-color: rgb(16, 173, 16);
+}
+
+.rouge {
+    background-color: red;
+}
