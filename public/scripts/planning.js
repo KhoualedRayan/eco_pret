@@ -196,7 +196,7 @@ function valider_tout() {
         }, 4000);
       }
     } else {
-      location.reload();
+      window.location.reload();
     }
   };
   xhr.open('POST', '/ajax/planning_validate', true);

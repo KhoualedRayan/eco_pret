@@ -34,13 +34,9 @@ class ProfileController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        if($this->getUser()){
-            if ($this->getUser()->isSleepMode()) {
-                return $this->redirectToRoute('app_sleep_mode');
-            }
+        if ($this->getUser()->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
         }
-
-        $edit_mode = false;
 
         $abonnements = $entityManager->getRepository(Abonnement::class)->findAll();
         foreach ($abonnements as $key => $abonnement) {
@@ -50,13 +46,12 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
-            'edit_mode' => $edit_mode,
             'abonnements' => $abonnements,
             'onglet' => "infos",
         ]);
     }
 
-    #[Route('/handle_infos_form', name: 'handle_infos_form')]
+    #[Route('/ajax/handle_infos_form', name: 'handle_infos_form')]
     public function handleInfosForm(EntityManagerInterface $entityManager,Request $request, UserRepository $ur, AbonnementRepository $ar): Response
     {
         $infos = $request->request;
@@ -66,7 +61,6 @@ class ProfileController extends AbstractController
         $newPrenom = $infos->get('prenom');
         $newAbo = $infos->get('options');
 
-        $errors = [];
         $user = $this->getUser();
 
         if ($newAbo != null) {
@@ -82,21 +76,16 @@ class ProfileController extends AbstractController
 
         // Check if new username contains "@" or already exists
         if (strpos($newUsername, '@') == true) {
-            $errors['username'] = 'Le nom d\'utilisateur ne peut pas contenir "@".';
+            return $this->json(['type' => 'erreurU', 'content' => 'Le nom d\'utilisateur ne peut pas contenir "@".']);
         } else if ($newUsername != $user->getUsername()) {
-            if ($ur->findOneByUsername($newUsername)) $errors['username'] = 'Le pseudo '.$newUsername.' est déjà utilisé par un autre utilisateur.';
+            if ($ur->findOneByUsername($newUsername)) 
+                return $this->json(['type' => 'erreurU', 'content' => 'Le pseudo '.$newUsername.' est déjà utilisé par un autre utilisateur.']);
             else $user->setUsername($newUsername);
         }
 
         if ($newEmail != $user->getEmail()) {
-            if ($ur->findOneByEmail($newEmail)) $errors['email'] = 'Il existe déjà un compte associé a l\'email '.$newEmail.'.';
+            if ($ur->findOneByEmail($newEmail)) return $this->json(['type' => 'erreurE', 'content' => 'Il existe déjà un compte associé a l\'email '.$newEmail.'.']);
             else $user->setEmail($newEmail);
-        }
-
-        if ($errors != []) {
-            $session = new Session();
-            $session->set('errors', $errors);
-            return $this->redirectToRoute('app_profile');
         }
 
         $user->setSurname($newNom);
@@ -105,7 +94,7 @@ class ProfileController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $this->addFlash('notifications', 'Vos modifications ont été enregistrées avec succès !');
-        return $this->redirectToRoute('app_profile');
+        return $this->json(['type' => 'success', 'content' =>$this->generateUrl('app_profile')]);
     }
 
     #[Route('/ajax/mdpForm', name: 'mdp_form')]

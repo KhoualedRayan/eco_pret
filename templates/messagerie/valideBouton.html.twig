@@ -1,0 +1,12 @@
+{% if "-" in statut %}
+    {% set st = statut|split("-")[1] %}
+    {% if st == userRole %}
+        <span onclick="valider()" class="m-right mi-v"><span class='material-icons'>done</span> (1/2)</span>
+    {% else %}
+        <button onclick="valider()" class="m-right valider">Valider (1/2)</button>
+    {% endif %}
+{% elseif statut == "Terminer" %}
+    <span class="material-icons fini m-right">done_all</span>
+{% else %}
+    <button onclick="valider()" class="m-right valider">Valider (0/2)</button>
+{% endif %}

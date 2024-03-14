@@ -25,7 +25,7 @@ class TestsConnexionTest extends WebTestCase
         $client = static::createClient();
 
         $outils->removeUser($client, $username, $email);
-        $user = $outils->createUser($client, $username, $email, '123456');
+        $outils->createUser($client, $username, $email, '123456');
 
         $crawler = $client->request('GET', '/login');
 
@@ -47,7 +47,7 @@ class TestsConnexionTest extends WebTestCase
         $email = 'test2@test2.fr';
 
         $outils->removeUser($client, $username, $email);
-        $user = $outils->createUser($client, $username, $email, '123456');
+        $outils->createUser($client, $username, $email, '123456');
 
         $crawler = $client->request('GET', '/login');
 

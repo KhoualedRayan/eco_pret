@@ -5,8 +5,7 @@
 {% block contenu %}
 
 <div class="tab">
-    <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>{% if edit_mode %}cancel{% else %}edit_square{% endif %}
-    </span>
+    <span class="material-icons edit" title="modifier vos informations" onclick='edit(this)'>edit_square</span>
     <div style="margin-bottom: 25px;">
         <button id="seDesabonnerBtn" class="but" onclick="desabonner()" style="float: right;" {% if app.user.nextAbonnement is null %}disabled{% endif %}>Se désabonner</button>
     <button class="but" onclick="openDialogMDP()" style="float: right;">Changer mon mot de passe</button>
@@ -16,28 +15,28 @@
     <h3>Vos informations personnelles</h3>
     </div>
     <div>
-        <form action="{{ path('handle_infos_form') }}" method="POST">
+        <form onsubmit="infos_form(event)" method="POST">
             <div style="display: flex;">
                 <div>
                     <div class="blockI">
                         <label for="username">Nom d'utilisateur</label><br>
-                        <input type="text" name="username" value="{{ app.user.username }}" {% if not edit_mode %}readonly{% endif %}><br>
-                        <div class="erreur">{% if errors['username'] is defined %} {{ errors['username'] }} {% endif %}</div>
+                        <input type="text" name="username" id="username" value="{{ app.user.username }}" readonly required><br>
+                        <div class="erreur" id="erreurU"></div>
                     </div>
                     <div class="blockI">
                         <label for="email">Email</label><br>
-                        <input type="email" name="email" value="{{ app.user.email }}" {% if not edit_mode %}readonly{% endif %}><br>
-                        <div class="erreur">{% if errors['email'] is defined %} {{ errors['email'] }} {% endif %}</div>    
+                        <input type="email" name="email" id="email" value="{{ app.user.email }}" readonly required><br>
+                        <div class="erreur" id="erreurE"></div>    
                     </div>
                     <div class="blockI">
                         <label>Prénom</label><br>
-                        <input type="text" name="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>
+                        <input type="text" name="prenom" id="prenom" {% if app.user.firstname %} value="{{ app.user.firstname }}" {% else %} placeholder="Non spécifié." {% endif %} readonly><br>
                     </div>
                     <div class="blockI">
                         <label>Nom</label><br>
-                        <input type="text" name="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} {% if not edit_mode %}readonly{% endif %}><br>    
+                        <input type="text" name="nom" id="nom" {% if app.user.surname %} value="{{ app.user.surname }}" {% else %} placeholder="Non spécifié." {% endif %} readonly><br>    
                     </div>
-                    <button type="submit" name="valider" {% if not edit_mode %}class="but validerBouton" {% else %} class="but"{% endif %}>Valider les modifications</button>
+                    <button type="submit" name="valider" class="but validerBouton">Valider les modifications</button>
                 </div>
     
                 
@@ -48,7 +47,7 @@
                     <div class="plans">
                         {% for abo in abonnements %}
                             {% if abo.getNiveau() == 1 %}
-                            <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                            <input type="radio" id="option1" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} disabled>
                             <label for="option1">
                                 <div class="title">{{ abo.nom }}</div>
                                 <div class="infos">
@@ -65,7 +64,7 @@
                                 </div>
                             </label>
                             {% else %}
-                            <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} {% if not edit_mode %}disabled{% endif %}>
+                            <input type="radio" id="option2" name="options" value={{ abo.nom }} {% if abo == app.user.nextAbonnement %}checked{% endif %} disabled>
                             <label for="option2">
                                 <div class="title">{{ abo.nom }}</div>
                                 <div class="infos">

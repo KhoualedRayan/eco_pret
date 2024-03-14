@@ -200,6 +200,33 @@ button {
     cursor: pointer;
 }
 
+.material-icons.fini {
+    font-size: 19px;
+    color: white;
+    padding: 2px;
+    border-radius: 0.25rem;
+    background-color: var(--couleurFancy);
+}
+
+.mi-v {
+    color: white;
+    padding: 2px;
+    font-size: 0.9em;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    background-color: var(--couleurFancy);
+}
+
+.valider {
+    font-weight: bold;
+}
+
+.validDiv {
+    display: inline-flex;
+}
+.m-right {
+    margin-right: 10px;
+}
 .messInput {
     flex: 1;
     border: none;

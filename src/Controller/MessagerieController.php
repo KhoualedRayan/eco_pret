@@ -75,6 +75,9 @@ class MessagerieController extends AbstractController
     #[Route('/charger-messages/{id}', name: 'charger_messages')]
     public function chargerMessages(int $id, TransactionRepository $transactionRepository, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } 
         $transaction = $transactionRepository->find($id);
         $messages = [];
         if ($transaction) {
@@ -101,8 +104,12 @@ class MessagerieController extends AbstractController
         $html = $this->renderView('messagerie/messages.html.twig', [
             'messages' => $messages,
         ]);
+        $boutonHtml = $this->renderView('messagerie/valideBouton.html.twig', [
+            'statut' => $transaction->getStatutTransaction(), 
+            'userRole' => $transaction->getRole($this->getUser())
+        ]);
 
-        return $this->json(['html' => $html, 'statut' => $transaction->getStatutTransaction(), 'userRole' => $transaction->getRole($this->getUser())]);
+        return $this->json(['html' => $html, 'boutonHtml' => $boutonHtml]);
     }
 
     #[Route('/ajax/nouveau_message', name: 'nouveau_message')]
@@ -182,10 +189,17 @@ class MessagerieController extends AbstractController
                     $transaction->setDureeFinal($duree." ".$modalite);
                     $transaction->setDateDebutPret(new DateTime($data->get('dateDebut')));
                 }
+                $notification = new Notification();
+                $notification->setContenu($this->outils->crypterMessage($this->getUser()->getUsername()." a validé la transaction '".$transaction->getAnnonce()->getTitre()."'."));
+                $notification->setAEteLu(false);
+                $notification->setDateEnvoi(new DateTime());
+                // on envoie l'information que la transaction est réalisée en notifications à celui qui n'a pas validé en dernier
+                $notification->setUser($transaction->getClient() == $this->getUser() ? $transaction->getAnnonce()->getPosteur() : $transaction->getClient());
                 
                 $transaction->setPrixFinal($prix);
                 $transaction->setStatutTransaction("Valide-".$transaction->getRole($this->getUser()));
                 $em->persist($transaction);
+                $em->persist($notification);
                 $em->flush();
                 $this->addFlash('notifications', "Vous avez bien validé la transaction ! En attente de l'autre utilisateur.");
                 return $this->redirectToRoute('app_messagerie');
@@ -241,6 +255,9 @@ class MessagerieController extends AbstractController
         if (!$transaction) return new Response("ERROR");
 
         $transaction->setStatutTransaction("En cours");
+        $transaction->setPrixFinal(null);
+        $transaction->setDureeFinal(null);
+        $transaction->setDateDebutPret(null);
         $notif = "Processus de validation annulé pour la transaction  '".$transaction->getAnnonce()->getTitre()."'.";
         $notification = new Notification();
         $notification->setContenu($this->outils->crypterMessage($notif));

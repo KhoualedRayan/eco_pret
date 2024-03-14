@@ -1,7 +1,7 @@
 function edit(icone) {
     if (icone.innerHTML == 'cancel')
-        location.reload();
-    icone.innerHTML = icone.innerHTML == 'cancel' ? 'edit_square' : 'cancel';
+        window.location.reload();
+    icone.innerHTML = 'cancel';
 
     var elems = document.forms[0].elements;
 
@@ -15,7 +15,7 @@ function edit(icone) {
         abo[i].disabled = !abo[i].disabled;
     }
 
-    elems['valider'].style.display = icone.innerHTML == 'cancel' ? 'block' : 'none';
+    elems['valider'].style.display = 'block';
 }
 
 function closeDialogMDP() {
@@ -58,11 +58,46 @@ function activeModeSommeil(){
 				}, 4000);
             }else{
                 console.log(xhr.responseText);
-                location.reload();
+                window.location.reload();
             }
         }
     };
     xhr.open('POST', '/ajax/activeSleepMode', true);
+    xhr.send(data);
+}
+
+function infos_form(event) {
+    event.preventDefault();
+	var xhr = new XMLHttpRequest();
+
+	var data = new FormData();
+    data.append('username', document.getElementById('username').value);
+    data.append('email', document.getElementById('email').value);
+    data.append('prenom', document.getElementById('prenom').value);
+    data.append('nom', document.getElementById('nom').value);
+
+    var abo1 = document.getElementById('option1');
+    var abo2 = document.getElementById('option2');
+
+    if (abo1.checked)
+        data.append('options', abo1.value);
+    else if (abo2.checked)
+        data.append('options', abo2.value);
+    else
+        data.append('options', null);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.type == "erreurU" || response.type == "erreurE") {
+                document.getElementById(response.type).textContent = response.content;
+            } else {
+                window.location.href = response.content;
+            }
+        }
+    };
+
+    xhr.open('POST', '/ajax/handle_infos_form', true);
     xhr.send(data);
 }
 
@@ -79,7 +114,7 @@ function submitMotDePasseForm(event) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
 
-            location.reload();
+            window.location.reload();
 
             if (xhr.responseText != "OK") {
                 document.getElementById(xhr.responseText + "Erreur").style.display = 'block';
@@ -100,7 +135,7 @@ function desabonner() {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                location.reload();
+                window.location.reload();
             }
         };
         xhr.open('POST', '/ajax/desabo_form', true);
@@ -264,7 +299,7 @@ function submitAnnonceForm(event) {
             else {
                 //Annonce modifiée avec succès :D
                 console.log(xhr.responseText);
-                location.reload();
+                window.location.reload();
             }
         }
     };
@@ -288,7 +323,7 @@ function confirmerSuppression(event,id) {
                 else {
                     //Annonce supprimé avec succès :D
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.reload();
                 }
             }
         };
@@ -313,7 +348,7 @@ function supprimerTransaction(event, id) {
                 else {
                     //Annonce supprimé avec succès :D
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.reload();
                 }
             }
         };
@@ -337,7 +372,7 @@ function seDesister(event, id) {
                 else {
                     //Annonce supprimé avec succès :D
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.reload();
                 }
             }
         };
@@ -361,7 +396,7 @@ function annulerTransactionAvecClient(event, id) {
                 else {
                     //Annonce supprimé avec succès :D
                     console.log(xhr.responseText);
-                    location.reload();
+                    window.location.reload();
                 }
             }
         };

@@ -22,7 +22,7 @@
                 </span>
                 {% if dernierMessage.expediteur != app.user %}{{dernierMessage.expediteur.username}}: {% endif %}<span class="preview-message">{{ dernierMessage.getMessageDecrypter() }}</span>
             {% else %}
-                <p class="preview-message">Nouvelle transaction. Envoyez un message !</p>
+                <span class="preview-message">Nouvelle transaction. Envoyez un message !</span>
             {% endif %}
         </div>
     </div>

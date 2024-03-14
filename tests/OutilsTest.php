@@ -9,7 +9,7 @@ use App\Entity\User;
 
 class OutilsTest
 {
-    public function createUser($client, string $username, string $email, string $password): User
+    public function createUser($client, string $username, string $email, string $password): void
     {
         $em = $client->getContainer()->get('doctrine')->getManager();
         $pwHasher = $client->getContainer()->get('security.password_hasher');
@@ -23,9 +23,9 @@ class OutilsTest
         );
         $em->persist($user);
         $em->flush();
-        return $user;
     }
-    public function removeUser($client, $username, $email) {
+    public function removeUser($client, $username, $email): void 
+    {
         $em = $client->getContainer()->get('doctrine')->getManager();
         $users = $em->getRepository(User::class)
                     ->createQueryBuilder('e')->where('e.username = :v1')
@@ -37,6 +37,19 @@ class OutilsTest
             $em->remove($users[0]);
             $em->flush();
         }
-        
+    }
+    public function login($client, $username, $email, $password) {
+        $outils->removeUser($client, $username, $email);
+        $outils->createUser($client, $username, $email, $password);
+
+        $crawler = $client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->filter('#login')->form();
+        $form['id'] = $username;
+        $form['password'] = $password;
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertRouteSame('app_home_page');
     }
 }

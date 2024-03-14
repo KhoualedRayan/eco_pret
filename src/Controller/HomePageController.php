@@ -40,6 +40,7 @@ class HomePageController extends AbstractController
             return $b->getDatePublication() <=> $a->getDatePublication();
         });
 
+
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'annonces' => $annonces,

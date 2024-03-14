@@ -24,7 +24,7 @@
                 <option value="heures" {% if d[1] == "heures" %}selected{% endif %}>heures</option>
                 <option value="jours" {% if d[1] == "jours" %}selected{% endif %}>jours</option>
             </select><br />
-            Quand se passera l'échange ? : <input type="datetime-local" name="dateDebut" required><br><br>
+            Quand se passera l'échange ? : <input type="date" name="dateDebut"  min="{{ "now"|date("Y-m-d") }}" required><br><br>
         {% endif %}
         <div>
             <button type="submit" class='but boutonDialog'>Valider</button>
@@ -45,9 +45,10 @@ Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
 
 <div>
     {% set userRoleValide = transaction.getStatutTransaction()|split('-')[1] %}
+    {% set interlocuteur = app.user == transaction.client ? transaction.annonce.posteur : transaction.client %}
     {% if userRole != userRoleValide %}
-    <button onclick="accepter()">Accepter</button>
-    <button onclick="refuser()">Refuser</button>
+    <button onclick="accepter('{{interlocuteur.username}}')">Accepter</button>
+    <button onclick="refuser('{{interlocuteur.username}}')">Refuser</button>
     {% endif %}
     <button type="button" onclick="closeValidDialog()">Annuler</button>
 

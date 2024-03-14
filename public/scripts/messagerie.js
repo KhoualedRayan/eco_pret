@@ -31,24 +31,7 @@ function updateDiscussion(dest, interlocuteur) {
             var zoneScroll = document.querySelector(".section-bas");
             zoneScroll.innerHTML = data.html;
             zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
-            if (data.statut.includes('-')) {
-                var statut = data.statut.split("-")[1];
-                if (statut == data.userRole) {
-                    document.getElementById('validerBouton').innerHTML = "<span class='material-icons'>done</span> (1/2)";
-                } else {
-                    document.getElementById('validerBouton').innerHTML = "Valider (1/2)";
-                }
-            } else if (data.statut == "Terminer") {
-                document.getElementById('validerBouton').innerHTML = "done_all";
-                document.getElementById('validerBouton').classList.add("material-icons");
-                document.getElementById('validerBouton').disabled = true;
-                // à mettre dans un css et ajouter à la liste des classes
-                document.getElementById('validerBouton').style.backgroundColor = "gray";
-                document.getElementById('validerBouton').style.cursor = "default";
-            } else {
-                document.getElementById('validerBouton').innerHTML = "Valider (0/2)";
-            }
-            
+            document.getElementById('valideBoutonDiv').innerHTML = data.boutonHtml;  
         })
         .catch(error => console.error('Erreur:', error));
 }
@@ -156,7 +139,7 @@ function closeValidDialog() {
     document.getElementById("valider").close();
 }
 
-function accepter() {
+function accepter(interlocuteur) {
     if (idDeLaTransaction == null) {
         alert("Something went wrong.");
         return;
@@ -167,8 +150,7 @@ function accepter() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText != "ERROR") {
                 document.getElementById("valider").close();
-                document.getElementById('validerBouton').innerHTML = "done_all";
-                document.getElementById('validerBouton').classList.add("material-icons");
+                window.location.reload();
             } else {
                 alert("erreur");
             } 
@@ -178,7 +160,7 @@ function accepter() {
     xhr.send();
 }
 
-function refuser() {
+function refuser(interlocuteur) {
     if (idDeLaTransaction == null) {
         alert("Something went wrong.");
         return;
@@ -189,6 +171,7 @@ function refuser() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText != "ERROR") {
                 document.getElementById("valider").close();
+                window.location.reload();
             } else {
                 alert("erreur");
             } 
