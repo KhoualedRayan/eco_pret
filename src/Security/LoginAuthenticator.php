@@ -53,7 +53,6 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
         if ($user->getAbonnement() != null) {
             $nextDateAbo = $user->getDateAbonnement();
-            echo $nextDateAbo->format("Y-m-d");
             $nextDateAbo->modify('+1 year');
             $nextAbo = $user->getNextAbonnement();
             if ($nextDateAbo < new DateTime()) {
