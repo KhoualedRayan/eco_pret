@@ -40,14 +40,14 @@ class ProfileTransactionsController extends AbstractController
 
         $transactionsClient = $entityManager->getRepository(Transaction::class)->findBy(['client' => $this->getUser() ]);
         $transactionsClientEnCours = array_filter($transactionsClient, function ($transaction) {
-            return $transaction->getStatutTransaction() === "En cours";
+            return $transaction->getStatutTransaction() != "Terminer";
         });
         $transactionsPosteur = $this->getUser()->getAnnonces()
                                 ->filter(function($a) {
                                     return $a->getTransaction() != null;
                                 })->map(function($a) { return $a->getTransaction(); })->toArray();
         $transactionsPosteurEnCours = array_filter($transactionsPosteur, function ($transaction) {
-            return $transaction->getStatutTransaction() === "En cours";
+            return $transaction->getStatutTransaction() != "Terminer";
         });
         $filesDattentes = $this->getUser()->getAnnoncesOuJattends();
         $annoncesEnAttente = []; // Pour stocker les annonces où l'utilisateur n'est pas premier

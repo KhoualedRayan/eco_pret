@@ -87,6 +87,32 @@ class NotificationController extends AbstractController
 
         return $this->redirectToRoute('app_notification');
     }
+    #[Route('/notification/tout_marquer_comme_lu', name: 'tout_marquer_comme_lu')]
+    public function toutMarquerCommeLu(EntityManagerInterface $entityManager): Response
+    {
+        $notifications = $this->getUser()->getNotifications();
+        foreach ($notifications as $notification){
+            if (!$notification->isAEteLu()) {
+                $notification->setAEteLu(true);
+            }
+        }
+        $entityManager->flush();
+        $this->addFlash('notifications', 'Notifications marquée comme lues.');
+        return $this->redirectToRoute('app_notification');
+    }
+    #[Route('/notification/tout_supprimer', name: 'tout_supprimer')]
+    public function toutSupprimer(EntityManagerInterface $entityManager): Response
+    {
+        $notifications = $this->getUser()->getNotifications();
+        foreach ($notifications as $notification){
+            if ($notification->isAEteLu()) {
+                $entityManager->remove($notification);
+            }
+        }
+        $entityManager->flush();
+        $this->addFlash('notifications', 'Notifications supprimés.');
+        return $this->redirectToRoute('app_notification');
+    }
     function decrypterMessage($messageCrypte)
     {
         $cleSecrete = $_ENV['APP_CLE_CRYPTAGE'];
