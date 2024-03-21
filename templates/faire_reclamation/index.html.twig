@@ -11,8 +11,22 @@
 
 <div>
 <form action="{{ path('handle_form') }}" method="post">
-    <label for="titre">Objet de la réclamation *</label>
-    <input type="text" name="objet" required /><br />
+    <label for="materiel">Objet de la réclamation * </label>
+    <select name="recla" id="recla" required>
+        <option value="">Aucun objet</option>
+        {% for obj in objets %}
+            <option value="{{ obj.getNom() }}">{{ obj.getNom() }}</option>
+        {% endfor %}
+    </select><br /><br />
+
+    <div id="annonces_litige" style="display: none;">
+        <label for="annonces">Annonce concernée par le litige </label>
+        <select name="annonce" id="annonce_l">
+        {% for tr in transactions %}
+            <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
+        {% endfor %}
+        </select><br /><br />
+    </div>
 
     <br />
     <label for="description">Description *</label><br />
@@ -27,4 +41,21 @@
     <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>
 </form>
 </div>
+
+<script>
+document.getElementById('recla').addEventListener('change', function () {
+    var obj = this.value;
+    if (obj === "Litige") {
+        var container = document.getElementById("annonce_l");
+        container.value = container.firstChild.value;
+        var container2 = document.getElementById("annonces_litige");
+        container2.style.display = "block";
+    }else{
+        var container = document.getElementById("annonce_l");
+        container.value = "";
+        var container2 = document.getElementById("annonces_litige");
+        container2.style.display = "none";
+    }
+});
+</script>
 {% endblock %}

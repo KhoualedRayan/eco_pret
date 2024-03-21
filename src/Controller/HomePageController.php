@@ -46,6 +46,13 @@ class HomePageController extends AbstractController
 
         $nombrePages = ceil($totalAnnonces / $limit);
 
+        $text = $request->query->get("search");
+        if ($text != null) {
+            $annonces = $entityManager->getRepository(Annonce::class)->findByTitreOrDescription($text);
+        } else {
+            $annonces = $entityManager->getRepository(Annonce::class)->findAll();
+        }
+
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -58,6 +65,7 @@ class HomePageController extends AbstractController
             'annonces' => $annonces,
             'pageActuelle' => $page,
             'nombrePages' => $nombrePages,
+            'recherche' => $text == null ? "" : $text,
         ]);
     }
 
