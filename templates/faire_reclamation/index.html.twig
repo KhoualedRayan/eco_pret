@@ -13,17 +13,17 @@
 <form action="{{ path('handle_form') }}" method="post">
     <label for="materiel">Objet de la réclamation * </label>
     <select name="recla" id="recla" required>
-        <option value="">Sélectionnez un objet pour votre réclamation</option>
+        <option value="">Aucun objet</option>
         {% for obj in objets %}
             <option value="{{ obj.getNom() }}">{{ obj.getNom() }}</option>
         {% endfor %}
     </select><br /><br />
 
-    <div id="annonces_litige">
+    <div id="annonces_litige" style="display: none;">
         <label for="annonces">Annonce concernée par le litige </label>
         <select name="annonce" id="annonce_l">
         {% for tr in transactions %}
-            <option value="{{ tr.getAnnonce().getTitre() }}">{{ tr.getAnnonce().getTitre() }}</option>
+            <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
         {% endfor %}
         </select><br /><br />
     </div>
