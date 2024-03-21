@@ -21,20 +21,41 @@ class AnnonceRepository extends ServiceEntityRepository
         parent::__construct($registry, Annonce::class);
     }
 
-//    /**
-//     * @return Annonce[] Returns an array of Annonce objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Annonce[] Returns an array of Annonce objects
+    */
+   public function findByTitre($value): array
+   {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.titre LIKE :val')
+           ->setParameter('val', '%'.$value.'%')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   /**
+    * @return Annonce[] Returns an array of Annonce objects
+    */
+    public function findByDescription($value): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.description LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByTitreOrDescription($value): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.description LIKE :val')->orWhere('a.titre LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?Annonce
 //    {
