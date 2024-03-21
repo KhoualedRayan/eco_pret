@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
 <script src="{{ asset('scripts/accueil.js') }}"></script>
 {% endblock %}
@@ -15,7 +16,11 @@
     <a href="{{ path('app_pret_materiel') }}"><button>Prêter du matériel</button></a>
     <a href = "{{ path('app_offre_service') }}"><button>Offrir un service</button></a>
 </div>
-<h2>Annonces</h2>
+<div class="searchZone">
+    <h2 style="margin: 0">Annonces</h2>
+    <div class="searchBar"><input type="text" class="searchInput"><span class="material-icons">search</span></div>
+</div>
+
 
 <div class="tout">
     {% for annonce in annonces %}
