@@ -72,13 +72,31 @@ button:active {
 .searchBar {
     margin: auto;
     display: flex;
+    width: fit-content;
     align-items: center;
+    position: relative;
 }
 
 .searchInput {
-    min-width:200%;
-    border: none;
+    border: 1px #999 solid;
     border-radius: 0.5rem;
     padding: 4px;
     font-size: 15px;
+    margin-right: 5px;
+    width: 300px;
+}
+
+.material-icons.searchIcon {
+    color: var(--couleurFancy);
+    position: absolute;
+    right: 3%;
+    padding: 5px;
+}
+
+.material-icons.searchIcon:hover {
+    color: white;
+    border-radius: 1rem;
+    background-color: var(--couleurFancy);
+    cursor: pointer;
+    border: 0.5px var(--couleurFancy) solid;
 }

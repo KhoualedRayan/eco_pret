@@ -26,7 +26,7 @@ class HomePageController extends AbstractController
     }
 
     #[Route('', name: 'app_home_page')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         if($this->getUser()){
             if ($this->getUser()->isSleepMode()) {
@@ -34,7 +34,13 @@ class HomePageController extends AbstractController
             }
         }
 
-        $annonces = $entityManager->getRepository(Annonce::class)->findAll();
+        $text = $request->query->get("search");
+        if ($text != null) {
+            $annonces = $entityManager->getRepository(Annonce::class)->findByTitreOrDescription($text);
+        } else {
+            $annonces = $entityManager->getRepository(Annonce::class)->findAll();
+        }
+
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
@@ -44,6 +50,7 @@ class HomePageController extends AbstractController
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'annonces' => $annonces,
+            'recherche' => $text == null ? "" : $text,
         ]);
     }
 

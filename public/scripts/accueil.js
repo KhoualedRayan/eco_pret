@@ -24,3 +24,11 @@ function confirmerEmprunt(event, id, type) {
         xhr.send(data);
     }
 }
+
+function search() {
+    var texte = document.getElementById("searchInput").value;
+    if (texte.trim().length != 0) {
+        params = window.location.href.split("?")
+        window.location.href = params[0]+"?search="+texte;
+    }
+}
