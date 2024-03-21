@@ -26,24 +26,38 @@ class HomePageController extends AbstractController
     }
 
     #[Route('', name: 'app_home_page')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,Request $request): Response
     {
         if($this->getUser()){
             if ($this->getUser()->isSleepMode()) {
                 return $this->redirectToRoute('app_sleep_mode');
             }
         }
+        $page = $request->query->get('page', 1);
 
-        $annonces = $entityManager->getRepository(Annonce::class)->findAll();
+        $limit = 12; // Nombre d'annonces par page
+        $offset = ($page - 1) * $limit;
+
+        // Modifier votre requête pour récupérer les annonces avec une limite et un offset
+        $annonces = $entityManager->getRepository(Annonce::class)->findBy(['statut' => 'Disponible'], [], $limit, $offset );
+
+        // Calculer le nombre total d'annonces pour déterminer le nombre de pages
+        $totalAnnonces = $entityManager->getRepository(Annonce::class)->count(['statut' => 'Disponible']);
+
+        $nombrePages = ceil($totalAnnonces / $limit);
+
         // Fonction de comparaison personnalisée pour trier par date de publication
         usort($annonces, function($a, $b) {
             return $b->getDatePublication() <=> $a->getDatePublication();
         });
 
 
+
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'annonces' => $annonces,
+            'pageActuelle' => $page,
+            'nombrePages' => $nombrePages,
         ]);
     }
 

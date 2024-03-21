@@ -66,3 +66,40 @@ h2 {
 .emprunter:hover {
     filter: brightness(130%);
 }
+/* Style général de la pagination */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center; /* Centrer la pagination */
+    margin-top: 20px; /* Espacement au-dessus de la barre de pagination */
+}
+
+    .pagination .page-item {
+        margin: 0 5px; /* Espacement entre les éléments de la pagination */
+    }
+
+        .pagination .page-item .page-link {
+            text-decoration: none;
+            color: #007bff; /* Couleur des liens */
+            background-color: #ffffff; /* Couleur de fond */
+            border: 1px solid #ddd; /* Bordure */
+            padding: 5px 10px; /* Espacement interne */
+            border-radius: 5px; /* Coins arrondis */
+            transition: all 0.3s ease; /* Transition pour le survol */
+        }
+
+            .pagination .page-item .page-link:hover {
+                background-color: #007bff; /* Couleur de fond au survol */
+                color: #ffffff; /* Couleur du texte au survol */
+            }
+
+    .pagination .active .page-link {
+        background-color: #007bff; /* Couleur de fond de l'élément actif */
+        color: #ffffff; /* Couleur du texte de l'élément actif */
+    }
+
+    .pagination .disabled .page-link {
+        color: #cccccc; /* Couleur des éléments désactivés */
+        cursor: not-allowed; /* Curseur pour indiquer l'action non autorisée */
+    }

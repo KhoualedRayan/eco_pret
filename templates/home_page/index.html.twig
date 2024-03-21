@@ -53,6 +53,36 @@
         {% endif %}
     {% endfor %}
 </div>
+    {# Barre de navigation de pagination #}
+    <nav aria-label="Navigation de pagination">
+        <ul class="pagination">
+            {# Bouton "Précédent" #}
+            {% if pageActuelle > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pageActuelle - 1 }}" aria-label="Précédent">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Précédent</span>
+                    </a>
+                </li>
+            {% endif %}
 
+            {# Lien vers les pages #}
+            {% for i in 1..nombrePages %}
+                <li class="page-item {{ i == pageActuelle ? 'active' : '' }}">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+            {% endfor %}
+
+            {# Bouton "Suivant" #}
+            {% if pageActuelle < nombrePages %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pageActuelle + 1 }}" aria-label="Suivant">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Suivant</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 
 {% endblock %}
