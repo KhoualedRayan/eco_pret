@@ -18,39 +18,56 @@
     </div>
 
     <div id="tab1" class="tab active">
-        {% for notification in notifications %}
-            {% if not notification.aEteLu %}
-                <div class="notif">
-                    <div class="notif-date">
-                        <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
-                    </div>
-                    <div class="notif-content">
-                        {{ notification.contenu }}
-                    </div>
-                    <div class="notif-buttons">
-                        <button onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility_off</span></button>
-                    </div>
+        {% if app.user.contientUneNotifNonLu() %}
+            <div class="conteneur">
+                <div class="toutLu">
+                    Tout marquer comme lu 
+                    <button onclick="location.href='{{ path('tout_marquer_comme_lu') }}'"><span class="material-icons">done_all</span></button>
                 </div>
-            {% endif %}
-        {% endfor %}
+            </div>
+            {% for notification in notifications %}
+                {% if not notification.aEteLu %}
+                    <div class="notif">
+                        <div class="notif-date">
+                            <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
+                        </div>
+                        <div class="notif-content">
+                            {{ notification.contenu }}
+                        </div>
+                        <div class="notif-buttons">
+                            <button onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility_off</span></button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {%endif%}
     </div>
     <div id="tab2" class="tab">
-        {% for notification in notifications %}
-            {% if notification.aEteLu %}
-                <div class="notif">
-                    <div class="notif-date">
-                        <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
-                    </div>
-                    <div class="notif-content">
-                        {{ notification.contenu }}
-                    </div>
-                    <div class="notif-buttons">
-                        <button onclick="location.href='{{ path('marquer_comme_non_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility</span></button>
-                        <button class="delete" onclick="location.href='{{ path('supprimer_la_notif_route', {'id': notification.id}) }}'"><span class="material-icons">delete</span></button>
-                    </div>
+        {% if app.user.contientUneNotifLu() %}
+            <div class="conteneur">
+                <div class="toutLu">
+                    Tout supprimer 
+                    <button style="background-color:#d32f2f;" onclick="location.href='{{ path('tout_supprimer') }}'"><span class="material-icons">delete_sweep</span></button>
                 </div>
-            {% endif %}
-        {% endfor %}
+            </div>
+
+            {% for notification in notifications %}
+                {% if notification.aEteLu %}
+                    <div class="notif">
+                        <div class="notif-date">
+                            <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
+                        </div>
+                        <div class="notif-content">
+                            {{ notification.contenu }}
+                        </div>
+                        <div class="notif-buttons">
+                            <button onclick="location.href='{{ path('marquer_comme_non_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility</span></button>
+                            <button class="delete" onclick="location.href='{{ path('supprimer_la_notif_route', {'id': notification.id}) }}'"><span class="material-icons">delete</span></button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
 
 </div>
