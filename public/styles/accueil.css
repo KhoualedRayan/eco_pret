@@ -100,6 +100,7 @@ button:active {
     cursor: pointer;
     border: 0.5px var(--couleurFancy) solid;
 }
+<<<<<<< HEAD
 }
 /* Style gÈnÈral de la pagination */
 .pagination {
@@ -138,3 +139,15 @@ button:active {
         color: #cccccc; /* Couleur des ÈlÈments dÈsactivÈs */
         cursor: not-allowed; /* Curseur pour indiquer l'action non autorisÈe */
     }
+=======
+
+.material-icons.filter:hover {
+    cursor: pointer;
+}
+
+.filtres {
+    display: none;
+    position: absolute;
+    border: 1px #999 solid;
+}
+>>>>>>> 8046d66 (d√©but filtres)

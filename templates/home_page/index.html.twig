@@ -22,7 +22,12 @@
         <input type="text" class="searchInput" id="searchInput" value="{{recherche}}">
         <span class="material-icons searchIcon" onclick="search()">search</span></a>
     </div>
-    <div>
+    <div style="position: relative;">
+        <span class="material-icons filter" onclick="filtrer()">filter_list</span>
+        <div class="filtres" id="filtres">
+            <div>Materiel</div>
+            <div>Service</div>
+        </div>
     </div>
 </div>
 
