@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\CategorieReclamation;
 use App\Entity\Transaction;
 use App\Entity\User;
-
+use Symfony\Component\HttpFoundation\Request;
 
 
 
@@ -44,6 +44,8 @@ class FaireReclamationController extends AbstractController
     public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
     {
         
+        $this->addFlash('notifications', 'Votre réclamation a été envoyée avec succès !');
+
         return $this->redirectToRoute('app_home_page');
     }
 }
