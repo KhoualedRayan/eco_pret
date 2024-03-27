@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Transaction;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class VueTransactionController extends AbstractController
 {
@@ -16,6 +18,9 @@ class VueTransactionController extends AbstractController
     {
         $identifiant = $id;
         $transaction = $em->getRepository(Transaction::class)->find($id);
+
+        dump($identifiant);
+
         if (!$transaction) {
             return $this->redirectToRoute('app_home_page');
         }
@@ -24,9 +29,38 @@ class VueTransactionController extends AbstractController
             'transaction' => $transaction,
         ]);
     }
-    public function modifierNote(EntityManagerInterface $em):Response{
-        // � faire
-        //n�cessite les notes d'abord...
-        return $this->redirectToRoute('app_vue_transaction');
+
+
+
+    #[Route('/ajax/validerNoteClient', name: 'valider_note_client', methods: ['POST'])]
+    public function validerNoteClient(Request $request, EntityManagerInterface $em): Response
+    {   
+
+        $idTransaction = $request->request->get('idTransaction');
+
+        $this->addFlash('notifications', 'Votre mot de passe a été eee avec succès !');
+
+        dump($idTransaction);
+
+        return $this->redirectToRoute('app_home_page');
+        
+        
     }
+
+    #[Route('/ajax/validerNotePosteur', name: 'valider_note_posteur')]
+    public function validerNotePosteur(Request $request, EntityManagerInterface $em): Response
+    {
+        
+         $idTransaction = $request->request->get('idTransaction');
+
+        $this->addFlash('notifications', 'Votre mot de passe a été eee avec succès !');
+
+        dump($idTransaction);
+
+        return $this->redirectToRoute('app_home_page');
+        
+        
+    }
+
+
 }

@@ -1,15 +1,46 @@
 document.querySelectorAll('.star').forEach(function (star, index) {
     star.addEventListener('click', function () {
         let allStars = document.querySelectorAll('.star');
-        // Mettre à jour l'affichage des étoiles en fonction de la sélection
+        // Mettre ï¿½ jour l'affichage des ï¿½toiles en fonction de la sï¿½lection
         allStars.forEach((star, i) => {
             if (i <= index) {
-                star.innerHTML = '&#9733;'; // étoile pleine
+                star.innerHTML = '&#9733;'; // ï¿½toile pleine
             } else {
-                star.innerHTML = '&#9734;'; // étoile vide
+                star.innerHTML = '&#9734;'; // ï¿½toile vide
             }
         });
-        // Ici, vous pouvez ajouter du code pour soumettre la note à votre serveur
-        console.log("Note donnée : ", index + 1);
+        // Ici, vous pouvez ajouter du code pour soumettre la note ï¿½ votre serveur
+        console.log("Note donnï¿½e : ", index + 1);
     });
 });
+
+/*Se dÃ©sister d'une file d'attente */
+function validerNotePosteur(username) {
+    var conf = confirm("Voulez-vous vraiment envoyer la note Ã  " + username + " ?");
+    if (conf) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                window.location.reload();
+            }
+        };
+        xhr.open('POST', '/ajax/validerNotePosteur', true);
+        xhr.send();
+    }
+}
+
+
+/*Se dÃ©sister d'une file d'attente */
+function validerNoteClient(username, id) {
+    var conf = confirm("Voulez-vous vraiment envoyer la note Ã  " + username + " ?");
+    if (conf) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                window.location.reload();
+            }
+        };
+        xhr.open('POST', '/ajax/validerNoteClient', true);
+        xhr.send();
+    }
+}

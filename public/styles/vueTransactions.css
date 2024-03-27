@@ -20,12 +20,12 @@
 	font-size: 36px;
 }
 
-/* Style pour les étoiles non sélectionnées, si nécessaire */
+/* Style pour les ï¿½toiles non sï¿½lectionnï¿½es, si nï¿½cessaire */
 .star-grise {
 	color: #ccc;
 }
 textarea {
-	width: 30em; /* Largeur ajustée à un quart de l'écran */
+	width: 30em; /* Largeur ajustï¿½e ï¿½ un quart de l'ï¿½cran */
 	height:7em;
 	padding: 8px;
 	margin-bottom: 10px;
@@ -43,6 +43,26 @@ textarea {
 	padding: 5px;
 	width: fit-content;
 	margin: auto; /* Centrer le bloc horizontalement */
-	display: block; /* Assure que le bloc peut être centré avec margin auto */
-	text-align: center; /* Centrer le texte à l'intérieur du bloc si nécessaire */
+	display: block; /* Assure que le bloc peut ï¿½tre centrï¿½ avec margin auto */
+	text-align: center; /* Centrer le texte ï¿½ l'intï¿½rieur du bloc si nï¿½cessaire */
+}
+
+.boutonValiderNoteClient button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.boutonValiderNotePosteur button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
 }

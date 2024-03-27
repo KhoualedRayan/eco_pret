@@ -63,6 +63,21 @@
                 <label for="commentaire"><b>Commentaire</b></label><br />
                 <textarea name="commentaire" ></textarea><br />
             </div>
+
+            {% if app.user.username == transaction.annonce.posteur.username %}
+
+                <div class="boutonValiderNoteClient">
+                    <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
+                </div>
+
+            {% else %}
+
+                <div class="boutonValiderNotePosteur">
+                    <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
+                </div>
+
+            {% endif %}
+        
         </div>
     </div>
 
