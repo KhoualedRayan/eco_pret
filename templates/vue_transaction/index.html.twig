@@ -54,24 +54,25 @@
             <div class="stars">
 
                 {% if app.user.username == transaction.annonce.posteur.username %}
-                    {%set note = transaction.getNoteOffrant() is null ? 0 : transaction.getNoteOffrant() %}           
-                    {%else%}
-                        {%set note = transaction.getNoteClient() is null ? 0 : transaction.getNoteClient()%}
+                    {% set note = transaction.getNoteClient() is null ? 0 : transaction.getNoteClient() %}           
+                {% else %}
+                    {% set note = transaction.getNoteOffrant() is null ? 0 : transaction.getNoteOffrant() %}
+                        
                 {% endif %}
                 {% if note == 0 %}
                     {% for i in range(5-note,1) %}
                         <span class="star">&#9734;</span>
-                    {%endfor%}
-                {%else%}
-                    {% for i in range(0,note-1)  %}
+                    {% endfor %}
+                {% else %}
+                    {% for i in range(0,note-1) %}
                         <span class="star">&#9733;</span>
-                    {%endfor%}
-                    {%if note < 5%}
+                    {% endfor %}
+                    {% if note < 5 %}
                         {% for i in range(5-note,1) %}
                                 <span class="star">&#9734;</span>
-                        {%endfor%}
-                    {%endif%}   
-                {%endif%}
+                        {% endfor %}
+                    {% endif %}   
+                {% endif %}
 
             </div>
             <div class="avis">
@@ -86,13 +87,13 @@
             {% if app.user.username == transaction.annonce.posteur.username %}
 
                 <div class="boutonValiderNoteClient">
-                    <button onclick="validerNotePosteur('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
+                    <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
                 </div>
 
             {% else %}
 
                 <div class="boutonValiderNotePosteur">
-                    <button onclick="validerNoteClient('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
+                    <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
                 </div>
 
             {% endif %}

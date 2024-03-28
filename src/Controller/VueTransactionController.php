@@ -17,13 +17,18 @@ class VueTransactionController extends AbstractController
     public function index(int $id, EntityManagerInterface $em): Response
     {
         $transaction = $em->getRepository(Transaction::class)->find($id);
-
+        
         if (!$transaction) {
             return $this->redirectToRoute('app_home_page');
         }
+
+        $note = ($transaction->getNoteOffrant() !== null) ? $transaction->getNoteOffrant() : $transaction->getNoteClient();
+        $note = ($note !== null) ? $note : 3; 
+    
         return $this->render('vue_transaction/index.html.twig', [
             'controller_name' => 'VueTransactionController',
             'transaction' => $transaction,
+            'note' => $note,
         ]);
     }
 
