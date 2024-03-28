@@ -34,38 +34,33 @@ class HomePageController extends AbstractController
             }
         }
         $page = $request->query->get('page', 1);
+        $text = $request->query->get("search", "");
 
         $limit = 12; // Nombre d'annonces par page
         $offset = ($page - 1) * $limit;
 
-        // Modifier votre requête pour récupérer les annonces avec une limite et un offset
-        $annonces = $entityManager->getRepository(Annonce::class)->findBy(['statut' => 'Disponible'], [], $limit, $offset );
-
         // Calculer le nombre total d'annonces pour déterminer le nombre de pages
-        $totalAnnonces = $entityManager->getRepository(Annonce::class)->count(['statut' => 'Disponible']);
-
-        $nombrePages = ceil($totalAnnonces / $limit);
-
-        $text = $request->query->get("search");
-        if ($text != null) {
-            $annonces = $entityManager->getRepository(Annonce::class)->findByTitreOrDescription($text);
+        $totalAnnonces = $entityManager->getRepository(Annonce::class)->getCountByTD($text);
+        
+        if ($totalAnnonces == 0) {
+            $annonces = null;
+            $nombrePages = 1;
         } else {
-            $annonces = $entityManager->getRepository(Annonce::class)->findAll();
+            // Modifier votre requête pour récupérer les annonces avec une limite et un offset
+            $annonces = $entityManager->getRepository(Annonce::class)->findByTitreOrDescription($text, $limit, $offset);
+
+            // Calculer le nombre total d'annonces pour déterminer le nombre de pages
+            $totalAnnonces = $entityManager->getRepository(Annonce::class)->getCountByTD($text);
+
+            $nombrePages = ceil($totalAnnonces / $limit);
         }
-
-        // Fonction de comparaison personnalisée pour trier par date de publication
-        usort($annonces, function($a, $b) {
-            return $b->getDatePublication() <=> $a->getDatePublication();
-        });
-
-
 
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'annonces' => $annonces,
             'pageActuelle' => $page,
             'nombrePages' => $nombrePages,
-            'recherche' => $text == null ? "" : $text,
+            'recherche' => $text,
         ]);
     }
 

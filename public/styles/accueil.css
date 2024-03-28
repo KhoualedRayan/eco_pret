@@ -100,8 +100,8 @@ button:active {
     cursor: pointer;
     border: 0.5px var(--couleurFancy) solid;
 }
-}
-/* Style général de la pagination */
+
+/* Style gï¿½nï¿½ral de la pagination */
 .pagination {
     display: flex;
     list-style: none;
@@ -111,7 +111,7 @@ button:active {
 }
 
     .pagination .page-item {
-        margin: 0 5px; /* Espacement entre les éléments de la pagination */
+        margin: 0 5px; /* Espacement entre les ï¿½lï¿½ments de la pagination */
     }
 
         .pagination .page-item .page-link {
@@ -130,11 +130,25 @@ button:active {
             }
 
     .pagination .active .page-link {
-        background-color: #007bff; /* Couleur de fond de l'élément actif */
-        color: #ffffff; /* Couleur du texte de l'élément actif */
+        background-color: #007bff; /* Couleur de fond de l'ï¿½lï¿½ment actif */
+        color: #ffffff; /* Couleur du texte de l'ï¿½lï¿½ment actif */
     }
 
     .pagination .disabled .page-link {
-        color: #cccccc; /* Couleur des éléments désactivés */
-        cursor: not-allowed; /* Curseur pour indiquer l'action non autorisée */
+        color: #cccccc; /* Couleur des ï¿½lï¿½ments dï¿½sactivï¿½s */
+        cursor: not-allowed; /* Curseur pour indiquer l'action non autorisï¿½e */
     }
+
+.material-icons.filter:hover {
+    cursor: pointer;
+}
+
+.filtres {
+    display: none;
+    position: absolute;
+    border: 1px #999 solid;
+}
+
+.noneFound {
+    font-size: 25px;
+}

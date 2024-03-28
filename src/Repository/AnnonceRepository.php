@@ -47,13 +47,32 @@ class AnnonceRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByTitreOrDescription($value): array
+    public function findByTitreOrDescription($value, $limit, $offset): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.description LIKE :val')->orWhere('a.titre LIKE :val')
-            ->setParameter('val', '%'.$value.'%')
-            ->getQuery()
-            ->getResult()
+        $qb = $this->createQueryBuilder('a');
+        $qb = $qb
+            ->where("a.statut = 'Disponible'")
+            ->andWhere($qb->expr()->orX('a.description LIKE :val', 'a.titre LIKE :val'))
+            ->orderBy('a.date_publication', 'DESC')
+            ->setParameter('val', '%'.$value.'%');
+        if ($limit != null)
+            $qb->setMaxResults($limit);
+        if ($offset != null)
+            $qb->setFirstResult($offset);
+        return $qb->getQuery()->getResult()
+        ;
+    }
+    public function getCountByTD($value): int
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb = $qb
+            ->select('COUNT(a.id)')
+            ->where("a.statut = 'Disponible'")
+            ->andWhere($qb->expr()->orX('a.description LIKE :val', 'a.titre LIKE :val'))
+            ->orderBy('a.date_publication', 'DESC')
+            ->setParameter('val', '%'.$value.'%');
+        $res = $qb->getQuery()->getResult()[0][1];
+        return $res;
         ;
     }
 

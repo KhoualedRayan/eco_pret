@@ -22,12 +22,20 @@
         <input type="text" class="searchInput" id="searchInput" value="{{recherche}}">
         <span class="material-icons searchIcon" onclick="search()">search</span></a>
     </div>
-    <div>
+    <div style="position: relative;">
+        <span class="material-icons filter" onclick="filtrer()">filter_list</span>
+        <div class="filtres" id="filtres">
+            <div>Materiel</div>
+            <div>Service</div>
+        </div>
     </div>
 </div>
 
 
 <div class="tout">
+    {% if annonces is empty %}
+    <p class="noneFound">Pas d'annonces trouvées :( </p>
+    {% endif %}
     {% for annonce in annonces %}
         {% if annonce.getPosteur().isSleepMode() == false and annonce.getStatut() == "Disponible" %}
             <a href="{{ path('app_vue_annonce', {'id': annonce.id}) }}" class="lienAnnonce"><div class="blocAnnonce">
@@ -63,6 +71,7 @@
         {% endif %}
     {% endfor %}
 </div>
+{% if annonces is not empty %}
     {# Barre de navigation de pagination #}
     <nav aria-label="Navigation de pagination">
         <ul class="pagination">
@@ -94,5 +103,6 @@
             {% endif %}
         </ul>
     </nav>
+{% endif %}
 
 {% endblock %}

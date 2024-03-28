@@ -32,3 +32,7 @@ function search() {
         window.location.href = params[0]+"?search="+texte;
     }
 }
+
+function filtrer() {
+    document.getElementById("filtres").style.display = "block";
+}
