@@ -9,12 +9,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\AnnonceService;
 use App\Entity\AnnonceMateriel;
 use App\Entity\Annonce;
+use App\Entity\CategorieMateriel;
+use App\Entity\CategorieService;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Transaction;
 use App\Entity\FileAttente;
 use DateTime;
 use App\Entity\Notification;
 use App\Service\Outils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HomePageController extends AbstractController
 {
@@ -126,5 +129,14 @@ class HomePageController extends AbstractController
         $notif->setUser($annonce->getPosteur());
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
+    }
+    #[Route('/ajax/getCategories/{type}', name: 'get_categories')]
+    public function getCategorie(EntityManagerInterface $em, $type): Response
+    {
+        $cs = $em->getRepository($type == "materiel" ? CategorieMateriel::class : CategorieService::class)->findAll();
+        return $this->render('home_page/categorie.html.twig', [
+            'controller_name' => 'HomePageController',
+            'categories' => $cs,
+        ]);
     }
 }

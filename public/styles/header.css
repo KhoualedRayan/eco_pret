@@ -1,3 +1,6 @@
+/* Définit les couleurs à utiliser dans plusieurs endroits du site,
+ * si une couleur est locale à un fichier css, bien sûr pas besoin de le mettre ici
+ *  utiliser les s'il vous plait */
 :root {
     --couleurFancy: #14b429;
     --couleurTexte: #333;
@@ -5,6 +8,9 @@
     --couleurFondMain: #f5f5f5;
     --couleurFondInput: white; 
     --couleurFilet: #ddd;
+    --couleurMateriel: black; /* à définir */
+    --couleurService : black; /* à définir */
+    --couleurCategorie : black; /* à définir */
 }
 
 body {

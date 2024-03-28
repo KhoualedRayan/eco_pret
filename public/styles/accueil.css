@@ -11,6 +11,7 @@
     text-align: center;
     padding: 10px;
     font-size: 24px;
+    margin-bottom: 20px;
     background-color: var(--couleurFond);
     border: 1px solid var(--couleurFilet);
     border-radius: 2rem;
@@ -146,9 +147,86 @@ button:active {
 .filtres {
     display: none;
     position: absolute;
-    border: 1px #999 solid;
+    right: 100%;
+    top: -200%;
+    background-color: var(--couleurFond);
+    z-index: 999;
+    border: 1px var(--couleurFilet) solid;
+    width: max-content;
+    padding: 5px;
+    text-align: center;
+    border-radius: 0.5rem;
+    font-size: 0.9em;
 }
 
 .noneFound {
     font-size: 25px;
+}
+
+
+h5 {
+    margin: 3px 0px 8px 0px;
+}
+
+.blocFiltres {
+    border-bottom: 1px var(--couleurFilet) solid;
+    padding: 5px;
+}
+
+
+.types label {
+    cursor: pointer;
+}
+
+input[type="radio"]:checked + label {
+    font-weight: bold;
+}
+
+.input-container input[type="text"] {
+    width: 100px;
+}
+
+.input-container {
+    display: inline-flex;
+}
+
+.prix-min-max-container {
+    display: flex;
+}
+
+.input-container:first-child {
+    margin-right: 10px;
+}
+
+#materielType:checked + label {
+    color: var(--couleurMateriel);
+}
+
+#serviceType:checked + label {
+    color: var(--couleurService);
+}
+
+.hidden {
+    display: none;
+}
+
+.categories {
+    max-height: 80px;
+    overflow: auto;
+    border-radius: 0.5rem;
+    text-align: justify;
+}
+
+input[type="date"] {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    padding-bottom: 3px;
+    border-radius: 0.25rem;
+}
+
+.date-du {
+    margin-bottom: 5px;
 }

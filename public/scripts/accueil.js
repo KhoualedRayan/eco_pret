@@ -6,7 +6,6 @@ function confirmerEmprunt(event, id, type) {
         var data = new FormData();
         data.append('annonceId', id);
         data.append('annonceType', type);
-        console.log("Type : " + type + ", Id : " + id);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 if (xhr.responseText != "OK") {
@@ -15,7 +14,6 @@ function confirmerEmprunt(event, id, type) {
                 }
                 else {
                     //Transaction réussi
-                    console.log(xhr.responseText);
                     window.location.href = '/profile/transactions';
                 }
             }
@@ -34,5 +32,49 @@ function search() {
 }
 
 function filtrer() {
-    document.getElementById("filtres").style.display = "block";
+    var d = document.getElementById("filtres").style.display;
+    document.getElementById("filtres").style.display = d == "block" ? "none" : "block";
+}
+
+function noFilterType() {
+    document.getElementById("categorieFiltre").style.display = "none";
+    document.getElementById("dureeFiltre").style.display = "none";
+    document.getElementById("periodeServiceFiltre").style.display = "none";
+}
+
+function filtrerType(type) {
+    document.getElementById("categorieFiltre").style.display = "block";
+    // mettre les bonnes catégories à partir de la bdd
+    var divCateg = document.getElementById("categs");
+    if (type == "materiel") {
+        document.getElementById("dureeFiltre").style.display = "block";
+        document.getElementById("periodeServiceFiltre").style.display = "none";
+    } else {
+        document.getElementById("dureeFiltre").style.display = "none";
+        document.getElementById("periodeServiceFiltre").style.display = "block";
+    }
+    if (divCateg.typeAnnonce == type) {
+        return;
+    } else {
+        while (divCateg.firstChild) {
+            divCateg.removeChild(divCateg.firstChild);
+        }
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            divCateg.innerHTML = xhr.responseText;
+            divCateg.typeAnnonce = type;
+        }
+    };
+    xhr.open('POST', '/ajax/getCategories/'+type, true);
+    xhr.send();
+}
+
+function filtrerMateriel() {
+    filtrerType("materiel");
+}
+
+function filtrerService() {
+    filtrerType("service");
 }

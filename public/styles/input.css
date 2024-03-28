@@ -1,0 +1,31 @@
+.input-container{
+    position:relative;
+    margin-top: 10px;
+}
+
+
+.input-container label {
+    position:absolute;
+    top:0px;
+    left:0px;
+    pointer-events:none;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-container input{ 
+  border:0;
+  border-bottom:1px var(--couleurFilet) solid;
+  background:transparent;
+}
+
+.input-container input:focus{ 
+ border:none;
+ outline:none;
+ border-bottom:1px solid var(--couleurFancy);
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: -14px;
+    font-size: 13px;
+}

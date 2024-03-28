@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/input.css') }}">
 <script src="{{ asset('scripts/accueil.js') }}"></script>
 {% endblock %}
 
@@ -25,8 +26,87 @@
     <div style="position: relative;">
         <span class="material-icons filter" onclick="filtrer()">filter_list</span>
         <div class="filtres" id="filtres">
-            <div>Materiel</div>
-            <div>Service</div>
+            <form>
+                <div class="blocFiltres types">
+                    <h5 title="ne cherchez que des annonces de prêt (matériel) ou service (service) ou pas (tout)">Type</h5>
+                    <div style="display: flex; justify-content: space-around">
+                        <div>
+                            <input type="radio" name="type" id="toutType" value="tout" onclick="noFilterType()" checked>
+                            <label for="toutType">Tout</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="type" id="materielType" onclick="filtrerMateriel()" value="materiel">
+                            <label for="materielType">Matériel</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="type" id="serviceType" onclick="filtrerService()" value="service">
+                            <label for="serviceType">Service</label>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="blocFiltres hidden" id="categorieFiltre">
+                    <h5 title="cherchez uniquement des annonces avec les catégories sélectionnées">Catégories</h5>
+                    <div id="categs" typeAnnonce="" class="categories">
+                    </div>
+                </div>
+                <div class="blocFiltres hidden" id="dureeFiltre">
+                    <h5 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h5>
+                        <div class="input-container">
+                            <input type="text" name="duree_min" pattern="^[0-9]$" placeholder="">
+                            <label for="duree_min">Minimum</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" name="duree_max" pattern="^[0-9]$" placeholder="">
+                            <label for="duree_max">Maximum</label>
+                        </div>
+                </div>
+                <div class="blocFiltres hidden" id="periodeServiceFiltre">
+                    <h5 title="cherche des services avec des disponibilités entre ces 2 dates (si non spécifié, ne borne pas les dates)">Périodes Service</h5>
+                    <div style="text-align: left;">
+                        <div class="date-du">
+                            <label>Du</label> : <input type="date" name="du">
+                        </div>
+                        <div>
+                            <label>Au</label> : <input type="date" name="au">
+                        </div>    
+                    </div>
+                    
+                    
+                </div>
+                <div class="blocFiltres">
+                    <h5 title="cherchez des annonces avec un prix entre ces 2 valeurs (si non spécifié, ne borne pas le prix)">Prix</h5>
+                    <div class="prix-min-max-container">
+                        <div class="input-container">
+                            <input type="text" name="prix_min" pattern="^[0-9]$" placeholder=""><label for="prix_min">Minimum</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" pattern="^[0-9]$" placeholder=""><label for="prix_max">Maximum</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="blocFiltres">
+                    <h5 title="cherchez des annonces avec un posteur ayant une note supérieure ou égal à celle saisie">Note du posteur</h5>
+                    
+                </div>
+                <div class="blocFiltres">
+                   <h5>Avec client(s) ?</h5>
+                    <label>
+                        <input type="radio" name="avecClient" value="tout" checked>Tout
+                    </label>
+                   <label>
+                        <input type="radio" name="avecClient" value="oui">Oui
+                    </label>
+                    <label>
+                        <input type="radio" name="avecClient" value="non">Non
+                    </label>
+                </div>
+               <div>
+                <button>Réinitialiser</button>
+                <button>Filtrer</button>
+               </div> 
+            </form>
         </div>
     </div>
 </div>
