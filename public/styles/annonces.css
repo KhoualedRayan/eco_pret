@@ -3,7 +3,7 @@
     border-radius: 5px;
     padding: 1em;
     width: 350px;
-    height: 200px;
+    height: 250px;
     margin: 10px;
     background-size: cover;
     position: relative; /* Ajout de position relative */
@@ -58,7 +58,7 @@
 }
 
 .description {
-    height: 90px;
+    height: 80px;
     overflow: auto;
 }
 
