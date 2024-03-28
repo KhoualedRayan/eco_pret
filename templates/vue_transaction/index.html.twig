@@ -53,7 +53,7 @@
             <b>Note</b>
             <div class="stars">
 
-                {% if app.user.username == transaction.annonce.posteur.username %}
+                {% if app.user.username != transaction.annonce.posteur.username %}
                     {% set note = transaction.getNoteClient() is null ? 0 : transaction.getNoteClient() %}           
                 {% else %}
                     {% set note = transaction.getNoteOffrant() is null ? 0 : transaction.getNoteOffrant() %}
@@ -76,14 +76,14 @@
             </div>
             <div class="avis">
                 <label for="commentaire"><b>Commentaire</b></label><br />
-                {% if app.user.username == transaction.annonce.posteur.username %}
+                {% if app.user.username != transaction.annonce.posteur.username %}
                     <textarea id="commentaire" name="commentaire" >{{transaction.getCommentaireClient()}}</textarea><br />
                 {%else%}
                     <textarea id="commentaire" name="commentaire" >{{transaction.getCommentaireOffrant()}}</textarea><br />
                 {% endif %}
             </div>
 
-            {% if app.user.username == transaction.annonce.posteur.username %}
+            {% if app.user.username != transaction.annonce.posteur.username %}
 
                 <div class="boutonValiderNoteClient">
                     <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
