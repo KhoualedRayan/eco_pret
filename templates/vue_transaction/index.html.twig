@@ -78,9 +78,9 @@
             <div class="avis">
                 <label for="commentaire"><b>Commentaire</b></label><br />
                 {% if app.user.username == transaction.annonce.posteur.username %}
-                    <textarea id="commentaire" name="commentaire" >{{transaction.getCommentaireOffrant()}}</textarea><br />
-                {%else%}
                     <textarea id="commentaire" name="commentaire" >{{transaction.getCommentaireClient()}}</textarea><br />
+                {%else%}
+                    <textarea id="commentaire" name="commentaire" >{{transaction.getCommentaireOffrant()}}</textarea><br />
                 {% endif %}
             </div>
 
