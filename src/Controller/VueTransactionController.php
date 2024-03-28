@@ -32,17 +32,17 @@ class VueTransactionController extends AbstractController
 
 
 
-    #[Route('/ajax/validerNoteClient', name: 'valider_note_client', methods: ['POST'])]
+    #[Route('/ajax/validerNoteClient', name: 'valider_note_client')]
     public function validerNoteClient(Request $request, EntityManagerInterface $em): Response
     {   
 
         $idTransaction = $request->request->get('idTransaction');
 
-        $this->addFlash('notifications', 'Votre mot de passe a été eee avec succès !');
+        //$this->addFlash('notifications', 'Votre mot de passe a été eee avec succès !');
 
         dump($idTransaction);
 
-        return $this->redirectToRoute('app_home_page');
+        return $this->redirectToRoute('app_login');
         
         
     }
@@ -51,13 +51,22 @@ class VueTransactionController extends AbstractController
     public function validerNotePosteur(Request $request, EntityManagerInterface $em): Response
     {
         
-         $idTransaction = $request->request->get('idTransaction');
+        $idTransaction = $request->request->get('id');
 
-        $this->addFlash('notifications', 'Votre mot de passe a été eee avec succès !');
+        $transaction = $em->getRepository(Transaction::class)->find($idTransaction);
 
-        dump($idTransaction);
+        dump($transaction);
 
-        return $this->redirectToRoute('app_home_page');
+        $transaction->setNoteOffrant(4);
+
+        dump($transaction);
+
+        $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
+
+        $em->persist($transaction);
+        $em->flush();
+
+        return new Response("OK");
         
         
     }

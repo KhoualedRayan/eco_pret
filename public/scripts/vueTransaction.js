@@ -15,17 +15,22 @@ document.querySelectorAll('.star').forEach(function (star, index) {
 });
 
 /*Se désister d'une file d'attente */
-function validerNotePosteur(username) {
+function validerNotePosteur(username, id) {
     var conf = confirm("Voulez-vous vraiment envoyer la note à " + username + " ?");
     if (conf) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 window.location.reload();
+                console.log(id);
             }
         };
+
+        var formData = new FormData();
+        formData.append('id', id);
+
         xhr.open('POST', '/ajax/validerNotePosteur', true);
-        xhr.send();
+        xhr.send(formData);
     }
 }
 
