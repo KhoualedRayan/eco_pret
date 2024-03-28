@@ -39,6 +39,7 @@ function validerNotePosteur(username, id) {
             };
 
             var formData = new FormData();
+            formData.append('username', username);
             formData.append('id', id);
             formData.append('note', nbEtoiles);
             formData.append('commentaire', document.getElementById("commentaire").value);
@@ -73,6 +74,7 @@ function validerNoteClient(username, id) {
                 }
             };
             var formData = new FormData();
+            formData.append('username', username);
             formData.append('id', id);
             formData.append('note', nbEtoiles);
             formData.append('commentaire', document.getElementById("commentaire").value);

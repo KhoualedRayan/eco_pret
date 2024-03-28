@@ -8,11 +8,21 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Transaction;
 use Symfony\Component\HttpFoundation\Request;
-
+use App\Entity\Notification;
+use DateTime;
+use App\Service\Outils;
 
 class VueTransactionController extends AbstractController
 {
     private int $identifiant;
+
+    private $outils;
+
+    public function __construct(Outils $outils)
+    {
+        $this->outils = $outils;
+    }
+
     #[Route('/vue/transaction/{id}', name: 'app_vue_transaction')]
     public function index(int $id, EntityManagerInterface $em): Response
     {
@@ -41,8 +51,10 @@ class VueTransactionController extends AbstractController
         $idTransaction = $request->request->get('id');
         $note = $request->request->get('note');
         $commentaire = $request->request->get('commentaire');
+        $username = $request->request->get('username');
 
         $transaction = $em->getRepository(Transaction::class)->find($idTransaction);
+        $titreTransaction = $transaction->getAnnonce()->getTitre();
 
         $transaction->setNoteClient($note);
 
@@ -50,6 +62,14 @@ class VueTransactionController extends AbstractController
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
+        $notif = "Vous avez recu un avis de $username concernant votre transaction $titreTransaction !";
+        $notification = new Notification();
+        $notification->setContenu($this->outils->crypterMessage($notif));
+        $notification->setAEteLu(false);
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setUser($transaction->getAnnonce()->getPosteur());
+        
+        $em->persist($notification);
         $em->flush();
 
         return new Response("OK");
@@ -64,9 +84,11 @@ class VueTransactionController extends AbstractController
         $idTransaction = $request->request->get('id');
         $note = $request->request->get('note');
         $commentaire = $request->request->get('commentaire');
+        $username = $request->request->get('username');
 
         $transaction = $em->getRepository(Transaction::class)->find($idTransaction);
 
+        $titreTransaction = $transaction->getAnnonce()->getTitre();
 
         $transaction->setNoteOffrant($note);
 
@@ -74,6 +96,14 @@ class VueTransactionController extends AbstractController
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
+        $notif = "Vous avez recu un avis de $username concernant votre transaction $titreTransaction !";
+        $notification = new Notification();
+        $notification->setContenu($this->outils->crypterMessage($notif));
+        $notification->setAEteLu(false);
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setUser($transaction->getClient());
+        
+        $em->persist($notification);
         $em->flush();
 
         return new Response("OK");

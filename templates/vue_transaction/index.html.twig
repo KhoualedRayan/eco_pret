@@ -83,17 +83,32 @@
                 {% endif %}
             </div>
 
-            {% if app.user.username != transaction.annonce.posteur.username %}
+            {% if app.user.username == transaction.client.username %}
+            
+                <div class="boutonContainer">
 
-                <div class="boutonValiderNoteClient">
-                    <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
+                <div class="boutonValiderNote">
+                    <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
+                </div>
+
+                <div class="boutonAnnuler">
+                    <a href="{{ path('app_profile_transactions') }}">
+                    <button >Annuler</button>
+                </div>
+
                 </div>
 
             {% else %}
 
-                <div class="boutonValiderNotePosteur">
-                    <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
+                <div class="boutonValiderNote">
+                    <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
                 </div>
+
+                <div class="boutonAnnuler">
+                    <a href="{{ path('app_profile_transactions') }}">
+                    <button >Annuler</button>
+                </div>
+
 
             {% endif %}
         
