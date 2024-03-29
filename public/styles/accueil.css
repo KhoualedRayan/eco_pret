@@ -17,12 +17,12 @@
     border-radius: 2rem;
 }
 
-button {
+.publishButton {
     align-items: center;
     background-clip: padding-box;
     background-color: var(--couleurFancy);
     border: 1px solid transparent;
-    border-radius: .25rem;
+    border-radius: .5rem;
     cursor: pointer;
     color: #fff;
     display: inline-flex;
@@ -33,18 +33,16 @@ button {
     margin-left: 2%;
 }
 
-button:hover {
+.publishButton:hover {
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
     transform: translateY(-1px);
 }
 
-button:active {
+.publishButton:active {
   background-color: #136e13;
   box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
   transform: translateY(0);
 }
-
-
 
 .emprunter {
     position: absolute;
@@ -149,7 +147,7 @@ button:active {
     position: absolute;
     right: 100%;
     top: -200%;
-    background-color: var(--couleurFond);
+    background-color: var(--couleurFondMain);
     z-index: 999;
     border: 1px var(--couleurFilet) solid;
     width: max-content;
@@ -157,6 +155,9 @@ button:active {
     text-align: center;
     border-radius: 0.5rem;
     font-size: 0.9em;
+    overflow: auto;
+    max-height: 400px;
+    
 }
 
 .noneFound {
@@ -164,13 +165,17 @@ button:active {
 }
 
 
-h5 {
+h4 {
     margin: 3px 0px 8px 0px;
 }
 
 .blocFiltres {
-    border-bottom: 1px var(--couleurFilet) solid;
-    padding: 5px;
+    border-radius: .5rem;
+    margin-bottom: 5px;
+    border: 1px var(--couleurFilet) solid;
+    background-color: var(--couleurFond);
+    padding: 5px 15px;
+    box-shadow: rgba(107, 39, 170, 0.219) 0 2px 4px;
 }
 
 
@@ -211,7 +216,7 @@ input[type="radio"]:checked + label {
 }
 
 .categories {
-    max-height: 80px;
+    max-height: 100px;
     overflow: auto;
     border-radius: 0.5rem;
     text-align: justify;
@@ -223,10 +228,58 @@ input[type="date"] {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
-    padding-bottom: 3px;
+    padding-bottom: 1px;
     border-radius: 0.25rem;
 }
 
-.date-du {
-    margin-bottom: 5px;
+.star {
+    font-size: 24px;
+    margin-right: 2px;
+}
+
+.close {
+    font-size: 16px;
+    padding: 3px;
+    border-radius: 1rem;
+    color: var(--couleurFancy);
+}
+
+.close:hover {
+    background-color: var(--couleurFancy);
+    color: white;
+    cursor: pointer;
+}
+
+.blocNote {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filterButtons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.filtreBouton {
+    border-radius: .5rem;
+    outline: none;
+    border: none;
+    padding: 5px 15px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #555;
+    transition: background-color 0.3s ease;
+}
+
+.filtreBouton:hover {
+    background-color: #333;
+    transform: translateY(-1px);
+}
+
+.filtreBouton:active {
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
 }

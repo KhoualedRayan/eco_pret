@@ -1,0 +1,9 @@
+.stars {
+	display: inline-flex;
+	cursor:pointer;
+	align-items:center;
+}
+
+.star {
+	color: gold;
+}

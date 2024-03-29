@@ -78,3 +78,20 @@ function filtrerMateriel() {
 function filtrerService() {
     filtrerType("service");
 }
+
+function resetNoteFiltre() {
+    let allStars = document.querySelectorAll('.star');
+    allStars.forEach((star, i) => {
+        star.innerHTML = 'star_rate';
+    });
+}
+
+function resetFilters() {
+    document.getElementById("toutType").checked = true;
+    noFilterType();
+    document.getElementById("categs").typeAnnonce = "";
+    document.getElementById("prix_min").value = "";
+    document.getElementById("prix_max").value = "";
+    resetNoteFiltre();
+    document.getElementById("toutAvecClient").checked = true;
+}

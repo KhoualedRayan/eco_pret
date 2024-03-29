@@ -130,6 +130,7 @@ class HomePageController extends AbstractController
         $entityManagerInterface->persist($notif);
         $entityManagerInterface->flush();
     }
+
     #[Route('/ajax/getCategories/{type}', name: 'get_categories')]
     public function getCategorie(EntityManagerInterface $em, $type): Response
     {
@@ -138,5 +139,11 @@ class HomePageController extends AbstractController
             'controller_name' => 'HomePageController',
             'categories' => $cs,
         ]);
+    }
+
+    #[Route('/filters', name: 'handle_filters')]
+    public function handleFilters(EntityManagerInterface $em, Request $request): Response
+    {
+        return new Response();
     }
 }

@@ -10,20 +10,11 @@
 	border: 1px var(--couleurFilet) solid;
 	border-radius: .5rem;
 }
-.stars {
-	display: inline-block;
-	cursor:pointer;
-}
 
 .star {
-	color: gold;
 	font-size: 36px;
 }
 
-/* Style pour les �toiles non s�lectionn�es, si n�cessaire */
-.star-grise {
-	color: #ccc;
-}
 textarea {
 	width: 30em; /* Largeur ajust�e � un quart de l'�cran */
 	height:9em;

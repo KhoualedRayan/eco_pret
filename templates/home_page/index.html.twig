@@ -5,7 +5,9 @@
 <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/input.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/etoiles.css') }}">
 <script src="{{ asset('scripts/accueil.js') }}"></script>
+<script src="{{ asset('scripts/etoiles.js') }}"></script>
 {% endblock %}
 
 {% block title %}EcoPrêt{% endblock %}
@@ -14,8 +16,8 @@
 {% block body %}
 <div class="publish">
     Publiez une annonce !
-    <a href="{{ path('app_pret_materiel') }}"><button>Prêter du matériel</button></a>
-    <a href = "{{ path('app_offre_service') }}"><button>Offrir un service</button></a>
+    <a href="{{ path('app_pret_materiel') }}"><button class="publishButton">Prêter du matériel</button></a>
+    <a href = "{{ path('app_offre_service') }}"><button class="publishButton">Offrir un service</button></a>
 </div>
 <div class="searchZone">
     <h2 style="margin: 0">Annonces</h2>
@@ -26,10 +28,10 @@
     <div style="position: relative;">
         <span class="material-icons filter" onclick="filtrer()">filter_list</span>
         <div class="filtres" id="filtres">
-            <form>
+            <form action="{{ path('handle_filters')}}" method="POST">
                 <div class="blocFiltres types">
-                    <h5 title="ne cherchez que des annonces de prêt (matériel) ou service (service) ou pas (tout)">Type</h5>
-                    <div style="display: flex; justify-content: space-around">
+                    <h4 title="ne cherchez que des annonces de prêt (matériel) ou service (service) ou pas (tout)">Type</h4>
+                    <div style="display: flex; justify-content: space-between">
                         <div>
                             <input type="radio" name="type" id="toutType" value="tout" onclick="noFilterType()" checked>
                             <label for="toutType">Tout</label>
@@ -42,69 +44,82 @@
                             <input type="radio" name="type" id="serviceType" onclick="filtrerService()" value="service">
                             <label for="serviceType">Service</label>
                         </div>
-                        
                     </div>
-                    
                 </div>
                 <div class="blocFiltres hidden" id="categorieFiltre">
-                    <h5 title="cherchez uniquement des annonces avec les catégories sélectionnées">Catégories</h5>
+                    <h4 title="cherchez uniquement des annonces avec les catégories sélectionnées">Catégories</h4>
                     <div id="categs" typeAnnonce="" class="categories">
                     </div>
                 </div>
                 <div class="blocFiltres hidden" id="dureeFiltre">
-                    <h5 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h5>
+                    <h4 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h4>
                         <div class="input-container">
-                            <input type="text" name="duree_min" pattern="^[0-9]$" placeholder="">
+                            <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]$" placeholder="">
                             <label for="duree_min">Minimum</label>
                         </div>
                         <div class="input-container">
-                            <input type="text" name="duree_max" pattern="^[0-9]$" placeholder="">
+                            <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]$" placeholder="">
                             <label for="duree_max">Maximum</label>
                         </div>
                 </div>
                 <div class="blocFiltres hidden" id="periodeServiceFiltre">
-                    <h5 title="cherche des services avec des disponibilités entre ces 2 dates (si non spécifié, ne borne pas les dates)">Périodes Service</h5>
+                    <h4 title="cherche des services avec des disponibilités entre ces 2 dates (si non spécifié, ne borne pas les dates)">Périodes Service</h4>
                     <div style="text-align: left;">
                         <div class="date-du">
-                            <label>Du</label> : <input type="date" name="du">
+                            <label>Du : <input type="date" name="du"></label>
                         </div>
                         <div>
-                            <label>Au</label> : <input type="date" name="au">
+                            <label>Au : <input type="date" name="au"></label>
                         </div>    
                     </div>
                     
-                    
                 </div>
                 <div class="blocFiltres">
-                    <h5 title="cherchez des annonces avec un prix entre ces 2 valeurs (si non spécifié, ne borne pas le prix)">Prix</h5>
+                    <h4 title="cherchez des annonces avec un prix entre ces 2 valeurs (si non spécifié, ne borne pas le prix)">Prix</h4>
                     <div class="prix-min-max-container">
                         <div class="input-container">
-                            <input type="text" name="prix_min" pattern="^[0-9]$" placeholder=""><label for="prix_min">Minimum</label>
+                            <input type="text" name="prix_min" id="prix_min" pattern="^[0-9]$" placeholder=""><label for="prix_min">Minimum</label>
                         </div>
                         <div class="input-container">
-                            <input type="text" pattern="^[0-9]$" placeholder=""><label for="prix_max">Maximum</label>
+                            <input type="text" pattern="^[0-9]$" id="prix_max" placeholder=""><label for="prix_max">Maximum</label>
                         </div>
                     </div>
                 </div>
-                <div class="blocFiltres">
-                    <h5 title="cherchez des annonces avec un posteur ayant une note supérieure ou égal à celle saisie">Note du posteur</h5>
+                <div class="blocFiltres note">
+                    <h4 title="cherchez des annonces avec un posteur ayant une note supérieure ou égal à celle saisie">Note Posteur</h4>
+                    <div class="blocNote">
+                        <div class="stars">
+                            {% for i in range(0, 4) %}
+                                <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star_rate</span>
+                            {% endfor %}
+                            +
+                        </div>
+                        <div><span class="material-icons-outlined close" onclick="resetNoteFiltre()">close</span></div>
+                    </div>
                     
                 </div>
                 <div class="blocFiltres">
-                   <h5>Avec client(s) ?</h5>
-                    <label>
-                        <input type="radio" name="avecClient" value="tout" checked>Tout
-                    </label>
-                   <label>
-                        <input type="radio" name="avecClient" value="oui">Oui
-                    </label>
-                    <label>
-                        <input type="radio" name="avecClient" value="non">Non
-                    </label>
+                    <h4 title="cherchez des annonces libres (c-à-d sans transactions en cours)">Avec client(s) ?</h4>
+                    <div style="display: flex; justify-content:space-around;">
+                        <div>
+                            <input type="radio" name="avecClient" value="tout" id="toutAvecClient" checked>
+                            <label for="toutAvecClient">Tout</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="avecClient" id="ouiClient" value="oui">
+                            <label for="ouiClient">Oui</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="avecClient" id="nonClient" value="non">
+                            <label for="nonClient">Non</label>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
-               <div>
-                <button>Réinitialiser</button>
-                <button>Filtrer</button>
+               <div class="filterButtons">
+                <button class="filtreBouton" onclick="resetFilters()" type="button">Réinitialiser</button>
+                <button class="filtreBouton" type="submit">Filtrer</button>
                </div> 
             </form>
         </div>

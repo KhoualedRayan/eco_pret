@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/vueTransactions.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('styles/etoiles.css') }}">
+    <script src="{{ asset('scripts/vueTransaction.js') }}"></script>
+    <script src="{{ asset('scripts/etoiles.js') }}"></script>
 
 {% endblock %}
 {% block title %}Transaction - {{transaction.annonce.titre}}{% endblock %}
@@ -61,15 +63,15 @@
                 {% endif %}
                 {% if note == 0 %}
                     {% for i in range(5-note,1) %}
-                        <span class="star">&#9734;</span>
+                        <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star_rate</span>
                     {% endfor %}
                 {% else %}
                     {% for i in range(0,note-1) %}
-                        <span class="star">&#9733;</span>
+                        <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star</span>
                     {% endfor %}
                     {% if note < 5 %}
                         {% for i in range(5-note,1) %}
-                                <span class="star">&#9734;</span>
+                                <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star_rate</span>
                         {% endfor %}
                     {% endif %}   
                 {% endif %}
@@ -114,6 +116,4 @@
         
         </div>
     </div>
-
-<script src="{{ asset('scripts/vueTransaction.js') }}"></script>
 {% endblock %}
