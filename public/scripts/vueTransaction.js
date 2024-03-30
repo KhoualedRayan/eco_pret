@@ -1,5 +1,5 @@
 
-document.querySelectorAll('.star').forEach(function (star, index) {
+document.querySelectorAll('.material-icons-outlined star').forEach(function (star, index) {
     star.addEventListener('click', function () {
         let allStars = document.querySelectorAll('.star');
         // Mettre � jour l'affichage des �toiles en fonction de la s�lection
