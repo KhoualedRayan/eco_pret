@@ -5,9 +5,7 @@
     <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/vueTransactions.css') }}">
-    <link rel="stylesheet" href="{{ asset('styles/etoiles.css') }}">
-    <script src="{{ asset('scripts/vueTransaction.js') }}"></script>
-    <script src="{{ asset('scripts/etoiles.js') }}"></script>
+    
 
 {% endblock %}
 {% block title %}Transaction - {{transaction.annonce.titre}}{% endblock %}
@@ -75,6 +73,9 @@
                         {% endfor %}
                     {% endif %}   
                 {% endif %}
+
+                
+
             </div>
             <div class="avis">
                 <label for="commentaire"><b>Commentaire</b></label><br />
@@ -89,28 +90,31 @@
             
                 <div class="boutonContainer">
 
-                <div class="boutonValiderNote">
-                    <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
-                </div>
+                    <div class="boutonValiderNote">
+                        <button onclick="validerNoteClient('{{ transaction.client.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.annonce.posteur.username }}</button>
+                    </div>
 
-                <div class="boutonAnnuler">
-                    <a href="{{ path('app_profile_transactions') }}">
-                    <button >Annuler</button>
-                </div>
+                    <div class="boutonAnnuler">
+                        <a href="{{ path('app_profile_transactions') }}">
+                        <button>Annuler</button>
+                    </div>
 
                 </div>
 
             {% else %}
 
-                <div class="boutonValiderNote">
-                    <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
-                </div>
+                <div class="boutonContainer">
 
-                <div class="boutonAnnuler">
-                    <a href="{{ path('app_profile_transactions') }}">
-                    <button >Annuler</button>
-                </div>
+                    <div class="boutonValiderNote">
+                        <button onclick="validerNotePosteur('{{ transaction.annonce.posteur.username }}', {{ transaction.id }})" >Confirmer et envoyer la note à {{ transaction.client.username }}</button>
+                    </div>
 
+                    <div class="boutonAnnuler">
+                        <a href="{{ path('app_profile_transactions') }}">
+                        <button>Annuler</button>
+                    </div>
+
+                </div>
 
             {% endif %}
         
