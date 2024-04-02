@@ -76,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: Annonce::class, orphanRemoval: true)]
     private Collection $annonces;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $note = null;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -531,5 +534,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // public function getTransactions() {
     //     return new ArrayCollection((array)getTransactionsWherePosteur()+$demandes);
     // }
+
+    public function getNote(): ?float
+    {
+        return $this->note;
+    }
+
+    public function setNote(?float $note): static
+    {
+
+        $this->note = $note;
+
+        return $this;
+    }
+
 
 }

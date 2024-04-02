@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Notification;
 use DateTime;
 use App\Service\Outils;
+use App\Repository\TransactionRepository;
 
 class VueTransactionController extends AbstractController
 {
@@ -27,14 +28,14 @@ class VueTransactionController extends AbstractController
     public function index(int $id, EntityManagerInterface $em): Response
     {
         $transaction = $em->getRepository(Transaction::class)->find($id);
-        
+
         if (!$transaction) {
             return $this->redirectToRoute('app_home_page');
         }
 
         $note = ($transaction->getNoteOffrant() !== null) ? $transaction->getNoteOffrant() : $transaction->getNoteClient();
-        $note = ($note !== null) ? $note : 3; 
-    
+        $note = ($note !== null) ? $note : 3;
+
         return $this->render('vue_transaction/index.html.twig', [
             'controller_name' => 'VueTransactionController',
             'transaction' => $transaction,
@@ -47,7 +48,7 @@ class VueTransactionController extends AbstractController
     #[Route('/ajax/validerNoteClient', name: 'valider_note_client')]
     public function validerNoteClient(Request $request, EntityManagerInterface $em): Response
     {
-
+        //Je suis le client
         $idTransaction = $request->request->get('id');
         $note = $request->request->get('note');
         $commentaire = $request->request->get('commentaire');
@@ -56,9 +57,31 @@ class VueTransactionController extends AbstractController
         $transaction = $em->getRepository(Transaction::class)->find($idTransaction);
         $titreTransaction = $transaction->getAnnonce()->getTitre();
 
+        //On change la note global du posteur
+        $transactions = $em->getRepository(Transaction::class)->findByClientOrPosteur($transaction->getAnnonce()->getPosteur() );
+        $nbNotes = 1;
+        $totalNotes = $note;
+        foreach($transactions as $t){
+            if($t->getId() != $transaction->getId()){
+                if ($t->getClient()->getId() == $transaction->getAnnonce()->getPosteur()->getId()) {
+                    if ($t->getNoteOffrant() != null) {
+                        $totalNotes += $t->getNoteOffrant();
+                        $nbNotes++;
+                    }
+                } else {
+                    if ($t->getNoteClient() != null) {
+                        $totalNotes += $t->getNoteClient();
+                        $nbNotes++;
+                    }
+                }
+            }
+        }
+        $transaction->getAnnonce()->getPosteur()->setNote($totalNotes / $nbNotes);
         $transaction->setNoteClient($note);
 
         $transaction->setCommentaireClient($commentaire);
+
+
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
@@ -68,7 +91,7 @@ class VueTransactionController extends AbstractController
         $notification->setAEteLu(false);
         $notification->setDateEnvoi(new DateTime());
         $notification->setUser($transaction->getAnnonce()->getPosteur());
-        
+
         $em->persist($notification);
         $em->flush();
 
@@ -80,7 +103,7 @@ class VueTransactionController extends AbstractController
     #[Route('/ajax/validerNotePosteur', name: 'valider_note_posteur')]
     public function validerNotePosteur(Request $request, EntityManagerInterface $em): Response
     {
-
+        //Je suis le posteur
         $idTransaction = $request->request->get('id');
         $note = $request->request->get('note');
         $commentaire = $request->request->get('commentaire');
@@ -90,9 +113,32 @@ class VueTransactionController extends AbstractController
 
         $titreTransaction = $transaction->getAnnonce()->getTitre();
 
+        //On change la note global du client
+        $transactions = $em->getRepository(Transaction::class)->findByClientOrPosteur($transaction->getClient());
+        $nbNotes = 1;
+        $totalNotes = $note;
+        foreach ($transactions as $t) {
+            if ($t->getId() != $transaction->getId()) {
+                if ($t->getClient()->getId() == $transaction->getClient()->getId()) {
+                    if ($t->getNoteOffrant() != null) {
+                        $totalNotes += $t->getNoteOffrant();
+                        $nbNotes++;
+                    }
+                } else {
+                    if ($t->getNoteClient() != null) {
+                        $totalNotes += $t->getNoteClient();
+                        $nbNotes++;
+                    }
+                }
+            }
+        }
+        $transaction->getClient()->setNote($totalNotes / $nbNotes);
+
         $transaction->setNoteOffrant($note);
 
         $transaction->setCommentaireOffrant($commentaire);
+
+
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
@@ -102,7 +148,7 @@ class VueTransactionController extends AbstractController
         $notification->setAEteLu(false);
         $notification->setDateEnvoi(new DateTime());
         $notification->setUser($transaction->getClient());
-        
+
         $em->persist($notification);
         $em->flush();
 
