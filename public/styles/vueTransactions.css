@@ -2,7 +2,7 @@
 	flex: 0;
 	padding: 10px 3em;
 	display: inline-block;
-	width: 3em;
+	width: fit-content	;
 	height: fit-content;
 	margin: auto;
 	text-align:center;
@@ -11,9 +11,21 @@
 	border-radius: .5rem;
 }
 
+.stars {
+	display: inline-block;
+	cursor:pointer;
+}
+
 .star {
+	color: gold;
 	font-size: 36px;
 }
+
+/* Style pour les �toiles non s�lectionn�es, si n�cessaire */
+.star-grise {
+	color: #ccc;
+}
+
 
 textarea {
 	width: 30em; /* Largeur ajust�e � un quart de l'�cran */
@@ -27,7 +39,6 @@ textarea {
 
 .centrer{
 	text-align:center;
-	width: fit-content;
 }
 .descriptionTransac {
 	background-color: #ddd;
@@ -65,7 +76,7 @@ textarea {
 }
 
 .boutonContainer {
-    display: flexbox; /* Utiliser flexbox pour aligner les éléments horizontalement */
+    display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
 	
 }
 
