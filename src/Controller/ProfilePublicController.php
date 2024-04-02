@@ -25,7 +25,6 @@ class ProfilePublicController extends AbstractController
         return $this->render('profile_public/index.html.twig', [
             'controller_name' => 'ProfilePublicController',
             'user' => $user,
-            'onglet' => "infos",
         ]);
     }
 }

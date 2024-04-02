@@ -23,7 +23,40 @@
         <a class="tab-button active" href="{{ path('app_profile_public_planning', {'id': user.id}) }}">Son Planning</a>
     </div>
 
-    {% block contenu %}{% endblock %}
+    {% block contenu %}
+        {% block ss3 %}
+<link rel="stylesheet" href="{{ asset('styles/planning.css') }}">
+{% endblock %}
+
+{% block container %}
+
+{% if user.abonnement is not null %}
+    <div id="user-id" data-user-id="{{ user.id }}" style="display: none;"></div>
+
+    <h1 id="month-year"></h1>
+
+    <table id="calendar"></table>
+    </br>
+    <div class= "btns" id="btn-container">
+        <button class="button_calendar" id="prev-month"><span class="material-icons">arrow_back</span></button>
+        <button class="button_calendar" id="current-month"><span class="material-icons">calendar_today</span></button>
+        <button class="button_calendar" id="next-month"><span class="material-icons">arrow_forward</span></button>
+    </div>
+    </br></br>
+    <script src="{{ asset('scripts/planning_public.js') }}"></script>
+{% else %}
+    <div class="no_planning">
+        <p>
+            <span class="bold">{{ user.username }}</span> n'a pas de Planning
+        </p>
+        
+    </div>
+    
+{% endif %}
+
+{% endblock %}
+    
+    {% endblock %}
 </div>
 
 </body>

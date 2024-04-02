@@ -2,8 +2,14 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('styles/profil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/accueil.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/input.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/etoiles.css') }}">
+<script src="{{ asset('scripts/accueil.js') }}"></script>
 <script src="{{ asset('scripts/profil.js') }}"></script>
-{% block ss2 %}{% endblock %}
 {% endblock %}
 
 {% block title %}Profil{% endblock %}
@@ -23,7 +29,49 @@
         <a class="tab-button" href="{{ path('app_profile_public_planning', {'id': user.id}) }}">Son Planning</a>
     </div>
 
-    {% block contenu %}{% endblock %}
+    {% block container %}
+
+{% block contenu %}
+
+<h3>Ses Annonces</h3>
+<div class="tout">
+        {% for annonce in annonces %}
+            <a href="{{ path('app_vue_annonce', {'id': annonce.id}) }}" class="lienAnnonce">
+            <div class="blocAnnonce">
+                <div>
+                    <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
+                    <span class="username">{{ annonce.getPosteur().getUsername() }}</span>
+                </div>
+                <div class="type">{{ annonce.getType() }}</div>
+                <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                <h3>{{ annonce.getTitre() }}</h3>
+                <div class="description">{{ annonce.getDescription() }}</div>
+
+                {# L'utilisateur est prenium #}
+                {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}
+                    {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
+                        {% if annonce.attentes is empty %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                        {% elseif annonce.transaction and annonce.contientUserDansFiles(app.user) == false %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
+                        {% endif %}
+                    {% endif %}
+                {# L'utilisateur n'est pas prenium, ne peut pas emprunter les matériels #}
+                {%elseif app.user and app.user.abonnement == "1" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}
+                    {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}
+                        {% if annonce.attentes is empty and annonce.getType() == "Service" %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Emprunter</button>
+                        {% elseif annonce.transaction and annonce.contientUserDansFiles(app.user) == false and annonce.getType() == "Service" %}
+                            <button class="emprunter" onclick="confirmerEmprunt(event, '{{ annonce.getId() }}', '{{ annonce.getType() }}')">Ajouter dans la file d'attente</button>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div></a>
+        {% endfor %}
+</div>
+{% endblock %}
+{% endblock %}
 </div>
 
 </body>
