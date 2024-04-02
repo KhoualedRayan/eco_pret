@@ -8,10 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
-
-class ProfilePublicController extends AbstractController
+class ProfilePublicAnnoncesController extends AbstractController
 {
-    #[Route('/profile/public/{id}', name: 'app_profile_public')]
+    #[Route('/profile/public/annonces/{id}', name: 'app_profile_public_annonces')]
     public function index($id, EntityManagerInterface $em): Response
     {
         $user = $em->getRepository(User::class)->find(intval($id));
@@ -21,9 +20,8 @@ class ProfilePublicController extends AbstractController
         if($user->getId() == $this->getUser()->getId()){
             return $this->redirectToRoute('app_profile');
         }
-
-        return $this->render('profile_public/index.html.twig', [
-            'controller_name' => 'ProfilePublicController',
+        return $this->render('profile_public_annonces/index.html.twig', [
+            'controller_name' => 'ProfilePublicAnnoncesController',
             'user' => $user,
             'onglet' => "infos",
         ]);
