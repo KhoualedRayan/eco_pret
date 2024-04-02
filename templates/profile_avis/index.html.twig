@@ -14,31 +14,6 @@
     {% if offrantTransactions is not empty %}
         <ul>
             {% for transaction in offrantTransactions %}
-                {% if transaction.getNoteOffrant() is not null %}
-                    <li>
-                        <strong>Note:</strong> 
-                        <div class="stars">
-                            {% for i in 1..5 %}
-                                {% if i <= transaction.getNoteOffrant() %}
-                                    <span class="material-icons star">star</span>
-                                {% else %}
-                                    <span class="material-icons star">star_border</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div><br>
-                        <strong>Commentaire:</strong> {{ transaction.getCommentaireOffrant() }}
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun avis reçu en tant qu'offrant.</p>
-    {% endif %}
-    
-    <h2>Avis en tant que client</h2>
-    {% if clientTransactions is not empty %}
-        <ul>
-            {% for transaction in clientTransactions %}
                 {% if transaction.getNoteClient() is not null %}
                     <li>
                         <strong>Note:</strong> 
@@ -52,6 +27,31 @@
                             {% endfor %}
                         </div><br>
                         <strong>Commentaire:</strong> {{ transaction.getCommentaireClient() }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun avis reçu en tant qu'offrant.</p>
+    {% endif %}
+    
+    <h2>Avis en tant que client</h2>
+    {% if clientTransactions is not empty %}
+        <ul>
+            {% for transaction in clientTransactions %}
+                {% if transaction.getNoteOffrant() is not null %}
+                    <li>
+                        <strong>Note:</strong> 
+                        <div class="stars">
+                            {% for i in 1..5 %}
+                                {% if i <= transaction.getNoteOffrant() %}
+                                    <span class="material-icons star">star</span>
+                                {% else %}
+                                    <span class="material-icons star">star_border</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div><br>
+                        <strong>Commentaire:</strong> {{ transaction.getCommentaireOffrant() }}
                     </li>
                 {% endif %}
             {% endfor %}
