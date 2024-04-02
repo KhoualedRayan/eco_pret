@@ -76,6 +76,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'posteur', targetEntity: Annonce::class, orphanRemoval: true)]
     private Collection $annonces;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $note = null;
+    private int $nbNotes = 0;
+    private int $totalNotes = 0;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -531,5 +536,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // public function getTransactions() {
     //     return new ArrayCollection((array)getTransactionsWherePosteur()+$demandes);
     // }
+
+    public function getNote(): ?float
+    {
+        return $this->note;
+    }
+
+    public function setNote(?float $note): static
+    {
+
+        $this->note = $note;
+
+        return $this;
+    }
+    public function ajouterNote(int $newNote){
+        dump($this->nbNotes);
+        $this->note = ($this->totalNotes + $newNote) / ($this->nbNotes +1);
+        $this->totalNotes += $newNote;
+        $this->nbNotes = $this->nbNotes + 1;
+        dump($this->note);
+        return $this;
+    }
+    public function removeNote(int $newNote){
+        if ($this->nbNotes > 0) {
+            $this->totalNotes -= $newNote;
+            $this->nbNotes = $this->nbNotes - 1;
+            $this->note = $this->totalNotes / $this->nbNotes;
+        }
+        return $this;
+    }
+
 
 }
