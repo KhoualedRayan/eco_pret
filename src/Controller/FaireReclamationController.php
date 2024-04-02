@@ -8,7 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\CategorieReclamation;
 use App\Entity\Transaction;
+use App\Entity\Reclamation;
 use App\Entity\User;
+use App\Repository\CategorieReclamationRepository;
+use App\Repository\AnnonceRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -41,9 +44,21 @@ class FaireReclamationController extends AbstractController
     }
 
     #[Route('/handle_form', name: 'handle_form')]
-    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request): Response
+    public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request,CategorieReclamationRepository $crr, AnnonceRepository $ar): Response
     {
-        
+        dump($request->request);
+        $objet = $request->request->get('recla');
+        $annonce_l = $request->request->get('annonce_l');
+        $description = $request->request->get('description');
+        $reclamation = new Reclamation();
+        $reclamation->setObjet($objet);
+        $reclamation->setDescription($description);
+        $reclamation->setUser($this->getUser());
+        $reclamation->setStatutReclamation("En cours");
+        $reclamation->setTagReclamation($crr->findOneByNom($objet));
+        $reclamation->setAnnonceLitige($ar->findOneById($annonce_l));
+        $entityManager->persist($reclamation);
+        $entityManager->flush();        
         $this->addFlash('notifications', 'Votre réclamation a été envoyée avec succès !');
 
         return $this->redirectToRoute('app_home_page');

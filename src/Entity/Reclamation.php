@@ -33,6 +33,9 @@ class Reclamation
     #[ORM\JoinColumn(nullable: false)]
     private ?CategorieReclamation $tag_reclamation = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Annonce $annonce_litige = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class Reclamation
     public function setTagReclamation(?CategorieReclamation $tag_reclamation): static
     {
         $this->tag_reclamation = $tag_reclamation;
+
+        return $this;
+    }
+
+    public function getAnnonceLitige(): ?Annonce
+    {
+        return $this->annonce_litige;
+    }
+
+    public function setAnnonceLitige(?Annonce $annonce_litige): static
+    {
+        $this->annonce_litige = $annonce_litige;
 
         return $this;
     }

@@ -21,16 +21,16 @@
 
     <div id="annonces_litige" style="display: none;">
         <label for="annonces">Annonce concernée par le litige </label>
-        <select name="annonce" id="annonce_l">
+        <select name="annonce_l" id="annonce_l">
         {% for tr in transactions %}
-            <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
+            <option value="{{ tr.getAnnonce().getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
         {% endfor %}
         </select><br /><br />
     </div>
 
     <br />
     <label for="description">Description *</label><br />
-    <textarea name="description" required></textarea><br />
+    <textarea name="description" id="description" required></textarea><br />
     <br />
 
     </br>
