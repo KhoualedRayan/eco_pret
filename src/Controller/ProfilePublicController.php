@@ -39,6 +39,7 @@ class ProfilePublicController extends AbstractController
         return $this->render('profile_public/index.html.twig', [
             'controller_name' => 'ProfilePublicController',
             'user' => $user,
+            'note_globale' => $user->getNote(),
             'offrantTransactions' => $offrantTransactions,
             'clientTransactions' => $clientTransactions,
         ]);

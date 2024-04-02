@@ -9,7 +9,11 @@
 {% block contenu %}
 
     <h1>Avis reçus</h1>
-
+    {% if note_globale is not null %}
+        <h2 style="text-align: center;"> Note globale : {{note_globale}} / 5 </h2>
+    {% else %}
+        <h2 style="text-align: center;"> Aucune notes </h2>
+    {% endif %}
     <div class="avis-container">
         <div class="avis-section">
             <h2>Avis en tant qu'offrant</h2>

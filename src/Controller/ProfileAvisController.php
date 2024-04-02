@@ -29,6 +29,7 @@ class ProfileAvisController extends AbstractController
         return $this->render('profile_avis/index.html.twig', [
             'controller_name' => 'ProfileAvisController',
             'onglet' => "avis",
+            'note_globale' => $this->getUser()->getNote(),
             'offrantTransactions' => $offrantTransactions,
             'clientTransactions' => $clientTransactions,
         ]);
