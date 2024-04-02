@@ -2,7 +2,7 @@
 	flex: 0;
 	padding: 10px 3em;
 	display: inline-block;
-	width: 3em;
+	width: fit-content	;
 	height: fit-content;
 	margin: auto;
 	text-align:center;
@@ -27,7 +27,6 @@ textarea {
 
 .centrer{
 	text-align:center;
-	width: fit-content;
 }
 .descriptionTransac {
 	background-color: #ddd;
@@ -65,7 +64,7 @@ textarea {
 }
 
 .boutonContainer {
-    display: flexbox; /* Utiliser flexbox pour aligner les éléments horizontalement */
+    display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
 	
 }
 
