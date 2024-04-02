@@ -30,6 +30,7 @@
         <a {% if onglet == 'annonces' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_annonces') }}">Mes Annonces</a>
         <a {% if onglet == 'transactions' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_transactions') }}">Mes Transactions</a>
         <a {% if onglet == 'planning' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_planning') }}">Mon Planning</a>
+        <a {% if onglet == 'avis' %}class="tab-button active" {% else %} class="tab-button"{% endif %} href="{{ path('app_profile_avis') }}">Avis</a>
     </div>
 
     {% block contenu %}{% endblock %}

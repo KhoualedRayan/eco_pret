@@ -1,20 +1,63 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}Hello ProfileAvisController!{% endblock %}
+{% block title %}Avis reçus{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block ss2 %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block contenu %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Thomas/Documents/PPIL/projet/eco_pret/src/Controller/ProfileAvisController.php'|file_link(0) }}">src/Controller/ProfileAvisController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Thomas/Documents/PPIL/projet/eco_pret/templates/profile_avis/index.html.twig'|file_link(0) }}">templates/profile_avis/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <h1>Avis reçus</h1>
+    
+    <h2>Avis en tant qu'offrant</h2>
+    {% if offrantTransactions is not empty %}
+        <ul>
+            {% for transaction in offrantTransactions %}
+                {% if transaction.getNoteOffrant() is not null %}
+                    <li>
+                        <strong>Note:</strong> 
+                        <div class="stars">
+                            {% for i in 1..5 %}
+                                {% if i <= transaction.getNoteOffrant() %}
+                                    <span class="material-icons star">star</span>
+                                {% else %}
+                                    <span class="material-icons star">star_border</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div><br>
+                        <strong>Commentaire:</strong> {{ transaction.getCommentaireOffrant() }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun avis reçu en tant qu'offrant.</p>
+    {% endif %}
+    
+    <h2>Avis en tant que client</h2>
+    {% if clientTransactions is not empty %}
+        <ul>
+            {% for transaction in clientTransactions %}
+                {% if transaction.getNoteClient() is not null %}
+                    <li>
+                        <strong>Note:</strong> 
+                        <div class="stars">
+                            {% for i in 1..5 %}
+                                {% if i <= transaction.getNoteClient() %}
+                                    <span class="material-icons star">star</span>
+                                {% else %}
+                                    <span class="material-icons star">star_border</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div><br>
+                        <strong>Commentaire:</strong> {{ transaction.getCommentaireClient() }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun avis reçu en tant que client.</p>
+    {% endif %}
+
 {% endblock %}

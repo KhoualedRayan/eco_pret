@@ -31,6 +31,18 @@ class TransactionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    
+    public function findTransactionsAsOffrant(UserInterface $user): array
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.annonce', 'a')
+            ->where('a.posteur = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Transaction[] Returns an array of Transaction objects
 //     */
