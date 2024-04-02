@@ -11,7 +11,7 @@
 
 <div>
     <h2>{{annonce.titre}}</h2>
-<div style="display: flex; align-items: center;">Posté par&nbsp;<span class="username">{{ annonce.posteur.username }}</span>&nbsp;<div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div>
+<div style="display: flex; align-items: center;">Posté par&nbsp;<a  href="{{ path('app_profile_public', {'id': annonce.posteur.id}) }}" class="username">{{ annonce.posteur.username }}</a>&nbsp;<div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div>
 </div>
 <br>
 <span class="bold">Prix</span> : {{ annonce.prix }}<span class="material-icons">attach_money</span>
@@ -65,6 +65,5 @@
 {% else %}
     Pas de clients.
 {% endif %}
-
 
 {% endblock %}

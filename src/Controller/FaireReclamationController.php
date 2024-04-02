@@ -46,7 +46,6 @@ class FaireReclamationController extends AbstractController
     #[Route('/handle_form', name: 'handle_form')]
     public function handleFormSubmission(EntityManagerInterface $entityManager,Request $request,CategorieReclamationRepository $crr, AnnonceRepository $ar): Response
     {
-        dump($request->request);
         $objet = $request->request->get('recla');
         $annonce_l = $request->request->get('annonce_l');
         $description = $request->request->get('description');
