@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Notification;
 use DateTime;
 use App\Service\Outils;
+use App\Repository\TransactionRepository;
 
 class VueTransactionController extends AbstractController
 {
@@ -56,17 +57,31 @@ class VueTransactionController extends AbstractController
         $transaction = $em->getRepository(Transaction::class)->find($idTransaction);
         $titreTransaction = $transaction->getAnnonce()->getTitre();
 
+        //On change la note global du posteur
+        $transactions = $em->getRepository(Transaction::class)->findByClientOrPosteur($transaction->getAnnonce()->getPosteur() );
+        $nbNotes = 1;
+        $totalNotes = $note;
+        foreach($transactions as $t){
+            if($t->getId() != $transaction->getId()){
+                if ($t->getClient()->getId() == $transaction->getAnnonce()->getPosteur()->getId()) {
+                    if ($t->getNoteOffrant() != null) {
+                        $totalNotes += $t->getNoteOffrant();
+                        $nbNotes++;
+                    }
+                } else {
+                    if ($t->getNoteClient() != null) {
+                        $totalNotes += $t->getNoteClient();
+                        $nbNotes++;
+                    }
+                }
+            }
+        }
+        $transaction->getAnnonce()->getPosteur()->setNote($totalNotes / $nbNotes);
         $transaction->setNoteClient($note);
 
         $transaction->setCommentaireClient($commentaire);
 
-        //On change la note global du posteur
-        if($transaction->getNoteClient()!=null){
-            $transaction->getAnnonce()->getPosteur()->removeNote($transaction->getNoteClient());
-            $transaction->getAnnonce()->getPosteur()->ajouterNote($note);
-        } else{
-            $transaction->getAnnonce()->getPosteur()->ajouterNote($note);
-        }
+
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
@@ -98,17 +113,32 @@ class VueTransactionController extends AbstractController
 
         $titreTransaction = $transaction->getAnnonce()->getTitre();
 
+        //On change la note global du client
+        $transactions = $em->getRepository(Transaction::class)->findByClientOrPosteur($transaction->getClient());
+        $nbNotes = 1;
+        $totalNotes = $note;
+        foreach ($transactions as $t) {
+            if ($t->getId() != $transaction->getId()) {
+                if ($t->getClient()->getId() == $transaction->getClient()->getId()) {
+                    if ($t->getNoteOffrant() != null) {
+                        $totalNotes += $t->getNoteOffrant();
+                        $nbNotes++;
+                    }
+                } else {
+                    if ($t->getNoteClient() != null) {
+                        $totalNotes += $t->getNoteClient();
+                        $nbNotes++;
+                    }
+                }
+            }
+        }
+        $transaction->getClient()->setNote($totalNotes / $nbNotes);
+
         $transaction->setNoteOffrant($note);
 
         $transaction->setCommentaireOffrant($commentaire);
 
-        //On change la note global du client
-        if ($transaction->getNoteOffrant() != null) {
-            $transaction->getClient()->removeNote($transaction->getNoteOffrant());
-            $transaction->getClient()->ajouterNote($note);
-        } else {
-            $transaction->getClient()->ajouterNote($note);
-        }
+
 
         $this->addFlash('notifications', 'Votre commentaire et votre note ont été confirmés et envoyés avec succès !');
 
