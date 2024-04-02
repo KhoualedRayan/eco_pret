@@ -3,7 +3,7 @@
 {% block title %}Avis reçus{% endblock %}
 
 {% block ss2 %}
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('styles/planning.css') }}">
 {% endblock %}
 
 {% block contenu %}
@@ -11,21 +11,13 @@
     <h1>Avis reçus</h1>
     
     <h2>Avis en tant qu'offrant</h2>
+    offrantTransactions
     {% if offrantTransactions is not empty %}
         <ul>
             {% for transaction in offrantTransactions %}
                 {% if transaction.getNoteOffrant() is not null %}
                     <li>
-                        <strong>Note:</strong> 
-                        <div class="stars">
-                            {% for i in 1..5 %}
-                                {% if i <= transaction.getNoteOffrant() %}
-                                    <span class="material-icons star">star</span>
-                                {% else %}
-                                    <span class="material-icons star">star_border</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div><br>
+                        <strong>Note:</strong> {{ transaction.getNoteOffrant() }}<br>
                         <strong>Commentaire:</strong> {{ transaction.getCommentaireOffrant() }}
                     </li>
                 {% endif %}
@@ -41,16 +33,7 @@
             {% for transaction in clientTransactions %}
                 {% if transaction.getNoteClient() is not null %}
                     <li>
-                        <strong>Note:</strong> 
-                        <div class="stars">
-                            {% for i in 1..5 %}
-                                {% if i <= transaction.getNoteClient() %}
-                                    <span class="material-icons star">star</span>
-                                {% else %}
-                                    <span class="material-icons star">star_border</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div><br>
+                        <strong>Note:</strong> {{ transaction.getNoteClient() }}<br>
                         <strong>Commentaire:</strong> {{ transaction.getCommentaireClient() }}
                     </li>
                 {% endif %}
