@@ -1,0 +1,45 @@
+.avis-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.avis-section {
+    text-align: center;
+    width: 45%;
+}
+
+.avis-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.avis-item {
+    margin-bottom: 20px;
+    border: 3px solid #4CAF50;
+    border-radius: 5px;
+    display: inline-block; /* Pour s'adapter au contenu */
+    padding: 10px;
+    text-align: center;
+}
+
+.avis-section h2 {
+    margin-bottom: 10px;
+}
+
+/* Styles pour les étoiles */
+.stars {
+    display: inline-flex;
+    align-items: center;
+}
+
+.star {
+    color: gold;
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.star-empty {
+    color: #ccc;
+}
