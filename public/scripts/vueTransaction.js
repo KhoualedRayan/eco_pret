@@ -1,5 +1,5 @@
 
-document.querySelectorAll('star').forEach(function (star, index) {
+document.querySelectorAll('.star').forEach(function (star, index) {
     star.addEventListener('click', function () {
         let allStars = document.querySelectorAll('.star');
         // Mettre � jour l'affichage des �toiles en fonction de la s�lection
@@ -15,19 +15,19 @@ document.querySelectorAll('star').forEach(function (star, index) {
     });
 });
 
-function clickStar(index) {
-    index = Number(index);
-    let allStars = document.querySelectorAll('.star');
-    // Mettre � jour l'affichage des �toiles en fonction de la s�lection
-    allStars.forEach((star, i) => {
-        if (i <= index) {
-            star.innerHTML = 'star'; // �toile pleine
-        } else {
-            star.innerHTML = 'star_rate'; // �toile vide
-        }
-    });
-    console.log("Note donnée : ", index + 1);
-}
+// function clickStar(index) {
+//     index = Number(index);
+//     let allStars = document.querySelectorAll('.star');
+//     // Mettre � jour l'affichage des �toiles en fonction de la s�lection
+//     allStars.forEach((star, i) => {
+//         if (i <= index) {
+//             star.innerHTML = 'star'; // �toile pleine
+//         } else {
+//             star.innerHTML = 'star_rate'; // �toile vide
+//         }
+//     });
+//     console.log("Note donnée : ", index + 1);
+// }
 
 /*Se désister d'une file d'attente */
 function validerNotePosteur(username, id) {

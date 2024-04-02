@@ -51,32 +51,7 @@
     <div class="evaluation">
         <div>
             <b>Note</b>
-            {# <div class="stars">
-
-                {% if app.user.username != transaction.annonce.posteur.username %}
-                    {% set note = transaction.getNoteClient() is null ? 0 : transaction.getNoteClient() %}           
-                {% else %}
-                    {% set note = transaction.getNoteOffrant() is null ? 0 : transaction.getNoteOffrant() %}
-                        
-                {% endif %}
-                {% if note == 0 %}
-                    {% for i in range(5-note,1) %}
-                        <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star_rate</span>
-                    {% endfor %}
-                {% else %}
-                    {% for i in range(0,note-1) %}
-                        <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star</span>
-                    {% endfor %}
-                    {% if note < 5 %}
-                        {% for i in range(5-note,1) %}
-                                <span class="material-icons-outlined star" onclick="clickStar('{{i}}')">star_rate</span>
-                        {% endfor %}
-                    {% endif %}   
-                {% endif %}
-
-                
-
-            </div> #}
+            
             <div class="stars">
 
                 {% if app.user.username != transaction.annonce.posteur.username %}
@@ -144,4 +119,5 @@
         
         </div>
     </div>
+<script src="{{ asset('scripts/vueTransaction.js') }}"></script>
 {% endblock %}
