@@ -21,8 +21,10 @@ class ProfilePublicController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_home_page');
         }
-        if($user->getId() == $this->getUser()->getId()){
-            return $this->redirectToRoute('app_profile');
+        if($this->getUser()){
+            if($user->getId() == $this->getUser()->getId()){
+                return $this->redirectToRoute('app_profile');
+            }
         }
 
         // Récupère les transactions en tant qu'offrant

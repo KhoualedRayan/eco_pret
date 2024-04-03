@@ -28,8 +28,10 @@ class ProfilePublicAnnoncesController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_home_page');
         }
-        if($user->getId() == $this->getUser()->getId()){
-            return $this->redirectToRoute('app_profile');
+        if($this->getUser()){
+            if($user->getId() == $this->getUser()->getId()){
+                return $this->redirectToRoute('app_profile');
+            }
         }
 
         $annonces = $em->getRepository(Annonce::class)->findBy(['posteur' => $user, 'statut' => 'Disponible']);

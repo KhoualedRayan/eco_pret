@@ -19,9 +19,12 @@ class ProfilePublicPlanningController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_home_page');
         }
-        if($user->getId() == $this->getUser()->getId()){
-            return $this->redirectToRoute('app_profile');
+        if($this->getUser()){
+            if($user->getId() == $this->getUser()->getId()){
+                return $this->redirectToRoute('app_profile');
+            }
         }
+        
         return $this->render('profile_public_planning/index.html.twig', [
             'controller_name' => 'ProfilePublicPlanningController',
             'user' => $user,
