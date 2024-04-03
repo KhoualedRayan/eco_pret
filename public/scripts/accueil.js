@@ -23,14 +23,6 @@ function confirmerEmprunt(event, id, type) {
     }
 }
 
-function search() {
-    var texte = document.getElementById("searchInput").value;
-    if (texte.trim().length != 0) {
-        params = window.location.href.split("?")
-        window.location.href = params[0]+"?search="+texte;
-    }
-}
-
 function filtrer() {
     var d = document.getElementById("filtres").style.display;
     document.getElementById("filtres").style.display = d == "block" ? "none" : "block";
@@ -84,6 +76,7 @@ function resetNoteFiltre() {
     allStars.forEach((star, i) => {
         star.innerHTML = 'star_rate';
     });
+    document.getElementById("note").value = ""
 }
 
 function resetFilters() {
@@ -94,4 +87,19 @@ function resetFilters() {
     document.getElementById("prix_max").value = "";
     resetNoteFiltre();
     document.getElementById("toutAvecClient").checked = true;
+}
+
+function clickStar(index) {
+    index = Number(index);
+    let allStars = document.querySelectorAll('.star');
+    // Mettre � jour l'affichage des �toiles en fonction de la s�lection
+    allStars.forEach((star, i) => {
+        if (i <= index) {
+            star.innerHTML = 'star'; // �toile pleine
+        } else {
+            star.innerHTML = 'star_rate'; // �toile vide
+        }
+    });
+    document.getElementById("note").value = ""+(index+1)
+    console.log("Note donnée : ", index + 1);
 }

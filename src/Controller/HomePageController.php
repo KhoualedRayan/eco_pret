@@ -14,6 +14,8 @@ use App\Entity\CategorieService;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Transaction;
 use App\Entity\FileAttente;
+use App\Entity\DatePonctuelleService;
+use App\Entity\Recurrence;
 use DateTime;
 use App\Entity\Notification;
 use App\Service\Outils;
@@ -36,25 +38,153 @@ class HomePageController extends AbstractController
                 return $this->redirectToRoute('app_sleep_mode');
             }
         }
+
+        $qb = null;
+        $du = "";
+        $au = "";
+        # obligé de passer par tout pour récupérer les catégories
+        # merci symfony
+        $params = $request->query->all();
+        $type = $request->query->get('type', 'tout');
+
+        if ($type == 'materiel') {
+            $qb = $entityManager->getRepository(AnnonceMateriel::class)->createQueryBuilder('a');
+            $categories = isset($params['categorie']) && is_array($params['categorie']) ? $params['categorie'] : [];
+            
+            # CATEGORIES MATERIEL
+            if ($categories != []) {
+                $categs = [];
+                foreach ($categories as $x) {
+                    $v = intval(substr($x, 5));
+                    if ($v != 0) {
+                        $categs[] = v;
+                    }
+                }
+                $qb = $qb->leftJoin('a.categorie', 'c')->andWhere($qb->expr()->in('c.id', $categs));
+            }
+            $duree_min = $request->query->get('duree_min', '');
+            if ($duree_min != "") {
+                $qd->andWhere();
+            }
+            $duree_max = $request->query->get('duree_max', '');
+            if ($duree_max != "") {
+                $qd->andWhere();
+            }
+        } else if ($type == 'service') {
+            $qb = $entityManager->getRepository(AnnonceService::class)->createQueryBuilder('a');
+
+            # CATEGORIES SERVICE
+            $categories = isset($params['categorie']) && is_array($params['categorie']) ? $params['categorie'] : [];
+            if ($categories != []) {
+                $categs = [];
+                foreach ($categories as $x) {
+                    $v = intval(substr($x, 5));
+                    if ($v != 0) {
+                        $categs[] = v;
+                    }
+                }
+                $qb = $qb->leftJoin('a.categorie', 'c')->andWhere($qb->expr()->in('c.id', $categs));
+            }
+
+            # DATE MINIMUM
+            $du = $request->query->get('du', '');
+            dump($du);
+            $du = \DateTime::createFromFormat('Y-m-d\TH:i', $du);
+            if ($du) {
+                $du = $du->format('Y-m-d H:i');
+                $subQuery = $entityManager->getRepository(DatePonctuelleService::class)
+                            ->createQueryBuilder('dps')->select('min(dps.date)')->andWhere('dps.dateponcts = a');
+                $subQuery2 = $entityManager->getRepository(Recurrence::class)
+                            ->createQueryBuilder('rec')->select('min(rec.date_debut)')->andWhere('rec.annonceServ = a');
+                $qb = $qb->andWhere($qb->expr()->gte('('.$subQuery->getDQL().')',':dateDu'))
+                        ->andWhere($qb->expr()->gte('('.$subQuery2->getDQL().')',':dateDu'))
+                        ->setParameter('dateDu', $du);
+            } else {
+                $du = "";
+            }
+
+            # DATE MAXIMUM
+            $au = $request->query->get('au', '');
+            $au = \DateTime::createFromFormat('Y-m-d\TH:i', $au);
+            if ($au) {
+                $au = $au->format('Y-m-d H:i');
+                $subQuery = $entityManager->getRepository(DatePonctuelleService::class)
+                            ->createQueryBuilder('dps')->select('max(dps.date)')->andWhere('dps.dateponcts = a');
+                $subQuery2 = $entityManager->getRepository(Recurrence::class)
+                            ->createQueryBuilder('rec')->select('max(rec.date_debut)')->andWhere('rec.annonceServ = a');
+                $qb = $qb->andWhere($qb->expr()->lte('('.$subQuery->getDQL().')',':dateAu'))
+                        ->andWhere($qb->expr()->lte('('.$subQuery2->getDQL().')',':dateAu'))
+                        ->setParameter('dateAu', $au);
+            } else {
+                $au = "";
+            }
+        } else {
+            $type = "tout";
+            $qb = $entityManager->getRepository(Annonce::class)->createQueryBuilder('a');
+        }
+        
+        # texte de recherche
+        $text = $request->query->get('texte', '');;
+        if ($text != "") {
+            $qb = $qb->andWhere($qb->expr()->orX('a.description LIKE :text', 'a.titre LIKE :text'))
+            ->setParameter('text', '%'.$text.'%');
+        }
+
+        # filter par prix min
+        $prix_min = $request->query->get('prix_min', '');
+        if (preg_match("/^\d+$/", $prix_min)) {
+            $qb = $qb->andWhere("a.prix >= :prixMin")->setParameter('prixMin', intval($prix_min));
+        } else {
+            $prix_min = "";
+        }
+
+        # filtrer par prix max
+        $prix_max = $request->query->get('prix_max', '');
+        # s'il n'y a que des chiffres
+        if (preg_match("/^\d+$/", $prix_max)) {
+            $qb = $qb->andWhere("a.prix <= :prixMax")->setParameter('prixMax', intval($prix_max));
+        } else {
+            $prix_max = "";
+        }
+
+        # filtrer par les notes des posteurs
+        $noteMin = $request->query->get('note', '');
+        $note = intval($noteMin);
+        if ($note > 0 && $note <= 5) {
+            $qb = $qb->leftJoin('a.posteur', 'p')->andWhere("p.note >= :note")
+            ->setParameter('note', $note);
+        } else {
+            $note = 0;
+        }
+
+        # Filtre les annonces selon si elles ont déjà des clients en attente / transaction en cours
+        $avecClient = $request->query->get('avecClient', "tout");
+        if ($avecClient == "oui") {
+            $qb = $qb->andWhere("a.transaction IS NOT NULL");
+        } else if ($avecClient == "non") {
+            $qb = $qb->andWhere("a.transaction IS NULL");
+        } else {
+            $avecClient = "tout";
+        }
+
+        $qb = $qb->andWhere("a.statut = 'Disponible'")->orderBy('a.date_publication', 'DESC');
+        $qbC = clone $qb;
+        $totalAnnonces = $qbC->select("COUNT(a.id)")->getQuery()->getResult()[0][1];
+
         $page = $request->query->get('page', 1);
-        $text = $request->query->get("search", "");
-
+        $page = intval($page);
         $limit = 12; // Nombre d'annonces par page
-        $offset = ($page - 1) * $limit;
 
-        // Calculer le nombre total d'annonces pour déterminer le nombre de pages
-        $totalAnnonces = $entityManager->getRepository(Annonce::class)->getCountByTD($text);
+        # si page incorrecte (car modification depuis l'url)
+        if ($page == 0 || $page > ceil($totalAnnonces / $limit)) { $page = 1; }
+        $offset = ($page - 1) * $limit;
         
         if ($totalAnnonces == 0) {
             $annonces = null;
             $nombrePages = 1;
         } else {
             // Modifier votre requête pour récupérer les annonces avec une limite et un offset
-            $annonces = $entityManager->getRepository(Annonce::class)->findByTitreOrDescription($text, $limit, $offset);
-
-            // Calculer le nombre total d'annonces pour déterminer le nombre de pages
-            $totalAnnonces = $entityManager->getRepository(Annonce::class)->getCountByTD($text);
-
+            $annonces = $qb->setMaxResults($limit)->setFirstResult($offset)->getQuery()->getResult();
             $nombrePages = ceil($totalAnnonces / $limit);
         }
 
@@ -64,6 +194,13 @@ class HomePageController extends AbstractController
             'pageActuelle' => $page,
             'nombrePages' => $nombrePages,
             'recherche' => $text,
+            'type' => $type,
+            'du' => $du,
+            'au' => $au,
+            'prix_min' => $prix_min,
+            'prix_max' => $prix_max,
+            'note' => $note,
+            'avecClient' => $avecClient,
         ]);
     }
 
@@ -139,11 +276,5 @@ class HomePageController extends AbstractController
             'controller_name' => 'HomePageController',
             'categories' => $cs,
         ]);
-    }
-
-    #[Route('/filters', name: 'handle_filters')]
-    public function handleFilters(EntityManagerInterface $em, Request $request): Response
-    {
-        return new Response();
     }
 }
