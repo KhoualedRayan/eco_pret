@@ -14,9 +14,6 @@ class ProfilePublicPlanningController extends AbstractController
     #[Route('/profile/public/planning/{id}', name: 'app_profile_public_planning')]
     public function index($id, EntityManagerInterface $em): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
 
         if ($this->getUser()->isSleepMode()) {
             return $this->redirectToRoute('app_sleep_mode');

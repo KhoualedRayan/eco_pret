@@ -15,9 +15,6 @@ class ProfilePublicController extends AbstractController
     #[Route('/profile/public/{id}', name: 'app_profile_public')]
     public function index($id, EntityManagerInterface $em,TransactionRepository $transactionRepository): Response
     {   
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
 
         if ($this->getUser()->isSleepMode()) {
             return $this->redirectToRoute('app_sleep_mode');
