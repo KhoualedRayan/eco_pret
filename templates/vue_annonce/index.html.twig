@@ -1,53 +1,43 @@
-{% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
-<link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
-    <link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
-{% endblock %}
-{% block title %}Annonce - {{annonce.titre}}{% endblock %}
-
-{% block body %}
-
 <div>
+    <span class="material-icons-outlined close flottant" id="close">close</span>
     <h2>{{annonce.titre}}</h2>
-<div style="display: flex; align-items: center;">Posté par&nbsp;<a  href="{{ path('app_profile_public', {'id': annonce.posteur.id}) }}" class="username">{{ annonce.posteur.username }}</a>&nbsp;<div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div>
-</div>
-<br>
-<span class="bold">Prix</span> : {{ annonce.prix }}<span class="material-icons">attach_money</span>
-<br>
-<div class="type">{{ annonce.getType() }}</div>
-<div class="categorie">{{ annonce.getCategorie().getNom() }}
+    <div style="display: flex; align-items: center;">Posté par&nbsp;<a  href="{{ path('app_profile_public', {'id': annonce.posteur.id}) }}" class="username">{{ annonce.posteur.username }}</a>&nbsp;<div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div>
+    </div>
+    <br>
+    <span class="bold">Prix</span> : {{ annonce.prix }}<span class="material-icons">attach_money</span>
+    <br>
+    <div class="type">{{ annonce.getType() }}</div>
+    <div class="categorie">{{ annonce.getCategorie().getNom() }}
 
-</div><br><br>
-{% if annonce.getType() == "Materiel" %}<div class="duree"><span class="bold">Durée du prêt</span> : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>
-{% else %}
-<span class="bold">Horaires</span> :
-{% if not (annonce.datePoncts is empty) %}Le(s){% endif %}
-{% for x in annonce.datePoncts %}
-    {{x.date|date('d M Y')}},
-{% endfor %}
-<br>
-{% for x in annonce.recurrence %}
-    {% if x.typeRecurrence == 'quotidienne' %}
-        Tous les jours 
-    {% elseif x.typeRecurrence == 'hebdomadaire' %}
-        Toutes les semaines 
-    {% elseif x.typeRecurrence == 'mensuelle' %}
-        Tous les mois 
+    </div><br><br>
+    {% if annonce.getType() == "Materiel" %}<div class="duree"><span class="bold">Durée du prêt</span> : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>
+    {% else %}
+    <span class="bold">Horaires</span> :
+    {% if not (annonce.datePoncts is empty) %}Le(s){% endif %}
+    {% for x in annonce.datePoncts %}
+        {{x.date|date('d M Y')}},
+    {% endfor %}
+    <br>
+    {% for x in annonce.recurrence %}
+        {% if x.typeRecurrence == 'quotidienne' %}
+            Tous les jours 
+        {% elseif x.typeRecurrence == 'hebdomadaire' %}
+            Toutes les semaines 
+        {% elseif x.typeRecurrence == 'mensuelle' %}
+            Tous les mois 
+        {% endif %}
+        du {{x.dateDebut|date('d M Y')}} au {{x.dateFin|date('d M Y')}},<br>
+    {% endfor %}
     {% endif %}
-    du {{x.dateDebut|date('d M Y')}} au {{x.dateFin|date('d M Y')}},<br>
-{% endfor %}
-{% endif %}
-<br>
-<span class="bold">Description</span> :
-<p class="desc">
-    {% set parties = annonce.description|split('\n') %}
-        <span class="texte-message">
-        {% for partie in parties %}
-            {{ partie }}<br>
-        {% endfor %}
-</p><br>
+    <br>
+    <span class="bold">Description</span> :
+    <p class="desc">
+        {% set parties = annonce.description|split('\n') %}
+            <span class="texte-message">
+            {% for partie in parties %}
+                {{ partie }}<br>
+            {% endfor %}
+    </p><br>
 </div>
 
 {% if annonce.transaction %}
@@ -72,4 +62,3 @@
     Pas de clients.
 {% endif %}
 
-{% endblock %}

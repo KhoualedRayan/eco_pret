@@ -4,8 +4,11 @@
 
 {% block ss2 %}
     <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/transaction.css') }}">
+    <script src="{{ asset('scripts/annonces.js') }}"></script>
 {% endblock %}
 
 {% block contenu %}
@@ -21,6 +24,7 @@
 <div class="tout">
     <div id="annoncesDisponible" class="typeSection">
         {% for annonce in annonces %}
+        <span onclick="showAnnonce('{{annonce.id}}')" class="lienAnnonce">
             <div class="blocAnnonce">
                 <div>
                     <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
@@ -88,10 +92,12 @@
                 {% endif %}
                 <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
             </div>
+        </span>
         {% endfor %}
     </div>
     <div id="annoncesIndisponible" class="typeSection" style="display: none;">
         {% for annonce in annoncesFinis %}
+        <span onclick="showAnnonce('{{annonce.id}}')" class="lienAnnonce">
             <div class="blocAnnonce">
                 <div>
                     <span class="prix" >{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
@@ -103,6 +109,7 @@
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
             </div>
+        </span>
         {% endfor %}
     </div>
 </div>
