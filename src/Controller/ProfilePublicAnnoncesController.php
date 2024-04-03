@@ -24,10 +24,6 @@ class ProfilePublicAnnoncesController extends AbstractController
     #[Route('/profile/public/annonces/{id}', name: 'app_profile_public_annonces')]
     public function index($id, EntityManagerInterface $em): Response
     {
-
-        if ($this->getUser()->isSleepMode()) {
-            return $this->redirectToRoute('app_sleep_mode');
-        }
         $user = $em->getRepository(User::class)->find(intval($id));
         if (!$user) {
             return $this->redirectToRoute('app_home_page');
