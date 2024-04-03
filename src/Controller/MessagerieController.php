@@ -112,6 +112,7 @@ class MessagerieController extends AbstractController
 
         return $this->json(['html' => $html, 
                             'boutonHtml' => $boutonHtml, 
+                            'statutTransaction' => $transaction->getStatutTransaction(),
                             'statut' => $interlocuteur->isBusy() ? "indisponible" : "dispo"]);
     }
 

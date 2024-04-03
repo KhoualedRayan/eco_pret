@@ -17,6 +17,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Outils;
 
 class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -24,10 +25,12 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
     private $entityManager;
+    private $outils;
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, Outils $outils)
     {
         $this->entityManager = $em;
+        $this->outils = $outils;
     }
 
     public function authenticate(Request $request): Passport
@@ -49,8 +52,12 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         // quand l'utilisateur se login, on vérifie la validité de son abonnement actuel
         // et on met le prochain
         $user = $token->getUser();
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return new RedirectResponse($this->urlGenerator->generate('app_admin'));
+        }
         $change = FALSE;
 
+        # Si son abonnement expire
         if ($user->getAbonnement() != null) {
             $nextDateAbo = $user->getDateAbonnement();
             $nextDateAbo->modify('+1 year');
@@ -59,6 +66,20 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
                 $user->setAbonnement($nextAbo);
                 $user->setDateAbonnement($nextAbo != null ? DateTime::createFromInterface($nextDateAbo) : null);
                 $change = TRUE;
+            }
+        }
+        # Si une transaction se termine, on change le statut, et envoie une notification
+        foreach ($user->getDemandes() as $t) {
+            if ($t->getStatutTransaction() == "Terminer") {
+                if ($t->getLastDate() < new DateTime()) {
+                    $change = TRUE;
+                    $t->setStatutTransaction("FINI");
+                    $mess = "Transaction clôturée, vous ne pouvez plus communiquer. En espérant que votre échange a été positif !";
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient());
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur());
+                    $this->entityManager->persist($t);
+                    $this->entityManager->flush();
+                }
             }
         }
         if ($change) {

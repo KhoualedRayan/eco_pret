@@ -32,20 +32,22 @@
             </div>
             <div class="aDroite">
                 {% if app.user %}
-                    <div class="solde">Solde : {{ app.user.nbflorains }} <span class="material-icons">attach_money</span></div>
-                    {% if app.user.contientUnMsgNonLu() %}
-                        <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mark_email_unread</span></a></div>
-                    {%else%}
-                        <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mail</span></a></div>
-                    {%endif%}
+                    {% if (app.user.abonnement is null) or (app.user.abonnement.nom != "Admin") %}
+                        <div class="solde">Solde : {{ app.user.nbflorains }} <span class="material-icons">attach_money</span></div>
+                        {% if app.user.contientUnMsgNonLu() %}
+                            <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mark_email_unread</span></a></div>
+                        {%else%}
+                            <div class="lien"><a href="{{ path('app_messagerie') }}"><span class="material-icons">mail</span></a></div>
+                        {%endif%}
                     
-                    {%if app.user.contientUneNotifNonLu() %}
-                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons" style="color: red;">notifications_active</span></a></div>
-                    {%else%}
-                        <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications</span></a></div>
-                    {%endif%}
-                    <div class='lien'><a href="{{ path('app_faire_reclamation') }}">Contacter le support</a></div>
-                    <div class='lien'><a href="{{ path('app_profile') }}">Mon Profil</a></div>
+                        {%if app.user.contientUneNotifNonLu() %}
+                            <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons" style="color: red;">notifications_active</span></a></div>
+                        {%else%}
+                            <div class="lien"><a href="{{ path('app_notification') }}"><span class="material-icons">notifications</span></a></div>
+                        {%endif%}
+                        <div class='lien'><a href="{{ path('app_faire_reclamation') }}">Contacter le support</a></div>
+                        <div class='lien'><a href="{{ path('app_profile') }}">Mon Profil</a></div>
+                    {% endif %}
                     <div class='lien'><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
                 {% else %}
                     <div class='lien'><a href="{{ path('app_login') }}">Se connecter</a></div>

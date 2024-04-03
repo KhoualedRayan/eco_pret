@@ -27,7 +27,8 @@
                 {# complété par twig #}
                 <div class="validDiv" id="valideBoutonDiv"></div>
                 <textarea class="messInput" id="input" rows="1" maxlength="500" placeholder="Envoyer un message" oninput="ajusterTaille()" onkeypress="entree(event, '{{app.user.username}}')"></textarea>
-                <span class="material-icons send" onclick="send('{{app.user.username}}')">send</span>
+                <span class="material-icons send" id="send" onclick="send('{{app.user.username}}')">send</span>
+                <span id="notalk" style="display: none;">TRANSACTION CLOTUREE. VOUS NE POUVEZ PLUS ENVOYER DE MESSAGES.</span>
             </div>
         </div>
     </div>

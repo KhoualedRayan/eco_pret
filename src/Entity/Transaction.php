@@ -250,4 +250,17 @@ class Transaction
 
         return $this;
     }
+
+    public function getLastDate(): ?\DateTimeInterface {
+        if ($this->annonce->getType() == "materiel") {
+            $val = intval(preg_replace("/[^0-9]/", "", $this->duree_final));
+            if (strpos($this->duree_final, "jours")) {
+                return $this->dateDebutPret()->modify('+'.$val.' days');
+            } else {
+                return $this->dateDebutPret()->modify('+'.$val.' hours');
+            }
+        } else {
+            return $this->annonce->dateFin();
+        }
+    }
 }

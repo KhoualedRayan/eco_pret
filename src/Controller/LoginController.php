@@ -13,7 +13,11 @@ class LoginController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
+        $user = $this->getUser();
+        # il peut ne pas avoir d'abonnement
+        if ($user && $user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        } else if ($user) {
             return $this->redirectToRoute('app_home_page');
         }
 

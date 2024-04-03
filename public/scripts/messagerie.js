@@ -32,6 +32,16 @@ function updateDiscussion(dest, interlocuteur) {
             zoneScroll.innerHTML = data.html;
             zoneScroll.scrollTop = zoneScroll.scrollHeight; // Défilement vers le bas dès le début
             document.getElementById('valideBoutonDiv').innerHTML = data.boutonHtml;
+            if (data.statutTransaction == "FINI") {
+                document.getElementById('notalk').style.display = "block";
+                document.getElementById('input').style.display = "none";
+                document.getElementById('send').style.display = "none";
+            } else {
+                document.getElementById('notalk').style.display = "none";
+                document.getElementById('input').style.display = "block";
+                document.getElementById('send').style.display = "block";
+            }
+            
             document.getElementById('statut').classList.add(data.statut == "indisponible" ? "rouge" : "vert");
         })
         .catch(error => console.error('Erreur:', error));
