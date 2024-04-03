@@ -1,0 +1,47 @@
+.content {
+    margin: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    background-color: var(--couleurFondMain);
+    border: 1px var(--couleurFilet) solid;
+}
+
+table {
+    border-collapse: collapse; /* Fusionner les bordures des cellules */
+    margin: 10px 0; /* Centrer le tableau */
+}
+
+th, td {
+    padding: 8px; /* Espacement interne des cellules */
+    border: 1px solid #ddd; /* Bordure de 1 pixel solide avec couleur grise */
+}
+
+th {
+    background-color: #f2f2f2; /* Couleur de fond pour les en-têtes de colonnes */
+}
+
+tr {
+    cursor: pointer;
+}
+
+tr:nth-child(even) {
+    background-color: #ebe4e4; /* Couleur de fond des lignes paires */
+}
+
+tr:hover {
+    background-color: #ddd; /* Couleur de fond des lignes au survol de la souris */
+}
+
+.recWindow {
+    border-radius: 0.5rem;
+    padding: 0.5em;
+    border: 1px var(--couleurFilet) solid;
+}
+
+.a {
+    width: 49.5%;
+}
+
+.selected {
+    color: red;
+}

@@ -56,27 +56,29 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($this->urlGenerator->generate('app_admin'));
         }
         $change = FALSE;
+        $date = new DateTime();
 
         # Si son abonnement expire
         if ($user->getAbonnement() != null) {
             $nextDateAbo = $user->getDateAbonnement();
             $nextDateAbo->modify('+1 year');
             $nextAbo = $user->getNextAbonnement();
-            if ($nextDateAbo < new DateTime()) {
+            if ($nextDateAbo < $date) {
                 $user->setAbonnement($nextAbo);
                 $user->setDateAbonnement($nextAbo != null ? DateTime::createFromInterface($nextDateAbo) : null);
                 $change = TRUE;
             }
         }
+
         # Si une transaction se termine, on change le statut, et envoie une notification
         foreach ($user->getDemandes() as $t) {
             if ($t->getStatutTransaction() == "Terminer") {
-                if ($t->getLastDate() < new DateTime()) {
+                if ($t->getLastDate() < $date) {
                     $change = TRUE;
                     $t->setStatutTransaction("FINI");
                     $mess = "Transaction clôturée, vous ne pouvez plus communiquer. En espérant que votre échange a été positif !";
-                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient());
-                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur());
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient(), $date);
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur(), $date);
                     $this->entityManager->persist($t);
                     $this->entityManager->flush();
                 }
