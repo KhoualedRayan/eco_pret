@@ -73,12 +73,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         # Si une transaction se termine, on change le statut, et envoie une notification
         foreach ($user->getDemandes() as $t) {
             if ($t->getStatutTransaction() == "Terminer") {
-                if ($t->getLastDate() < $date) {
+                $lastDate = $t->getLastDate();
+                if ($lastDate < $date) {
                     $change = TRUE;
                     $t->setStatutTransaction("FINI");
                     $mess = "Transaction clôturée, vous ne pouvez plus communiquer. En espérant que votre échange a été positif !";
-                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient(), $date);
-                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur(), $date);
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient(), $lastDate);
+                    $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur(), $lastDate);
                     $this->entityManager->persist($t);
                     $this->entityManager->flush();
                 }
