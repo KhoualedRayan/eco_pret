@@ -17,3 +17,7 @@
         border-color: #555;
     }
 
+.lien2Annonce {
+    color: var(--couleurFancy);
+    cursor: pointer;
+}

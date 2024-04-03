@@ -11,13 +11,13 @@ use App\Entity\FileAttente;
 
 class VueAnnonceController extends AbstractController
 {
-    #[Route('/vue/annonce/{id}', name: 'app_vue_annonce')]
+    #[Route('/ajax/vue/annonce/{id}', name: 'app_vue_annonce')]
     public function index($id, EntityManagerInterface $em): Response
     {
         
         $annonce = $em->getRepository(Annonce::class)->find(intval($id));
         if (!$annonce) {
-            return $this->redirectToRoute('app_home_page');
+            return new Response("KO");
         }
         $l = $em->getRepository(FileAttente::class)->findAll();
         $l = array_filter($l, function ($a) use ($annonce) {return $a->getAnnonce() == $annonce; });
