@@ -103,3 +103,4 @@ function clickStar(index) {
     document.getElementById("note").value = ""+(index+1)
     console.log("Note donnée : ", index + 1);
 }
+

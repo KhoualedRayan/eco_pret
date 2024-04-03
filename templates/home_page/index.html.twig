@@ -219,4 +219,11 @@
     </nav>
 {% endif %}
 
+<script>
+function redirectToProfile(event, userId) {
+     event.preventDefault();
+    window.location.href = "{{ path('app_profile_public', {'id': 'userId'}) }}".replace('userId', userId);
+}
+</script>
+
 {% endblock %}

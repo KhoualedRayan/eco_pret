@@ -29,7 +29,7 @@ class AnnonceMateriel extends Annonce
 
     public function setMode(string $duree): static
     {
-        $this->mode = $mode;
+        $this->mode = $duree;
 
         return $this;
     }
