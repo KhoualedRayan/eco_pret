@@ -24,7 +24,7 @@ class RechercherAnnonceTest extends PantherTestCase
 
         $currentUrl = $crawler->getUri();
 
-        $expectedUrl = 'http://127.0.0.1:9080/?texte=test&type=tout&duree_min=&duree_max=&du=&au=&prix_min=&prix_max=&note=0&avecClient=tout';
+        $expectedUrl = 'http://127.0.0.1:8000/?texte=test&type=tout&duree_min=&duree_max=&du=&au=&prix_min=&prix_max=&note=0&avecClient=tout';
         $this->assertSame($expectedUrl, $currentUrl);
     }
 }
