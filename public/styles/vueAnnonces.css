@@ -32,20 +32,12 @@ td.right {
     text-align: right;
 }
 
-.content {
-    margin: 1em;
-    padding: 1em;
-    border-radius: 10px;
-    font-size: 1.05em;
-    background-color: var(--couleurFondMain);
-    border: 1px var(--couleurFilet) solid;
-}
-
-.bold {
+dialog .bold {
+    color: var(--couleurTexte);
     font-weight: bold;
 }
 
-.categorie {
+dialog .categorie {
     margin-top: 10px;
     border-radius: 1rem;
     padding: 5px 10px;
@@ -55,10 +47,39 @@ td.right {
     display: inline-flex;
 }
 
-.desc {
+dialog .desc {
     background-color: #ddd;
     border-radius: 0.5rem;
-    width: fit-content;
+    max-width: 40vw;
+    height: fit-content;
     padding: 5px;
+    overflow: auto;
+}
+
+.close {
+    font-size: 16px;
+    padding: 3px;
+    border-radius: 1rem;
+    color: var(--couleurFancy);
+}
+
+.close:hover {
+    background-color: var(--couleurFancy);
+    color: white;
+    cursor: pointer;
+}
+
+.flottant {
+    float: right;
+}
+
+dialog {
+    border-radius: 0.5rem;
+    width:  40vw;
+    max-height: 70vh;
+    overflow: auto;
+    border: 3px var(--couleurFilet) solid;
+    padding: 1em;
+    background-color: var(--couleurFondMain);
 }
 

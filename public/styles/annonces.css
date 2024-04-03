@@ -12,6 +12,7 @@
 .lienAnnonce {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
     transition: transform 0.2s; /* Animation de transition */
 }
 

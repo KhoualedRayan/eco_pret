@@ -3,7 +3,10 @@
 {% block title %}Mes Transactions{% endblock %}
 {% block ss2 %}
 <link rel="stylesheet" href="{{ asset('styles/annonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/vueAnnonces.css') }}">
+<link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/transaction.css') }}">
+<script src="{{ asset('scripts/annonces.js') }}"></script>
 {% endblock %}
 {% block contenu %}
 
@@ -29,7 +32,7 @@
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
                 {% if transaction.annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
-                <h3>{{ transaction.annonce.getTitre() }}</h3>
+                <h3 onclick="showAnnonce('{{ transaction.annonce.id }}')" class="lien2Annonce">Annonce : {{ transaction.annonce.getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                 <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
             </div>
@@ -46,7 +49,7 @@
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
                 {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
-                <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                <h3 onclick="showAnnonce('{{transaction.annonce.id}}')" class="lien2Annonce">Annonce : {{ transaction.getAnnonce().getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                 <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction </button>
             </div>
@@ -63,7 +66,7 @@
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
                 {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
-                <h3>{{ annonce.getTitre() }}</h3>
+                <h3 onclick="showAnnonce('{{annonce.id}}')" class="lien2Annonce">Annonce : {{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
                 <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
                 <button class="supprimer" onclick="seDesister(event,'{{ annonce.getId() }}')">Quitter la file</button>
@@ -84,7 +87,7 @@
                     <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
                     {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt (final) : {{ transaction.getDureeFinal() }}</div>
                     {% endif %}
-                    <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                    <h3 onclick="showAnnonce('{{transaction.annonce.id}}')" class="lien2Annonce">Annonce : {{ transaction.getAnnonce().getTitre() }}</h3>
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
         
                     {# <div class="stars">
