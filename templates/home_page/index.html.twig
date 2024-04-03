@@ -25,7 +25,7 @@
         <div class="searchBar">
             <input type="text" class="searchInput" name="texte" id="searchInput" value="{{recherche}}">
             <div style="position: relative;">
-                <span class="material-icons filter" onclick="filtrer()">filter_list</span>
+                <span class="material-icons filter {% if filtered %}red{% endif %}" onclick="filtrer()">filter_list</span>
                 <div class="filtres" id="filtres">
                     <div class="blocFiltres types">
                         <h4 title="ne cherchez que des annonces de prêt (matériel) ou service (service) ou pas (tout)">Type</h4>
@@ -35,38 +35,41 @@
                                 <label for="toutType" style="margin-right: 10px;">Tout</label>
                             </div>
                             <div>
-                                <input type="radio" name="type" id="materielType" onclick="filtrerMateriel()" value="materiel" {% if avecClient == "materiel" %}checked{% endif %}>
+                                <input type="radio" name="type" id="materielType" onclick="filtrerMateriel()" value="materiel" {% if type == "materiel" %}checked{% endif %}>
                                 <label for="materielType" style="margin-right: 10px;">Matériel</label>
                             </div>
                             <div>
-                                <input type="radio" name="type" id="serviceType" onclick="filtrerService()" value="service" {% if avecClient == "service" %}checked{% endif %}>
+                                <input type="radio" name="type" id="serviceType" onclick="filtrerService()" value="service" {% if type == "service" %}checked{% endif %}>
                                 <label for="serviceType">Service</label>
                             </div>
                         </div>
                     </div>
-                    <div class="blocFiltres hidden" id="categorieFiltre">
+                    <div class="blocFiltres {% if type == "tout" %}hidden{% endif %}" id="categorieFiltre">
                         <fieldset>
                         <legend>
                             <h4 title="cherchez uniquement des annonces avec les catégories sélectionnées">Catégories</h4>
                         </legend>
                         <div id="categs" typeAnnonce="" class="categories">
+                            {% if type != "tout" %}
+                                {% include 'home_page/categorie.html.twig' %}
+                            {% endif %}
                         </div>
                         </fieldset>
                     </div>
-                    <div class="blocFiltres hidden" id="dureeFiltre">
+                    <div class="blocFiltres {% if type != "materiel" %}hidden{% endif %}" id="dureeFiltre">
                         <h4 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h4>
                         <div class="input-cc">
                             <div class="input-container">
-                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]*$" placeholder="" class="minimum">
+                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]+ ((jour|heure)s?)?$" placeholder="" value="{{duree_min}}" class="minimum">
                                 <label for="duree_min">Minimum</label>
                             </div>
                             <div class="input-container">
-                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]*$" placeholder="">
+                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]+ ((jour|heure)s?)?$" value="{{duree_max}}" placeholder="">
                                 <label for="duree_max">Maximum</label>
                             </div>
                         </div>
                     </div>
-                    <div class="blocFiltres hidden" id="periodeServiceFiltre">
+                    <div class="blocFiltres {% if type != "service" %}hidden{% endif %}" id="periodeServiceFiltre">
                         <h4 title="cherche des services avec des disponibilités entre ces 2 dates (si non spécifié, ne borne pas les dates)">Périodes Service</h4>
                         <div style="text-align: left;">
                             <div class="date-du">
@@ -147,7 +150,13 @@
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
                 {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode == 'heures' %}{{ annonce.dureeH }}{% else %}{{annonce.dureeH /24 }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
-                <div class="description">{{ annonce.getDescription() }}</div>
+                <div class="description">
+                    {% set parties = annonce.description|split('\n') %}
+                        <span class="texte-message">
+                        {% for partie in parties %}
+                            {{ partie }}<br>
+                        {% endfor %}
+                </div>
                 {# L'utilisateur est prenium #}
                 {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}
                     {% if  annonce.getTransaction()  == null or annonce.getTransaction.client != app.user %}

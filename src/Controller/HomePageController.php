@@ -42,12 +42,18 @@ class HomePageController extends AbstractController
         $qb = null;
         $du = "";
         $au = "";
+        $duree_min = "";
+        $duree_max = "";
+        $categories = [];
+        $categs = [];
+        $filtered = false;
         # obligé de passer par tout pour récupérer les catégories
         # merci symfony
         $params = $request->query->all();
         $type = $request->query->get('type', 'tout');
 
         if ($type == 'materiel') {
+            $filtered = true;
             $qb = $entityManager->getRepository(AnnonceMateriel::class)->createQueryBuilder('a');
             $categories = isset($params['categorie']) && is_array($params['categorie']) ? $params['categorie'] : [];
             
@@ -56,21 +62,36 @@ class HomePageController extends AbstractController
                 $categs = [];
                 foreach ($categories as $x) {
                     $v = intval(substr($x, 5));
-                    if ($v != 0) {
-                        $categs[] = v;
-                    }
+                    if ($v != 0) { $categs[] = $v; }
                 }
                 $qb = $qb->leftJoin('a.categorie', 'c')->andWhere($qb->expr()->in('c.id', $categs));
             }
+
+            # DUREE MINIMUM
             $duree_min = $request->query->get('duree_min', '');
-            if ($duree_min != "") {
-                $qd->andWhere();
+            if (preg_match("/^[0-9]+ ((jour|heure)s?)?$/", $duree_min)) {
+                $val = intval(preg_replace("/[^0-9]/", "", $duree_min));
+                if (strpos($duree_min, "jour")) {
+                    $val = 24*$val;
+                }
+                $qb = $qb->andWhere("a.dureeH >= :val1")->setParameter(':val1', $val);
+            } else {
+                $duree_min = "";
             }
+
+            # DUREE MAXIMUM
             $duree_max = $request->query->get('duree_max', '');
-            if ($duree_max != "") {
-                $qd->andWhere();
+            if (preg_match("/^[0-9]+ ((jour|heure)s?)?$/", $duree_max)) {
+                $val = intval(preg_replace("/[^0-9]/", "", $duree_max));
+                if (strpos($duree_max, "jour")) {
+                    $val = 24*$val;
+                }
+                $qb = $qb->andWhere("a.dureeH <= :val2")->setParameter(':val2', $val);
+            } else {
+                $duree_max = "";
             }
         } else if ($type == 'service') {
+            $filtered = true;
             $qb = $entityManager->getRepository(AnnonceService::class)->createQueryBuilder('a');
 
             # CATEGORIES SERVICE
@@ -79,16 +100,13 @@ class HomePageController extends AbstractController
                 $categs = [];
                 foreach ($categories as $x) {
                     $v = intval(substr($x, 5));
-                    if ($v != 0) {
-                        $categs[] = v;
-                    }
+                    if ($v != 0) { $categs[] = $v; }
                 }
                 $qb = $qb->leftJoin('a.categorie', 'c')->andWhere($qb->expr()->in('c.id', $categs));
             }
 
             # DATE MINIMUM
             $du = $request->query->get('du', '');
-            dump($du);
             $du = \DateTime::createFromFormat('Y-m-d\TH:i', $du);
             if ($du) {
                 $du = $du->format('Y-m-d H:i');
@@ -126,6 +144,7 @@ class HomePageController extends AbstractController
         # texte de recherche
         $text = $request->query->get('texte', '');;
         if ($text != "") {
+            $filtered = true;
             $qb = $qb->andWhere($qb->expr()->orX('a.description LIKE :text', 'a.titre LIKE :text'))
             ->setParameter('text', '%'.$text.'%');
         }
@@ -133,6 +152,7 @@ class HomePageController extends AbstractController
         # filter par prix min
         $prix_min = $request->query->get('prix_min', '');
         if (preg_match("/^\d+$/", $prix_min)) {
+            $filtered = true;
             $qb = $qb->andWhere("a.prix >= :prixMin")->setParameter('prixMin', intval($prix_min));
         } else {
             $prix_min = "";
@@ -142,6 +162,7 @@ class HomePageController extends AbstractController
         $prix_max = $request->query->get('prix_max', '');
         # s'il n'y a que des chiffres
         if (preg_match("/^\d+$/", $prix_max)) {
+            $filtered = true;
             $qb = $qb->andWhere("a.prix <= :prixMax")->setParameter('prixMax', intval($prix_max));
         } else {
             $prix_max = "";
@@ -151,6 +172,7 @@ class HomePageController extends AbstractController
         $noteMin = $request->query->get('note', '');
         $note = intval($noteMin);
         if ($note > 0 && $note <= 5) {
+            $filtered = true;
             $qb = $qb->leftJoin('a.posteur', 'p')->andWhere("p.note >= :note")
             ->setParameter('note', $note);
         } else {
@@ -160,8 +182,10 @@ class HomePageController extends AbstractController
         # Filtre les annonces selon si elles ont déjà des clients en attente / transaction en cours
         $avecClient = $request->query->get('avecClient', "tout");
         if ($avecClient == "oui") {
+            $filtered = true;
             $qb = $qb->andWhere("a.transaction IS NOT NULL");
         } else if ($avecClient == "non") {
+            $filtered = true;
             $qb = $qb->andWhere("a.transaction IS NULL");
         } else {
             $avecClient = "tout";
@@ -187,6 +211,7 @@ class HomePageController extends AbstractController
             $annonces = $qb->setMaxResults($limit)->setFirstResult($offset)->getQuery()->getResult();
             $nombrePages = ceil($totalAnnonces / $limit);
         }
+        $categories = $type == "tout" ? "" : $cs = $entityManager->getRepository($type == "materiel" ? CategorieMateriel::class : CategorieService::class)->findAll();;
 
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
@@ -195,12 +220,17 @@ class HomePageController extends AbstractController
             'nombrePages' => $nombrePages,
             'recherche' => $text,
             'type' => $type,
+            'duree_min' => $duree_min,
+            'duree_max' => $duree_max,
+            'categories' => $categories,
+            'checked' => $categs,
             'du' => $du,
             'au' => $au,
             'prix_min' => $prix_min,
             'prix_max' => $prix_max,
             'note' => $note,
             'avecClient' => $avecClient,
+            'filtered' => $filtered,
         ]);
     }
 
@@ -269,12 +299,13 @@ class HomePageController extends AbstractController
     }
 
     #[Route('/ajax/getCategories/{type}', name: 'get_categories')]
-    public function getCategorie(EntityManagerInterface $em, $type): Response
+    public function getCategorie(EntityManagerInterface $em, $type, $checked = []): Response
     {
         $cs = $em->getRepository($type == "materiel" ? CategorieMateriel::class : CategorieService::class)->findAll();
         return $this->render('home_page/categorie.html.twig', [
             'controller_name' => 'HomePageController',
             'categories' => $cs,
+            'checked' => $checked,
         ]);
     }
 }
