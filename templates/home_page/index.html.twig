@@ -141,10 +141,13 @@
     {% endif %}
     {% for annonce in annonces %}
         {% if annonce.getPosteur().isSleepMode() == false and annonce.getStatut() == "Disponible" %}
-            <a href="{{ path('app_vue_annonce', {'id': annonce.id}) }}" class="lienAnnonce"><div class="blocAnnonce">
+            <div class="blocAnnonce">
                 <div>
                     <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>
-                    <div style="display: flex; align-items: center;"><div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div><a  href="{{ path('app_profile_public', {'id': annonce.getPosteur().getId() }) }}" class="username">{{ annonce.getPosteur().getUsername() }}</a></div>
+                    <div style="display: flex; align-items: center;">
+                        <div {% if annonce.posteur.isBusy() %}class="cercle rouge"{% else %}class="cercle vert"{% endif %}></div>
+                        <div class="username" onclick="redirectToProfile(event, '{{ annonce.getPosteur().getId() }}');">{{ annonce.getPosteur().getUsername() }}</div>
+                    </div>
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
@@ -214,5 +217,12 @@
         </ul>
     </nav>
 {% endif %}
+
+<script>
+function redirectToProfile(event, userId) {
+     event.preventDefault();
+    window.location.href = "{{ path('app_profile_public', {'id': 'userId'}) }}".replace('userId', userId);
+}
+</script>
 
 {% endblock %}

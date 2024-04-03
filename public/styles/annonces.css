@@ -43,9 +43,8 @@
 }
 
 .username {
-    display: block;
-    font-weight: bold;
-    color: green;
+    color: inherit;
+    text-decoration: none;
 }
 
 .categorie {
