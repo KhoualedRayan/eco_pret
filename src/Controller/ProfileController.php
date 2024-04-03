@@ -31,10 +31,17 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser()) {
+        // si pas d'utilisateur connecté
+        $user = $this->getUser();
+        if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-        if ($this->getUser()->isSleepMode()) {
+        // si c'est un admin il n'a pas accès à cette page
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        }
+        // s'il est en mode sommeil aussi
+        if ($user->isSleepMode()) {
             return $this->redirectToRoute('app_sleep_mode');
         }
 

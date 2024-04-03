@@ -1,6 +1,11 @@
 // affiche la boite de dialogue d'une annonce
+let a = 0;
 
-function showAnnonce(id) {
+function showAnnonce(event, id) {
+    if (event.target.tagName.toLowerCase() == 'button' || a == 1) {
+        return;
+    }
+    a = 1;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -11,6 +16,7 @@ function showAnnonce(id) {
                 document.getElementById('close').addEventListener("click", function() {
                     dialog.close();
                     document.body.removeChild(dialog);
+                    a = 0;
                 });
                 dialog.showModal();
             }

@@ -55,7 +55,6 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
             return new RedirectResponse($this->urlGenerator->generate('app_admin'));
         }
-        $change = FALSE;
         $date = new DateTime();
 
         # Si son abonnement expire
@@ -66,7 +65,8 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             if ($nextDateAbo < $date) {
                 $user->setAbonnement($nextAbo);
                 $user->setDateAbonnement($nextAbo != null ? DateTime::createFromInterface($nextDateAbo) : null);
-                $change = TRUE;
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
             }
         }
 
@@ -75,19 +75,14 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             if ($t->getStatutTransaction() == "Terminer") {
                 $lastDate = $t->getLastDate();
                 if ($lastDate < $date) {
-                    $change = TRUE;
                     $t->setStatutTransaction("FINI");
-                    $mess = "Transaction clôturée, vous ne pouvez plus communiquer. En espérant que votre échange a été positif !";
+                    $mess = "Transaction clôturée, vous ne pouvez plus communiquer. En espérant que votre échange ait été positif !";
                     $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getClient(), $lastDate);
                     $this->outils->envoieNotificationA($this->entityManager, $mess, $t->getAnnonce()->getPosteur(), $lastDate);
                     $this->entityManager->persist($t);
                     $this->entityManager->flush();
                 }
             }
-        }
-        if ($change) {
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
         }
         
         if ($user->isSleepMode()) {

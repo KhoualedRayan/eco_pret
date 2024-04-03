@@ -14,11 +14,16 @@ class LoginController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $user = $this->getUser();
-        # il peut ne pas avoir d'abonnement
-        if ($user && $user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
-            return $this->redirectToRoute('app_admin');
-        } else if ($user) {
-            return $this->redirectToRoute('app_home_page');
+        if ($user) {
+            if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+                return $this->redirectToRoute("app_admin");
+            } else {
+                if ($user->isSleepMode()) {
+                    return $this->redirectToRoute("app_sleep_mode");
+                } else {
+                   return $this->redirectToRoute("app_home_page"); 
+                }
+            }
         }
 
         // get the login error if there is one

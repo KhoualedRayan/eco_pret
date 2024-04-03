@@ -143,7 +143,7 @@
     {% endif %}
     {% for annonce in annonces %}
         {% if annonce.getPosteur().isSleepMode() == false and annonce.getStatut() == "Disponible" %}
-            <span onclick="showAnnonce('{{ annonce.id }}')" class="lienAnnonce">
+            <span onclick="showAnnonce(event, '{{ annonce.id }}')" class="lienAnnonce">
                 <div class="blocAnnonce">
                     <div>
                         <span class="prix">{{ annonce.getPrix() }}<span class="material-icons">attach_money</span></span>

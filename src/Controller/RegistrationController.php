@@ -34,6 +34,20 @@ class RegistrationController extends AbstractController
         // $entityManager->persist($admin);
         // $entityManager->flush();
 
+        // empeche un utilisateur déjà connecté (admin ou pas) d'accéder à cette page
+        $user = $this->getUser();
+        if ($user) {
+            if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+                return $this->redirectToRoute("app_admin");
+            } else {
+                if ($user->isSleepMode()) {
+                    return $this->redirectToRoute("app_sleep_mode");
+                } else {
+                   return $this->redirectToRoute("app_home_page"); 
+                }
+            }
+        }
+
         $user = new User();
 
         $form = $this->createForm(RegistrationFormType::class, $user);
