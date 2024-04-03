@@ -15,8 +15,8 @@
     <div>
         <h2 class="centrer">{{transaction.annonce.titre}}</h2>
 
-        Posté par&nbsp;<b>{{ transaction.annonce.posteur.username }}</b>&nbsp; <br />
-        Client &nbsp;<b>{{ transaction.client.username }}</b>&nbsp;
+        Posté par&nbsp;<a  href="{{ path('app_profile_public', {'id': transaction.annonce.posteur.id }) }}" class="username">{{ transaction.annonce.posteur.username }}</a>&nbsp; <br />
+        Client &nbsp;<a  href="{{ path('app_profile_public', {'id': transaction.client.id }) }}" class="username">{{ transaction.client.username }}</a>&nbsp;
 
         <br>
         <span class="bold">Prix</span> : {{ transaction.getPrixFinal()}}<span class="material-icons">attach_money</span>

@@ -45,6 +45,7 @@
 .username {
     display: block;
     font-weight: bold;
+    color: green;
 }
 
 .categorie {
@@ -65,5 +66,3 @@
 .duree {
     margin-top: 5px;
 }
-
-
