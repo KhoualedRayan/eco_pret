@@ -69,7 +69,7 @@ class HomePageController extends AbstractController
 
             # DUREE MINIMUM
             $duree_min = $request->query->get('duree_min', '');
-            if (preg_match("/^[0-9]+ ((jour|heure)s?)?$/", $duree_min)) {
+            if (preg_match("/^[0-9]+( (jour|heure)s?)?$/", $duree_min)) {
                 $val = intval(preg_replace("/[^0-9]/", "", $duree_min));
                 if (strpos($duree_min, "jour")) {
                     $val = 24*$val;
@@ -81,7 +81,7 @@ class HomePageController extends AbstractController
 
             # DUREE MAXIMUM
             $duree_max = $request->query->get('duree_max', '');
-            if (preg_match("/^[0-9]+ ((jour|heure)s?)?$/", $duree_max)) {
+            if (preg_match("/^[0-9]+( (jour|heure)s?)?$/", $duree_max)) {
                 $val = intval(preg_replace("/[^0-9]/", "", $duree_max));
                 if (strpos($duree_max, "jour")) {
                     $val = 24*$val;

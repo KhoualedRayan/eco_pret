@@ -20,7 +20,7 @@
 <div class="categorie">{{ annonce.getCategorie().getNom() }}
 
 </div><br><br>
-{% if annonce.getType() == "Materiel" %}<div class="duree"><span class="bold">Durée du prêt</span> : {% if annonce.mode == 'heures' %}{{ annonce.dureeH }}{% else %}{{annonce.dureeH /24 }}{% endif %} {{ annonce.mode }}</div>
+{% if annonce.getType() == "Materiel" %}<div class="duree"><span class="bold">Durée du prêt</span> : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>
 {% else %}
 <span class="bold">Horaires</span> :
 {% if not (annonce.datePoncts is empty) %}Le(s){% endif %}

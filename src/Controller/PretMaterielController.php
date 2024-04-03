@@ -47,16 +47,19 @@ class PretMaterielController extends AbstractController
         $prix = $request->request->get('prix');
         $description = $request->request->get('description');
         $categorie = $request->request->get('materiel');
-        $duree_pret_valeur = $request->request->get('duree_pret_valeur');
+        $duree_pret_valeur = intval($request->request->get('duree_pret_valeur', ''));
         $duree_pret = $request->request->get('duree_pret');
-        $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
 
 
         $annonce = new AnnonceMateriel();
         $annonce->setTitre($titre);
         $annonce->setDescription($description);
         $annonce->setDatePublication($date);
-        $annonce->setDuree($duree_pret);
+        # si ça a été mis (durée non obligatoire)
+        if ($duree_pret_valeur > 0) {
+            $annonce->setMode($duree_pret);
+            $annonce->setDureeH($duree_pret == 'jours' ? $duree_pret_valeur*24 : $duree_pret_valeur);
+        }
         $annonce->setCategorie($cmr->findOneByNom($categorie));
         $annonce->setPrix($prix);
         $annonce->setPosteur($this->getUser());

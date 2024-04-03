@@ -44,7 +44,7 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
 

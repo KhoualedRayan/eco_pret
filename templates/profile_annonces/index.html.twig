@@ -28,11 +28,11 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
                 {% if annonce.getType() == "Materiel" %}
-                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}','{{ annonce.getDuree() }}',null,null,null,null)">Modifier</button>
+                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}','{{ annonce.getDureeH() }}',null,null,null,null)">Modifier</button>
                 {% endif %}
                 {% if annonce.getType() == "Service" %}
                     {%if annonce.getDatePoncts().get(0) != null%}
@@ -99,7 +99,7 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
             </div>
@@ -133,7 +133,7 @@
             </div>
             <div>
                 <label for="duree_pret">Durée : </label>
-                <input type="text" class="input_small" id="editDureeNombre" name="duree_pret_valeur" pattern="[0-9]+" title="Entrez une durée valide (par exemple : 12 heures)" required />
+                <input type="text" class="input_small" id="editDureeNombre" name="duree_pret_valeur" pattern="[0-9]*" title="Entrez une durée valide (par exemple : 12 heures)"/>
                 <select name="duree_pret" id="editDureePeriode" >
                     <option value="heures">heures</option>
                     <option value="jours">jours</option>

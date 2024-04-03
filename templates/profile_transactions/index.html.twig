@@ -28,8 +28,8 @@
                 </div>
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
-                <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
+                {% if transaction.annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
+                <h3>{{ transaction.annonce.getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                 <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
             </div>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ transaction.getAnnonce().getDuree() }}</div>{% endif %}
+                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
                 <h3>{{ transaction.getAnnonce().getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                 <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction </button>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {{ annonce.getDuree() }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
                 <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>

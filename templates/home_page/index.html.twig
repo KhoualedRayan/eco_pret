@@ -60,11 +60,11 @@
                         <h4 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h4>
                         <div class="input-cc">
                             <div class="input-container">
-                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]+ ((jour|heure)s?)?$" placeholder="" value="{{duree_min}}" class="minimum">
+                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]+( (jour|heure)s?)?$" placeholder="" value="{{duree_min}}" class="minimum">
                                 <label for="duree_min">Minimum</label>
                             </div>
                             <div class="input-container">
-                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]+ ((jour|heure)s?)?$" value="{{duree_max}}" placeholder="">
+                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]+( (jour|heure)s?)?$" value="{{duree_max}}" placeholder="">
                                 <label for="duree_max">Maximum</label>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode == 'heures' %}{{ annonce.dureeH }}{% else %}{{annonce.dureeH /24 }}{% endif %} {{ annonce.mode }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">
                     {% set parties = annonce.description|split('\n') %}

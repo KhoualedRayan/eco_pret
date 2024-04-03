@@ -69,13 +69,21 @@ class ProfileAnnoncesController extends AbstractController
         $nouvelleCategorie = $data->get('nouvelleCategorie');
 
         if($annonceType === 'Materiel'){
-            $duree_pret_valeur = $data->get('nouvelleDureeValeur');
+            $duree_pret_valeur = intval($data->get('nouvelleDureeValeur', ''));
             $duree_pret = $data->get('nouvelleDureePeriode');
-            $duree_pret = $duree_pret_valeur . ' ' . $duree_pret;
             $annonceMateriel = $entityManager->getRepository(AnnonceMateriel::class)->find($annonceId);
             $annonceMateriel->setPrix($nouveauPrix);
             $annonceMateriel->setTitre($nouveauTitre);
-            $annonceMateriel->setDuree($duree_pret);
+            
+            # non obligatoire, donc on peut vouloir l'enlever
+            if ($duree_pret_valeur > 0) {
+                $annonceMateriel->setMode($duree_pret);
+                $annonceMateriel->setDureeH($duree_pret == 'jours' ? $duree_pret_valeur*24 : $duree_pret_valeur);
+            } else {
+                $annonceMateriel->setMode(NULL);
+                $annonceMateriel->setDureeH(NULL);
+            }
+            
             $annonceMateriel->setDescription($nouvelleDescription);
             $annonceMateriel->setCategorie($cmr->findOneByNom($nouvelleCategorie));
             $entityManager->flush();

@@ -19,11 +19,11 @@
         <br>
 
         {% if transaction.annonce.getType() == "Materiel" %}
-            {% set d = transaction.annonce.duree|split(' ') %}
-            Durée fin : <input type="text" style="width: 60px;" pattern="^[0-9]*$" name="duree" value="{{d[0]}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
+            {% set duree = transaction.annonce.mode == 'jours' ? transaction.annonce.dureeH /24 : transaction.annonce.dureeH %}
+            Durée final : <input type="text" style="width: 60px;" pattern="^[0-9]*$" name="duree" value="{{duree}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
             <select name="duree_pret"  >
-                <option value="heures" {% if d[1] == "heures" %}selected{% endif %}>heures</option>
-                <option value="jours" {% if d[1] == "jours" %}selected{% endif %}>jours</option>
+                <option value="heures" {% if transaction.annonce.mode == "heures" %}selected{% endif %}>heures</option>
+                <option value="jours" {% if transaction.annonce.mode == "jours" %}selected{% endif %}>jours</option>
             </select><br /><br>
             Quand se passera l'échange ? : <input type="date" name="dateDebut"  min="{{ "now"|date("Y-m-d") }}" required><br><br>
         {% endif %}
@@ -38,7 +38,7 @@
 Prix d'origine : <span class="bold">{{transaction.annonce.prix}}<span class="material-icons">attach_money</span></span>   ------->   Nouveau Prix : <span class="bold">{{transaction.prixFinal}}<span class="material-icons">attach_money</span></span><br>
 <br>
 {% if transaction.annonce.getType() == "Materiel" %}
-    Durée d'origine : <span class="bold">{{transaction.annonce.duree}}</span>   ------->   Nouvelle durée : <span class="bold">{{transaction.dureeFinal}}</span><br><br>
+    Durée d'origine : <span class="bold">{% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</span>   ------->   Nouvelle durée : <span class="bold">{{transaction.dureeFinal}}</span><br><br>
 
     Date de l'échange (soit le début du prêt) : <span class="bold">{{transaction.dateDebutPret|date('d M Y')}}</span><br>
 {% endif %}
@@ -60,7 +60,7 @@ Prix d'origine : <span>{{transaction.annonce.prix}}</span><br>
 Nouveau Prix : <span>{{transaction.prixFinal}}</span><br>
 
 {% if transaction.annonce.getType() == "Materiel" %}
-    Durée d'origine : <span>{{transaction.annonce.duree}}</span><br>
+    Durée d'origine : <span>{% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</span><br>
     Nouvelle durée : <span>{{transaction.dureeFinal}}</span><br>
 {% endif %}
 
