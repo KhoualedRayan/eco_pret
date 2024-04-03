@@ -21,6 +21,19 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        // Si vous voulez créer un admin
+        // décommentez ces lignes, allez dans la page d'inscription et recommentez-les
+        // $admin = new User();
+        // $admin->setUsername('NOM');
+        // $admin->setEmail('EMAIL@EMAIL.ML');
+        // $admin->setPassword($userPasswordHasher->hashPassword(
+        //     $admin,
+        //     'MOT DE PASSE'
+        // ));
+        // $admin->setAbonnement($entityManager->getRepository(Abonnement::class)->findOneBy(['nom' => 'Admin']));
+        // $entityManager->persist($admin);
+        // $entityManager->flush();
+
         $user = new User();
 
         $form = $this->createForm(RegistrationFormType::class, $user);

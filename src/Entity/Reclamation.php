@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ReclamationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
@@ -29,12 +30,17 @@ class Reclamation
     #[ORM\ManyToOne(inversedBy: 'reclamations_traitees')]
     private ?User $administrateur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reclamations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?CategorieReclamation $tag_reclamation = null;
+    #[ORM\Column(length: 255)]
+    private ?string $titre = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Annonce $annonce_litige = null;
+    #[ORM\ManyToOne]
+    private ?Transaction $transaction = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_poste = null;
+
+    #[ORM\Column(length: 2047, nullable: true)]
+    private ?string $reponse = null;
 
     public function getId(): ?int
     {
@@ -101,26 +107,50 @@ class Reclamation
         return $this;
     }
 
-    public function getTagReclamation(): ?CategorieReclamation
+    public function getTitre(): ?string
     {
-        return $this->tag_reclamation;
+        return $this->titre;
     }
 
-    public function setTagReclamation(?CategorieReclamation $tag_reclamation): static
+    public function setTitre(string $titre): static
     {
-        $this->tag_reclamation = $tag_reclamation;
+        $this->titre = $titre;
 
         return $this;
     }
 
-    public function getAnnonceLitige(): ?Annonce
+    public function getTransaction(): ?Transaction
     {
-        return $this->annonce_litige;
+        return $this->transaction;
     }
 
-    public function setAnnonceLitige(?Annonce $annonce_litige): static
+    public function setTransaction(?Transaction $transaction): static
     {
-        $this->annonce_litige = $annonce_litige;
+        $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    public function getDatePoste(): ?\DateTimeInterface
+    {
+        return $this->date_poste;
+    }
+
+    public function setDatePoste(\DateTimeInterface $date_poste): static
+    {
+        $this->date_poste = $date_poste;
+
+        return $this;
+    }
+
+    public function getReponse(): ?string
+    {
+        return $this->reponse;
+    }
+
+    public function setReponse(?string $reponse): static
+    {
+        $this->reponse = $reponse;
 
         return $this;
     }

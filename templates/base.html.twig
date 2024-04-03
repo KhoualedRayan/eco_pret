@@ -28,7 +28,12 @@
     <body>
         <header>
             <div style="display:flex;">
-                <div class="logo"><a href="/">EcoPrêt</a></div>
+                <div class="logo">
+                    {% if app.user and app.user.abonnement and app.user.abonnement.nom == "Admin" %}
+                        <a href="{{ path('app_admin') }}">
+                    {% else %}
+                        <a href="/">
+                    {% endif %}EcoPrêt</a></div>
             </div>
             <div class="aDroite">
                 {% if app.user %}

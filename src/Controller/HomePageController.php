@@ -34,7 +34,11 @@ class HomePageController extends AbstractController
     public function index(EntityManagerInterface $entityManager,Request $request): Response
     {
         if($this->getUser()){
-            if ($this->getUser()->isSleepMode()) {
+            $user = $this->getUser();
+            if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+                return $this->redirectToRoute('app_admin');
+            }
+            if ($user->isSleepMode()) {
                 return $this->redirectToRoute('app_sleep_mode');
             }
         }
@@ -111,9 +115,9 @@ class HomePageController extends AbstractController
             if ($du) {
                 $du = $du->format('Y-m-d H:i');
                 $subQuery = $entityManager->getRepository(DatePonctuelleService::class)
-                            ->createQueryBuilder('dps')->select('min(dps.date)')->andWhere('dps.dateponcts = a');
+                            ->createQueryBuilder('dps2')->select('min(dps2.date)')->andWhere('dps2.dateponcts = a');
                 $subQuery2 = $entityManager->getRepository(Recurrence::class)
-                            ->createQueryBuilder('rec')->select('min(rec.date_debut)')->andWhere('rec.annonceServ = a');
+                            ->createQueryBuilder('rec2')->select('min(rec2.date_debut)')->andWhere('rec2.annonceServ = a');
                 $qb = $qb->andWhere($qb->expr()->gte('('.$subQuery->getDQL().')',':dateDu'))
                         ->andWhere($qb->expr()->gte('('.$subQuery2->getDQL().')',':dateDu'))
                         ->setParameter('dateDu', $du);

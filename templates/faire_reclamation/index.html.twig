@@ -5,31 +5,32 @@
 <link rel="stylesheet" href="{{ asset('styles/annonce.css') }}">
 {% endblock %}
 
-{% block title %}Hello FaireReclamationController!{% endblock %}
+{% block title %}Reclamation{% endblock %}
 
 {% block body %}
 
 <div>
 <form action="{{ path('handle_form') }}" method="post">
-    <label for="materiel">Objet de la réclamation * </label>
+    <label for="materiel">Objet de la réclamation *</label>
     <select name="recla" id="recla" required>
         <option value="">Aucun objet</option>
-        {% for obj in objets %}
-            <option value="{{ obj.getNom() }}">{{ obj.getNom() }}</option>
-        {% endfor %}
-    </select><br /><br />
+        <option value="Litige">Litige</option>
+        <option value="Question / Problème Technique">Question / Problème Technique</option>
+    </select><br />
 
     <div id="annonces_litige" style="display: none;">
-        <label for="annonces">Annonce concernée par le litige </label>
-        <select name="annonce_l" id="annonce_l">
+        <label for="annonces">Transaction concernée par le litige *</label>
+        <select name="transaction_l" id="annonce_l">
         {% for tr in transactions %}
-            <option value="{{ tr.getAnnonce().getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
+            <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
         {% endfor %}
-        </select><br /><br />
+        </select><br />
     </div>
 
-    <br />
-    <label for="description">Description *</label><br />
+    <label>Titre *</label>
+    <input type="text" name="titre"><br>
+
+    <label for="description">Description *</label>
     <textarea name="description" id="description" required></textarea><br />
     <br />
 
