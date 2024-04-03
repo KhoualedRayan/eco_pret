@@ -9,7 +9,7 @@
 <h2>Nouvelle Annonce</h2>
 <form class = "form_serv" action="{{ path('handle_form_service') }}" method="post">
     <label for="titre">Titre de l'annonce *</label>
-    <input type="text" name="titre" required /><br />
+    <input type="text" name="titre" required maxlength="100"/><br />
     
     <br />
     <div class="special-div">
@@ -62,13 +62,13 @@
     
     <br />
     <label for="prix">Prix *</label>
-    <input type="text" class="input_small" name="prix" pattern="[0-9]*" title="Entrez un prix valide (par exemple, 10)" required /><br />
+    <input type="text" class="input_small" name="prix" pattern="[0-9]*" maxlength="9" title="Entrez un prix valide (par exemple, 10)" required /><br />
 
     <br />
     <label for="description">Description</label><br />
-    <textarea name="description" ></textarea><br />
+    <textarea name="description" maxlength="255"></textarea><br />
     </br>
-    <label for="prix">* Champs obligatoires</label>
+    <label>* Champs obligatoires</label>
     </br>
     <button>Valider</button>
     <a href="{{ path('app_home_page') }}"><button type="button">Annuler</button></a>

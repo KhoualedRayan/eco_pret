@@ -151,7 +151,14 @@
                     </div>
                     <div class="type">{{ annonce.getType() }}</div>
                     <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                    {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
+                    {% if annonce.getType() == "Materiel" %}
+                        <div class="duree">
+                            Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}
+                        </div>
+                    {% else %}
+                        <div class="limite">Du : {{ annonce.dateDebut()|date('d M Y H:i') }}<br>
+                            Au : {{ annonce.dateFin()|date('d M Y H:i') }}</div>
+                    {% endif %}
                     <h3>{{ annonce.getTitre() }}</h3>
                     <div class="description">
                         {% set parties = annonce.description|split('\n') %}
