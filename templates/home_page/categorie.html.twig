@@ -1,4 +1,3 @@
-<input type="checkbox" value="tout" name="categorie"><label>Tout</label><br>
 {% for categ in categories %}
-<label><input type="checkbox" name="categorie" value="{{categ.nom}}">{{categ.nom}}</label><br>
+<label><input type="checkbox" name="categorie[]" value="categ{{categ.id}}">{{categ.nom}}</label><br>
 {% endfor %}

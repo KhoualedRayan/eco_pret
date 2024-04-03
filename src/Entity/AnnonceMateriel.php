@@ -10,7 +10,7 @@ class AnnonceMateriel extends Annonce
 {
 
     #[ORM\Column(length: 255)]
-    private ?string $duree = null;
+    private ?string $mode = null;
 
 
 
@@ -18,21 +18,24 @@ class AnnonceMateriel extends Annonce
     #[ORM\JoinColumn(nullable: false)]
     private ?CategorieMateriel $categorie = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $dureeH = null;
 
-    public function getDuree(): ?string
+
+    public function getMode(): ?string
     {
-        return $this->duree;
+        return $this->mode;
     }
 
-    public function setDuree(string $duree): static
+    public function setMode(string $duree): static
     {
-        $this->duree = $duree;
+        $this->mode = $mode;
 
         return $this;
     }
-    public function setDureeNull(): static
+    public function setModeNull(): static
     {
-        $this->duree = null;
+        $this->mode = null;
 
         return $this;
     }
@@ -51,6 +54,18 @@ class AnnonceMateriel extends Annonce
     public function setCategorie(?CategorieMateriel $categorie): static
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getDureeH(): ?int
+    {
+        return $this->dureeH;
+    }
+
+    public function setDureeH(?int $dureeH): static
+    {
+        $this->dureeH = $dureeH;
 
         return $this;
     }

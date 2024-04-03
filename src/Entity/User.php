@@ -542,11 +542,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setNote(?float $note): static
     {
-
         $this->note = $note;
 
         return $this;
     }
-
 
 }
