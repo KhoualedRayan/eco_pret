@@ -61,14 +61,25 @@ class ProfileController extends AbstractController
     #[Route('/ajax/handle_infos_form', name: 'handle_infos_form')]
     public function handleInfosForm(EntityManagerInterface $entityManager,Request $request, UserRepository $ur, AbonnementRepository $ar): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        // si c'est un admin il n'a pas accès à cette page
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        }
+        // s'il est en mode sommeil aussi
+        if ($user->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
+        }
+
         $infos = $request->request;
         $newUsername = $infos->get('username');
         $newEmail = $infos->get('email');
         $newNom = $infos->get('nom');
         $newPrenom = $infos->get('prenom');
         $newAbo = $infos->get('options');
-
-        $user = $this->getUser();
 
         if ($newAbo != null) {
             $newAbo = $ar->findOneByName($newAbo);
@@ -107,29 +118,38 @@ class ProfileController extends AbstractController
     #[Route('/ajax/mdpForm', name: 'mdp_form')]
     public function checkMDP(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+        if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+        // si c'est un admin il n'a pas accès à cette page
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        }
+        // s'il est en mode sommeil aussi
+        if ($user->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
+        }
+
         $data = $request->request;
 
         $motDePasseActuel = $data->get('motDePasseActuel') == null ? "" : $data->get('motDePasseActuel');
         $nouveauMotDePasse = $data->get('nouveauMotDePasse');
         $confirmNouveauMDP = $data->get('confirmNouveauMDP');
 
-        $bonMDPActuel = $userPasswordHasher->isPasswordValid($this->getUser(), $motDePasseActuel);
+        $bonMDPActuel = $userPasswordHasher->isPasswordValid($user, $motDePasseActuel);
         $motDePasseSecurise = strlen($nouveauMotDePasse) >= 6;
         $confirmerCorrect = $nouveauMotDePasse == $confirmNouveauMDP;
 
         if ($bonMDPActuel && $confirmerCorrect && $motDePasseSecurise) {
 
-            $this->getUser()->setPassword(
+            $user->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $this->getUser(),
+                    $user,
                     $nouveauMotDePasse
                 )
             );
-            $entityManager->persist($this->getUser());
+            $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('notifications', 'Votre mot de passe a été modifié avec succès !');
@@ -148,8 +168,17 @@ class ProfileController extends AbstractController
     #[Route('/ajax/desabo_form', name: 'desabo_form')]
     public function checkDesabo(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+        if (!$user) {
             return $this->redirectToRoute('app_login');
+        }
+        // si c'est un admin il n'a pas accès à cette page
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        }
+        // s'il est en mode sommeil aussi
+        if ($user->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
         }
         $this->getUser()->setNextAbonnement(null);
         $entityManager->persist($this->getUser());

@@ -121,4 +121,15 @@ class AnnonceService extends Annonce
         return $a;
     }
 
+    public function dateDebut(): \DateTime
+    {
+        $a = min(
+            array_merge(
+                $this->datePoncts->map(function ($a) { return $a->getDate(); })->toArray(), 
+                $this->recurrence->map(function ($a) { return $a->getDateDebut(); })->toArray()
+            )
+        );
+        return $a;
+    }
+
 }

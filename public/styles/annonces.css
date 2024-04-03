@@ -21,6 +21,7 @@
 }
 
 
+
 .tout {
     display: flex;
     flex-wrap: wrap;
@@ -63,6 +64,7 @@
     overflow: auto;
 }
 
-.duree {
+.duree, .limite {
     margin-top: 5px;
 }
+
