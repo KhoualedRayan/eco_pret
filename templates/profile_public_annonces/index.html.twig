@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="{{ asset('styles/statut.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/input.css') }}">
 <link rel="stylesheet" href="{{ asset('styles/etoiles.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/transaction.css') }}">
+
 <script src="{{ asset('scripts/accueil.js') }}"></script>
 <script src="{{ asset('scripts/profil.js') }}"></script>
 <script src="{{ asset('scripts/annonces.js') }}"></script>
@@ -56,62 +58,7 @@
                 {% endif %}
                 <h3>{{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
-                {% if annonce.getType() == "Materiel" %}
-                    <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}','{{ annonce.getDureeH() }}',null,null,null,null)">Modifier</button>
-                {% endif %}
-                {% if annonce.getType() == "Service" %}
-                    {%if annonce.getDatePoncts().get(0) != null%}
-                        {% set datePoncts = [] %}
-                        {%for dateP in annonce.getDatePoncts()%}
-                            {% set datePoncts = datePoncts|merge([dateP.date|date('Y-m-d H:i')]) %}
-                        {%endfor%}
-                        {% set datePonctsString = datePoncts|json_encode|escape('js') %}
-                        {% if annonce.getRecurrence().get(0)!=null  %}
-                            {% set dateReccu_Debut = [] %}
-                            {% set dateReccu_Fin   = [] %}
-                            {% set dateReccu_Type  = [] %}
-                            {%for dateR in annonce.getRecurrence()%}
-                                {% if dateR.typeRecurrence == 'quotidienne' %}
-                                    {% set formatFin = 'Y-m-d' %}
-                                {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
-                                    {% set formatFin = 'Y-!W'%}
-                                {% elseif dateR.typeRecurrence == 'mensuelle' %}
-                                    {% set formatFin = 'Y-m' %}
-                                {% endif %}
-                                {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                                {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
-                                {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
-                            {%endfor%}
-                            {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
-                            {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
-                            {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
-                            <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}','{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
-                        {% else %}
-                            <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,'{{ datePonctsString }}',null,null,null)">Modifier</button>
-                        {% endif %}
-                    {%else%}
-                            {% set dateReccu_Debut = [] %}
-                            {% set dateReccu_Fin   = [] %}
-                            {% set dateReccu_Type  = [] %}
-                            {%for dateR in annonce.getRecurrence()%}
-                                {% if dateR.typeRecurrence == 'quotidienne' %}
-                                    {% set formatFin = 'Y-m-d' %}
-                                {% elseif dateR.typeRecurrence == 'hebdomadaire' %}
-                                    {% set formatFin = 'Y-!W'%}
-                                {% elseif dateR.typeRecurrence == 'mensuelle' %}
-                                    {% set formatFin = 'Y-m' %}
-                                {% endif %}
-                                {% set dateReccu_Debut = dateReccu_Debut|merge([dateR.getDateDebut()|date('Y-m-d H:i')]) %}
-                                {% set dateReccu_Fin   = dateReccu_Fin|merge([dateR.getDateFin()|date(formatFin)]) %}
-                                {% set dateReccu_Type  = dateReccu_Type|merge([dateR.typeRecurrence]) %}
-                            {%endfor%}
-                            {% set dateReccu_Debut_String = dateReccu_Debut|json_encode|escape('js') %}
-                            {% set dateReccu_Fin_String  =  dateReccu_Fin|json_encode|escape('js') %}
-                            {% set dateReccu_Type_String = dateReccu_Type|json_encode|escape('js') %}
-                        <button class="modifier" onclick="openAnnonceDialog('{{ annonce.getPrix() }}', '{{ annonce.getTitre()|escape('js') }}', '{{ annonce.getDescription()|escape('js') }}', '{{ annonce.getId() }}', '{{ annonce.getType() }}', '{{ annonce.getCategorie().getNom()|escape('js') }}',null,null,'{{ dateReccu_Debut_String }}','{{ dateReccu_Fin_String }}','{{ dateReccu_Type_String }}')">Modifier</button>
-                    {%endif%}
-                {% endif %}
-                <button class="supprimer" onclick="confirmerSuppression(event,'{{ annonce.getId() }}')">Supprimer</button>
+                
             </div>
         </span>
         {% endfor %}
