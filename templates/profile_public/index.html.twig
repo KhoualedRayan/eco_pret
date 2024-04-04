@@ -27,7 +27,28 @@
     {% block contenu %}
     <h1>Avis reçus</h1>
     {% if note_globale is not null %}
-        <h2 style="text-align: center;"> Note globale : {{note_globale}} / 5 </h2>
+        <h2 style="text-align: center;"> Note globale : {{note_globale}} / 5 </br>
+        <div class="stars" style="text-align: center;">
+            {% set full_stars = note_globale //1 %}
+            {% set decimal_part = note_globale - full_stars %}
+            {% if decimal_part >= 0.25 and decimal_part <= 0.75 %}
+                {% set half_star = true %}
+            {% else %}
+                {% if decimal_part > 0.75 %}
+                    {% set full_stars = full_stars + 1 %}
+                {% endif %}
+                {% set half_star = false %}
+            {% endif %}
+            {% for i in 1..5 %}
+                {% if i <= full_stars %}
+                    <span class="material-icons star">star</span>
+                {% elseif i == full_stars + 1 and half_star %}
+                    <span class="material-icons star">star_half</span>
+                {% else %}
+                    <span class="material-icons star star-empty">star_border</span>
+                {% endif %}
+            {% endfor %}
+        </div></h2>
     {% else %}
         <h2 style="text-align: center;"> Aucune notes </h2>
     {% endif %}
