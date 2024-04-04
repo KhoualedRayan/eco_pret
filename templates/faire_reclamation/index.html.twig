@@ -10,7 +10,7 @@
 {% block body %}
 
 <div>
-<form action="{{ path('handle_form') }}" method="post">
+<form action="{{ path('handle_form') }}" method="post" id="reclamation">
     <label for="materiel">Objet de la réclamation *</label>
     <select name="recla" id="recla" required>
         <option value="">Aucun objet</option>
