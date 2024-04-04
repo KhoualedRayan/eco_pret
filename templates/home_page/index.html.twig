@@ -62,11 +62,11 @@
                         <h4 title="cherchez des emprunts avec une durée entre ces 2 valeurs (si non spécifié, ne borne pas la durée)">Durée</h4>
                         <div class="input-cc">
                             <div class="input-container">
-                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]+( (jour|heure)s?)?$" placeholder="" value="{{duree_min}}" class="minimum">
+                                <input type="text" name="duree_min" id="duree_min" pattern="^[0-9]{1,7}( (jour|heure)s?)?$" placeholder="" title="peut inclure la période. Ex : '10', '10 heures', et '10 jours' sont des formats valides. entier <= 999999" value="{{duree_min}}" class="minimum">
                                 <label for="duree_min">Minimum</label>
                             </div>
                             <div class="input-container">
-                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]+( (jour|heure)s?)?$" value="{{duree_max}}" placeholder="">
+                                <input type="text" name="duree_max" id="duree_max" pattern="^[0-9]{1,7}( (jour|heure)s?)?$" value="{{duree_max}}" title="peut inclure la période. Ex : '10', '10 heures', et '10 jours' sont des formats valides. entier <= 999999" placeholder="">
                                 <label for="duree_max">Maximum</label>
                             </div>
                         </div>
@@ -87,10 +87,10 @@
                         <h4 title="cherchez des annonces avec un prix entre ces 2 valeurs (si non spécifié, ne borne pas le prix)">Prix</h4>
                         <div class="input-cc">
                             <div class="input-container">
-                                <input type="text" name="prix_min" id="prix_min" pattern="^[0-9]*$" value="{{prix_min}}" placeholder="" class="minimum"><label for="prix_min">Minimum</label>
+                                <input type="text" name="prix_min" id="prix_min" pattern="^[0-9]*$" value="{{prix_min}}" maxlength="9" placeholder="" class="minimum"><label for="prix_min">Minimum</label>
                             </div>
                             <div class="input-container">
-                                <input type="text" name="prix_max" pattern="^[0-9]*$" id="prix_max" value="{{prix_max}}" placeholder=""><label for="prix_max">Maximum</label>
+                                <input type="text" name="prix_max" pattern="^[0-9]*$" id="prix_max" value="{{prix_max}}" maxlength="9" placeholder=""><label for="prix_max">Maximum</label>
                             </div>
                         </div>
                     </div>

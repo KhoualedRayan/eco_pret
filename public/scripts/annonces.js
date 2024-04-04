@@ -6,19 +6,19 @@ function showAnnonce(event, id) {
         return;
     }
     a = 1;
+    var dialog = document.createElement('dialog');
+    document.body.appendChild(dialog);
+    dialog.showModal();
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (xhr.responseText != 'KO') {
-                var dialog = document.createElement('dialog');
-                document.body.appendChild(dialog);
                 dialog.innerHTML = xhr.responseText;
                 document.getElementById('close').addEventListener("click", function() {
                     dialog.close();
                     document.body.removeChild(dialog);
                     a = 0;
                 });
-                dialog.showModal();
             }
         }
     };

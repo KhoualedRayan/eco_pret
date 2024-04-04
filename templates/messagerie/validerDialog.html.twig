@@ -20,7 +20,7 @@
 
         {% if transaction.annonce.getType() == "Materiel" %}
             {% set duree = transaction.annonce.mode == 'jours' ? transaction.annonce.dureeH /24 : transaction.annonce.dureeH %}
-            Durée final : <input type="text" style="width: 60px;" pattern="^[0-9]*$" name="duree" value="{{duree}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
+            Durée final : <input type="text" style="width: 60px;" pattern="^[1-9][0-9]*$" name="duree" value="{{duree}}" title="Entrez une durée valide (par exemple : 12 heures)" required />
             <select name="duree_pret"  >
                 <option value="heures" {% if transaction.annonce.mode == "heures" %}selected{% endif %}>heures</option>
                 <option value="jours" {% if transaction.annonce.mode == "jours" %}selected{% endif %}>jours</option>

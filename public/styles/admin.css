@@ -48,7 +48,7 @@ tr:hover {
 }
 
 .selected {
-    color: var(--couleurFancy);
+    color: #c51212;
 }
 
 .bold {
@@ -59,13 +59,15 @@ tr:hover {
     float: right;
     padding: 5px 10px;
     border-radius: 0.75rem;
+    font-size: 0.9em;
+    margin-bottom: 5px;
     color: #eee;
     background: #333;
     font-weight: bold;
 }
 
 .description {
-    margin-top: 5px 0px;
+    margin-top: 5px;
     border-radius: 0.5rem;
     padding: 5px;
     border: 1px #aaa solid;

@@ -37,16 +37,16 @@ class AdminController extends AbstractController
             if ($rec->getStatutReclamation() != "Traite") {
                 $contenu = "";
                 if ($rec->getObjet() != "Litige") {
-                    $contenu = "Un administrateur a répondu à votre réclamation '".$rec->getTitre()."' avec :\n".$form['reponse'];
+                    $contenu = "Un administrateur a répondu à votre réclamation '".$rec->getTitre()."' avec comme message :\n'".$form['reponse']."'";
                     $rec->setReponse($form['reponse']);
                 } else {
                     if ($form['resultat'] == 'Rejet') {
-                        $contenu = "Un administrateur a rejeté votre réclamation '".$rec->getTitre()."' avec comme message :\n".$form['reponse'];
+                        $contenu = "Un administrateur a rejeté votre réclamation '".$rec->getTitre()."' avec comme message :\n'".$form['reponse']."'";
                         // 0 -> Rejet, autre -> Remboursement
                         $rec->setReponse("0-".$form['reponse']);
                     } else {
                         $montant = $form['montant'];
-                        $contenu = "Un administrateur a accepté votre réclamation '".$rec->getTitre()."' avec comme message :\n".$form['reponse']."\nVous avez reçu un remboursement de ".$montant." euros.";
+                        $contenu = "Un administrateur a accepté votre réclamation '".$rec->getTitre()."' avec comme message :\n'".$form['reponse']."'"."\nVous avez reçu un remboursement de ".$montant." euros.";
                         $rec->setReponse($montant."-".$form['reponse']);
                     }
                 }
@@ -55,6 +55,7 @@ class AdminController extends AbstractController
                 $this->outils->envoieNotificationA($entityManager,$contenu, $rec->getUser());
                 $entityManager->persist($rec);
                 $entityManager->flush();
+                $this->addFlash('notifications', 'Réclamation traitée avec succès !');
             }
             
         }

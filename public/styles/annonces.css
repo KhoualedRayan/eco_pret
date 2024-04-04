@@ -20,7 +20,11 @@
     transform: scale(1.05); /* Augmentation de l'échelle de 10% */
 }
 
-
+.blocAnnonce h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .tout {
     display: flex;

@@ -12,7 +12,7 @@ Par <span class="bold">{{ reclamation.user.username }}</span><br><br>
 {% if reclamation.objet == "Litige" %}
 Transaction : {{ reclamation.transaction.annonce.titre }}<br>
 - Avec {{ reclamation.transaction.client.username }}<br>
-- Depuis le {{ reclamation.transaction.dateDebutPret|date('d M Y à H:i') }}<br>
+- Commence/a commencé le {{ reclamation.transaction.dateDebutPret|date('d M Y à H:i') }}<br>
 - Pendant {{ reclamation.transaction.dureeFinal }}<br><br>
 {% endif %}
 
@@ -33,7 +33,7 @@ Transaction : {{ reclamation.transaction.annonce.titre }}<br>
             <button>Valider</button>
         </form>
     {% else %}
-        <span class="bold">Reponse</span> :<br>
+        <span class="bold">Reponse</span> :
         {% set message = reclamation.objet == "Litige" ? reclamation.reponse|split('-', 2)[1] : reclamation.reponse %}
         <div class="description">
             {% set parties = message|split('\n') %}

@@ -34,7 +34,7 @@ class FaireReclamationController extends AbstractController
 
         // Récupérer les transactions où l'utilisateur connecté est le posteur de l'annonce
         // l'annonce est une annonce de matériel et la transaction a été au moins validé 
-        $transactions = array_filter($entityManager->getRepository(Transaction::class)->findByPandEnded($user), function($a) { return $a->getType() == "Materiel"; });
+        $transactions = array_filter($entityManager->getRepository(Transaction::class)->findByPandEnded($user), function($a) { return $a->getAnnonce()->getType() == "Materiel"; });
 
          return $this->render('faire_reclamation/index.html.twig', [
             'controller_name' => 'FaireReclamationController',
