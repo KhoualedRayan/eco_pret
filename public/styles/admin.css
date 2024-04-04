@@ -4,6 +4,9 @@
     border-radius: 10px;
     background-color: var(--couleurFondMain);
     border: 1px var(--couleurFilet) solid;
+    display: flex;
+    height: auto;
+    overflow: auto;
 }
 
 table {
@@ -24,24 +27,61 @@ tr {
     cursor: pointer;
 }
 
-tr:nth-child(even) {
-    background-color: #ebe4e4; /* Couleur de fond des lignes paires */
-}
-
 tr:hover {
+    color: var(--couleurTexte);
     background-color: #ddd; /* Couleur de fond des lignes au survol de la souris */
 }
 
 .recWindow {
     border-radius: 0.5rem;
-    padding: 0.5em;
+    padding: 1em;
     border: 1px var(--couleurFilet) solid;
+    height: auto;
+    overflow: auto;
+    width: 40%;
 }
 
 .a {
-    width: 49.5%;
+    width: 55%;
+    height: auto;
+    overflow: auto;
 }
 
 .selected {
-    color: red;
+    color: var(--couleurFancy);
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.objet {
+    float: right;
+    padding: 5px 10px;
+    border-radius: 0.75rem;
+    color: #eee;
+    background: #333;
+    font-weight: bold;
+}
+
+.description {
+    margin-top: 5px 0px;
+    border-radius: 0.5rem;
+    padding: 5px;
+    border: 1px #aaa solid;
+    max-height: 30vh;
+    overflow: auto;
+}
+
+.rep {
+    width: 100%;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+.repZone {
+    border-top: 1px #333 dashed;
+    padding-top: 10px;
 }

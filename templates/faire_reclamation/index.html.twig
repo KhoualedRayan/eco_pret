@@ -21,17 +21,18 @@
     <div id="annonces_litige" style="display: none;">
         <label for="annonces">Transaction concernée par le litige *</label>
         <select name="transaction_l" id="annonce_l">
-        {% for tr in transactions %}
-            <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
-        {% endfor %}
+            <option value="">Aucune transaction</option>
+            {% for tr in transactions %}
+                <option value="{{ tr.getId() }}">{{ tr.getAnnonce().getTitre() }}</option>
+            {% endfor %}
         </select><br />
     </div>
 
     <label>Titre *</label>
-    <input type="text" name="titre"><br>
+    <input type="text" name="titre" maxlength="100"><br>
 
     <label for="description">Description *</label>
-    <textarea name="description" id="description" required></textarea><br />
+    <textarea name="description" id="description" required maxlength="1500"></textarea><br />
     <br />
 
     </br>
@@ -49,11 +50,13 @@ document.getElementById('recla').addEventListener('change', function () {
     if (obj === "Litige") {
         var container = document.getElementById("annonce_l");
         container.value = container.firstChild.value;
+        container.required = true;
         var container2 = document.getElementById("annonces_litige");
         container2.style.display = "block";
     }else{
         var container = document.getElementById("annonce_l");
         container.value = "";
+        container.required = false;
         var container2 = document.getElementById("annonces_litige");
         container2.style.display = "none";
     }

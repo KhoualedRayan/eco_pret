@@ -31,6 +31,17 @@ class TransactionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByPandEnded(UserInterface $user)
+    {
+        $qb = $this->createQueryBuilder('t');
+        return $qb->leftJoin('t.annonce', 'a')
+                    ->where($qb->expr()->orX("t.statut_transaction = 'Terminer'", "t.statut_transaction = 'FINI'"))
+                    ->andWhere('a.posteur = :user')
+                    ->setParameter('user', $user)
+                    ->getQuery()
+                    ->getResult();
+    }
+
     
     public function findTransactionsAsOffrant(UserInterface $user): array
     {

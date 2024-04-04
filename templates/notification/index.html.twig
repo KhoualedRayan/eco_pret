@@ -29,10 +29,13 @@
                 {% if not notification.aEteLu %}
                     <div class="notif">
                         <div class="notif-date">
-                            <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
+                            <b>{{ notification.dateEnvoi|date('d M Y H:i') }}</b>
                         </div>
                         <div class="notif-content">
-                            {{ notification.contenu }}
+                            {% set parties = notification.contenu|split('\n') %}
+                            {% for partie in parties %}
+                                {{ partie }}<br>
+                            {% endfor %}
                         </div>
                         <div class="notif-buttons">
                             <button onclick="location.href='{{ path('marquer_comme_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility_off</span></button>
@@ -55,10 +58,13 @@
                 {% if notification.aEteLu %}
                     <div class="notif">
                         <div class="notif-date">
-                            <b>{{ notification.dateEnvoi|date('Y-m-d H:i') }}</b>
+                            <b>{{ notification.dateEnvoi|date('d M Y H:i') }}</b>
                         </div>
                         <div class="notif-content">
-                            {{ notification.contenu }}
+                            {% set parties = notification.contenu|split('\n') %}
+                            {% for partie in parties %}
+                                {{ partie }}<br>
+                            {% endfor %}
                         </div>
                         <div class="notif-buttons">
                             <button onclick="location.href='{{ path('marquer_comme_non_lu_route', {'id': notification.id}) }}'"><span class="material-icons">visibility</span></button>

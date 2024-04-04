@@ -8,7 +8,7 @@
 {% block title %}Admin{% endblock %}
 
 {% block body %}
-    <div style="display: flex; justify-content: space-between;">
+    <div style="display: flex; flex: 1; justify-content: space-between;">
         <div class="a">
             <h3>Réclamations non traitées</h3>
             <table>
@@ -20,7 +20,7 @@
                 </tr>
                 {% for reclamation in reclamationsNonTraitees %}
                     <tr onclick="showRec('{{reclamation.id}}')" id="rec-{{reclamation.id}}">
-                        <td>{{ reclamation.datePoste|date('Y-m-d') }}</td>
+                        <td>{{ reclamation.datePoste|date('d M Y') }}</td>
                         <td>{{ reclamation.objet }}</td>
                         <td>{{ reclamation.user.username }}</td>
                         <td>{{ reclamation.titre }}</td>
@@ -38,7 +38,7 @@
                 </tr>
                 {% for reclamation in reclamationsTraitees %}
                     <tr onclick="showRec('{{reclamation.id}}')" id="rec-{{reclamation.id}}">
-                        <td>{{ reclamation.datePoste|date('Y-m-d') }}</td>
+                        <td>{{ reclamation.datePoste|date('d M Y') }}</td>
                         <td>{{ reclamation.objet }}</td>
                         <td>{{ reclamation.user.username }}</td>
                         <td>{{ reclamation.administrateur.username }}</td>
@@ -47,7 +47,7 @@
                 {% endfor %}
             </table>
         </div>
-        <div id="recWindow" class="recWindow a">
+        <div id="recWindow" class="recWindow">
             
         </div>
     </div>

@@ -162,10 +162,9 @@
                     <h3>{{ annonce.getTitre() }}</h3>
                     <div class="description">
                         {% set parties = annonce.description|split('\n') %}
-                            <span class="texte-message">
-                            {% for partie in parties %}
-                                {{ partie }}<br>
-                            {% endfor %}
+                        {% for partie in parties %}
+                            {{ partie }}<br>
+                        {% endfor %}
                     </div>
                     {# L'utilisateur est prenium #}
                     {% if app.user and app.user.abonnement == "2" and app.user.id != annonce.getPosteur().id and annonce.getStatut() == "Disponible" %}

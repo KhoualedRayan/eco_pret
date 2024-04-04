@@ -25,9 +25,16 @@ class FaireReclamationController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+        if ($user->getAbonnement() && $user->getAbonnement()->getNom() == "Admin") {
+            return $this->redirectToRoute('app_admin');
+        }
+        if ($user->isSleepMode()) {
+            return $this->redirectToRoute('app_sleep_mode');
+        }
 
-        // Récupérer les transactions où l'utilisateur connecté est le client ou le posteur de l'annonce
-        $transactions = $entityManager->getRepository(Transaction::class)->findByClientOrPosteur($user);
+        // Récupérer les transactions où l'utilisateur connecté est le posteur de l'annonce
+        // l'annonce est une annonce de matériel et la transaction a été au moins validé 
+        $transactions = array_filter($entityManager->getRepository(Transaction::class)->findByPandEnded($user), function($a) { return $a->getType() == "Materiel"; });
 
          return $this->render('faire_reclamation/index.html.twig', [
             'controller_name' => 'FaireReclamationController',

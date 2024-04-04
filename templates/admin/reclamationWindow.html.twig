@@ -1,2 +1,51 @@
+<span class="objet">{{ reclamation.objet }}</span>
 <h3>Réclamation : {{ reclamation.titre }}</h3>
-Par {{ reclamation.user.username }}
+Par <span class="bold">{{ reclamation.user.username }}</span><br><br>
+<span class="bold">Description</span> :
+<div class="description">
+    {% set parties = reclamation.description|split('\n') %}
+    {% for partie in parties %}
+        {{ partie }}<br>
+    {% endfor %}
+</div>
+<br>
+{% if reclamation.objet == "Litige" %}
+Transaction : {{ reclamation.transaction.annonce.titre }}<br>
+- Avec {{ reclamation.transaction.client.username }}<br>
+- Depuis le {{ reclamation.transaction.dateDebutPret|date('d M Y à H:i') }}<br>
+- Pendant {{ reclamation.transaction.dureeFinal }}<br><br>
+{% endif %}
+
+<div class="repZone">
+    {% if reclamation.statutReclamation == "En cours" %}
+        <form action="{{ path('app_admin') }}" method="POST">
+            <input name="recId" value="{{ reclamation.id }}" hidden>
+            <span class="bold">Réponse</span> :<br>
+            <textarea name="reponse" id="rep" class="rep" rows="4"></textarea><br>
+            {% if reclamation.objet == "Litige" %}
+                Actions :
+                <input type="radio" name="resultat" id="resRejet" value="Rejet" onclick="hideMontant()" checked><label onclick="hideMontant()" for="resRejet">Rejet</label>
+                <input type="radio" name="resultat" id="resRemb" value="Remboursement" onclick="showMontant()"><label onclick="showMontant()" for="resRemb">Remboursement</label>
+                <div style="display: none;" id="blocMontant">
+                    <br><label for="montant">montant : </label><input type="text" pattern="^[1-9][0-9]*$" id="montant" name="montant">
+                </div>
+            {% endif %}<br>
+            <button>Valider</button>
+        </form>
+    {% else %}
+        <span class="bold">Reponse</span> :<br>
+        {% set message = reclamation.objet == "Litige" ? reclamation.reponse|split('-', 2)[1] : reclamation.reponse %}
+        <div class="description">
+            {% set parties = message|split('\n') %}
+            {% for partie in parties %}
+                {{ partie }}<br>
+            {% endfor %}
+        </div>
+        {% if reclamation.objet == "Litige" %}
+            {% set montant = reclamation.reponse|split('-', 2)[0] %}
+            <br><span class="bold">Action choisie</span> : {% if montant == 0%}Rejet{% else %}Remboursement de {{ montant }} euros{% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+
+    
