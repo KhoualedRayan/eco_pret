@@ -18,6 +18,7 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Outils;
+use App\Entity\Transaction;
 
 class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -69,9 +70,9 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
                 $this->entityManager->flush();
             }
         }
-
         # Si une transaction se termine, on change le statut, et envoie une notification
-        foreach ($user->getDemandes() as $t) {
+        $transactions = $this->entityManager->getRepository(Transaction::class)->findByClientOrPosteur($user);
+        foreach ($transactions as $t) {
             if ($t->getStatutTransaction() == "Terminer") {
                 $lastDate = $t->getLastDate();
                 if ($lastDate < $date) {

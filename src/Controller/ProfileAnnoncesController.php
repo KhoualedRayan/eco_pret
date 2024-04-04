@@ -134,7 +134,6 @@ class ProfileAnnoncesController extends AbstractController
 
         $init_date = $request->request->get('date_pret');
         $init_reccu = $request->request->get('recurrence');
-        dump($request->request->all());
         #FIRST DATE
         if($init_reccu == ""){
             #DATE PONCTUELLE

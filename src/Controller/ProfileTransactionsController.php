@@ -62,22 +62,35 @@ class ProfileTransactionsController extends AbstractController
         }
         // Filtration des transactions du client terminées
         $transactionsClientTerminees = array_filter($transactionsClient, function ($transaction) {
-            return $transaction->getStatutTransaction() === "Terminer" || $transaction->getStatutTransaction() === "FINI";
+            return $transaction->getStatutTransaction() === "Terminer";
         });
 
         // Filtration des transactions posteur terminées
         $transactionsPosteurTerminees = array_filter($transactionsPosteur, function ($transaction) {
-            return $transaction->getStatutTransaction() === "Terminer" || $transaction->getStatutTransaction() === "FINI";
+            return $transaction->getStatutTransaction() === "Terminer";
         });
 
         // Fusion des transactions terminées en une seule variable
         $toutesTransactionsTerminees = array_merge($transactionsClientTerminees, $transactionsPosteurTerminees);
+
+        $transactionsClientFinies = array_filter($transactionsClient, function ($transaction) {
+            return $transaction->getStatutTransaction() === "FINI";
+        });
+
+        // Filtration des transactions posteur terminées
+        $transactionsPosteurFinies = array_filter($transactionsPosteur, function ($transaction) {
+            return $transaction->getStatutTransaction() === "FINI";
+        });
+
+        // Fusion des transactions terminées en une seule variable
+        $toutesTransactionsFinies = array_merge($transactionsClientFinies, $transactionsPosteurFinies);
 
         return $this->render('profile_transactions/index.html.twig', [
             'controller_name' => 'ProfileTransactionsController',
             'transactionsClient' => $transactionsClientEnCours,
             'transactionsPosteur' => $transactionsPosteurEnCours,
             'transactionsTermines' => $toutesTransactionsTerminees,
+            'transactionsFinies' => $toutesTransactionsFinies,
             'annoncesEnAttente' => $annoncesEnAttente,
             'onglet' => "transactions",
         ]);

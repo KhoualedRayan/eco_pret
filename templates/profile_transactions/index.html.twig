@@ -12,12 +12,12 @@
 
 <h3>Mes transactions</h3>
 <div>
-    <b>Votre statut dans la transaction :</b>
     <select id="typeTransactionSelect">
-        <option value="client">Client</option>
-        <option value="posteur">Posteur</option>
-        <option value="enAttente">En Attente</option>
-        <option value="terminer">Terminé</option>
+        <option value="client">Transactions en cours où je suis le client</option>
+        <option value="posteur">Transactions en cours où je suis le posteur</option>
+        <option value="enAttente">Annonces où je suis en file d'attente</option>
+        <option value="terminer">Transactions validées par les 2 parties</option>
+        <option value="fini">Transactions terminées</option>
     </select>
 </div>
 <div class="tout">
@@ -31,7 +31,14 @@
                 </div>
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                {% if transaction.annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
+                {% if transaction.annonce.getType() == "Materiel" %}
+                    <div class="duree">
+                        Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}
+                    </div>
+                {% else %}
+                    <div class="limite">Du : {{ transaction.annonce.dateDebut()|date('d M Y H:i') }}<br>
+                        Au : {{ transaction.annonce.dateFin()|date('d M Y H:i') }}</div>
+                {% endif %}
                 <h3 onclick="showAnnonce(event, '{{ transaction.annonce.id }}')" class="lien2Annonce">Annonce : {{ transaction.annonce.getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
                 <button class="supprimer" onclick="supprimerTransaction(event,'{{ transaction.getId() }}')">Se désister</button>
@@ -48,10 +55,17 @@
                 </div>
                 <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                 <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}</div>{% endif %}
+                {% if transaction.getAnnonce().getType() == "Materiel" %}
+                    <div class="duree">
+                        Durée du prêt : {% if transaction.annonce.mode is null %}Non défini{% elseif transaction.annonce.mode == 'jours' %}{{ transaction.annonce.dureeH /24 }}{% else %}{{ transaction.annonce.dureeH }}{% endif %} {{ transaction.annonce.mode }}
+                    </div>
+                {% else %}
+                    <div class="limite">Du : {{ transaction.annonce.dateDebut()|date('d M Y H:i') }}<br>
+                        Au : {{ transaction.annonce.dateFin()|date('d M Y H:i') }}</div>
+                {% endif %}
                 <h3 onclick="showAnnonce(event, '{{transaction.annonce.id}}')" class="lien2Annonce">Annonce : {{ transaction.getAnnonce().getTitre() }}</h3>
                 <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-                <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction </button>
+                <button class="supprimer" onclick="annulerTransactionAvecClient(event,'{{ transaction.getId() }}')">Annuler la transaction</button>
             </div>
         {% endfor %}
     </div>
@@ -65,7 +79,14 @@
                 </div>
                 <div class="type">{{ annonce.getType() }}</div>
                 <div class="categorie">{{ annonce.getCategorie().getNom() }}</div>
-                {% if annonce.getType() == "Materiel" %}<div class="duree">Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}</div>{% endif %}
+                {% if annonce.getType() == "Materiel" %}
+                <div class="duree">
+                    Durée du prêt : {% if annonce.mode is null %}Non défini{% elseif annonce.mode == 'jours' %}{{ annonce.dureeH /24 }}{% else %}{{ annonce.dureeH }}{% endif %} {{ annonce.mode }}
+                </div>
+                {% else %}
+                        <div class="limite">Du : {{ annonce.dateDebut()|date('d M Y H:i') }}<br>
+                            Au : {{ annonce.dateFin()|date('d M Y H:i') }}</div>
+                {% endif %}
                 <h3 onclick="showAnnonce(event, '{{annonce.id}}')" class="lien2Annonce">Annonce : {{ annonce.getTitre() }}</h3>
                 <div class="description">{{ annonce.getDescription() }}</div>
                 <div class="fileAttente">Position : {{ annonce.positionFileAttente(annonce,app.user) }}</div>
@@ -74,8 +95,29 @@
         {% endfor %}
     </div>
     <div id="transactionsTermines" class="typeSection" style="display: none;">
-        {# Annonces ou l'utilisateur est en attente #}
         {% for transaction in transactionsTermines %}
+                <div class="blocAnnonce">
+                    <div>
+                        <span class="prix" >{{ transaction.prixFinal }}<span class="material-icons">attach_money</span></span>
+                        <span class="username">Prestataire : {{ transaction.annonce.posteur.getUsername() }}</span>
+                        <span class="username">Client : {{ transaction.getClient().getUsername() }}</span>
+                    </div>
+                    <div class="type">{{ transaction.getAnnonce().getType() }}</div>
+                    <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
+                    {% if transaction.getAnnonce().getType() == "Materiel" %}
+                        <div class="duree">Date début du prêt : {{ transaction.dateDebutPret|date('d M Y') }}</div>
+                        <div class="duree">Durée du prêt (final) : {{ transaction.getDureeFinal() }}</div>
+                    {% else %}
+                        <div class="limite">Du : {{ transaction.annonce.dateDebut()|date('d M Y H:i') }}<br>
+                            Au : {{ transaction.annonce.dateFin()|date('d M Y H:i') }}</div>
+                    {% endif %}
+                    <h3 onclick="showAnnonce(event, '{{transaction.annonce.id}}')" class="lien2Annonce">Annonce : {{ transaction.getAnnonce().getTitre() }}</h3>
+                    <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
+                </div>
+        {% endfor %}
+    </div>
+    <div id="transactionsFinies" class="typeSection" style="display: none;">
+        {% for transaction in transactionsFinies %}
             <a href="{{ path('app_vue_transaction', {'id': transaction.id}) }}" class="lienAnnonce">
                 <div class="blocAnnonce">
                     <div>
@@ -85,33 +127,15 @@
                     </div>
                     <div class="type">{{ transaction.getAnnonce().getType() }}</div>
                     <div class="categorie">{{ transaction.getAnnonce().getCategorie().getNom() }}</div>
-                    {% if transaction.getAnnonce().getType() == "Materiel" %}<div class="duree">Durée du prêt (final) : {{ transaction.getDureeFinal() }}</div>
+                    {% if transaction.getAnnonce().getType() == "Materiel" %}
+                        <div class="duree">Date début du prêt : {{ transaction.dateDebutPret|date('d M Y') }}</div>
+                        <div class="duree">Durée du prêt (final) : {{ transaction.getDureeFinal() }}</div>
+                    {% else %}
+                        <div class="limite">Du : {{ transaction.annonce.dateDebut()|date('d M Y H:i') }}<br>
+                            Au : {{ transaction.annonce.dateFin()|date('d M Y H:i') }}</div>
                     {% endif %}
                     <h3 onclick="showAnnonce(event, '{{transaction.annonce.id}}')" class="lien2Annonce">Annonce : {{ transaction.getAnnonce().getTitre() }}</h3>
                     <div class="description">{{ transaction.getAnnonce().getDescription() }}</div>
-        
-                    {# <div class="stars">
-                        {% if app.user.username != transaction.annonce.posteur.username %}
-                            {% set note = transaction.getNoteClient() is null ? 0 : transaction.getNoteClient() %}           
-                        {% else %}
-                            {% set note = transaction.getNoteOffrant() is null ? 0 : transaction.getNoteOffrant() %}
-                            
-                        {% endif %}
-                        {% if note == 0 %}
-                            {% for i in range(5-note,1) %}
-                                <span class="star">&#9734;</span>
-                            {% endfor %}
-                        {% else %}
-                            {% for i in range(0,note-1) %}
-                                <span class="star">&#9733;</span>
-                            {% endfor %}
-                            {% if note < 5 %}
-                                {% for i in range(5-note,1) %}
-                                        <span class="star">&#9734;</span>
-                                {% endfor %}
-                            {% endif %}   
-                        {% endif %}
-                    </div> #}
                 </div>
             </a>
         {% endfor %}
@@ -132,6 +156,8 @@
             document.getElementById('transactionsEnAttente').style.display = 'contents';
         } else if (valeur === 'terminer') {
             document.getElementById('transactionsTermines').style.display = 'contents';
+        } else if (valeur === 'fini') {
+            document.getElementById('transactionsFinies').style.display = 'contents';
         }
     });
 

@@ -21,8 +21,6 @@ use App\Entity\Abonnement;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use App\Repository\CategorieServiceRepository;
 use App\Repository\CategorieMaterielRepository;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\VarDumper\VarDumper;
 use App\Entity\Notification;
 use App\Entity\Disponibilite;
 
